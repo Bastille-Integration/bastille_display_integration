@@ -2,7 +2,7 @@ import logging
 import hashlib
 import base64
 from logging.handlers import RotatingFileHandler
-from fastapi import FastAPI, BackgroundTasks
+from fastapi import FastAPI, HTTPException, Request, BackgroundTasks  # Import Request and BackgroundTasks
 import httpx
 import asyncio
 import json
@@ -53,12 +53,12 @@ new_query_made = False
 reset_task = None
 
 async def reset_new_query_flag():
-    await asyncio.sleep(10)  # Sleep for X seconds
+    await asyncio.sleep(30)  # Sleep for X seconds
     global new_query_made
     new_query_made = False
 
 async def send_default_payload():
-    await asyncio.sleep(20)  # Sleep for X seconds
+    await asyncio.sleep(30)  # Sleep for X seconds
     global new_query_made
     logger.info("new_query_made value: %s", new_query_made) 
     if not new_query_made:
@@ -91,7 +91,6 @@ async def send_default_payload():
             else:
                 logger.error("Failed to send the default payload due to inactivity.")
 
-@app.post("/zone-detections")
 async def transfer_data(payload: dict, background_tasks: BackgroundTasks):
     # Log the incoming JSON payload for debugging
     logger.info("Received JSON payload: %s", payload)
@@ -127,6 +126,18 @@ async def transfer_data(payload: dict, background_tasks: BackgroundTasks):
         protocol = emitter.get("protocol")
         logging.info("protocol details: %s", protocol)  
 
+        # Access the nested value 'device_info' within 'payload'
+        device_info = payload.get("payload", {}).get("device_info", {})
+        logging.info("device info: %s", device_info)
+
+        # Access the nested value 'manufacturer' within 'device_info'
+        manufacturer = device_info.get("manufacturer")
+        logging.info("manufacturer details: %s", manufacturer)
+
+        # Access the nested value 'vendor' within 'emitter'
+        vendor = emitter.get("vendor")
+        logging.info("vendor details: %s", vendor)
+
         # Access to tags
         tags = payload.get("payload", {}).get("tags", {})
         logging.info("tags details: %s", tags)
@@ -136,11 +147,11 @@ async def transfer_data(payload: dict, background_tasks: BackgroundTasks):
         logging.info("zone_name details: %s", zone_name) 
 
         # Check if the "protocol" value is "wifi" in the source payload
-        if protocol in ["cellular", "wifi", "bluetooth"] and "authorized" not in tags: 
-            # Create the target payload with "text1" set to "ALERT - Cellular in Conference Rm - ALERT"
+        if protocol in ["cellular", "wifi", "ble"] and "authorized" not in tags: 
+            # Create the target payload with "text1" set to "ALERT - [protocol] in [zone] - ALERT"
             target_payload = {
                 "type": "image",
-                "text1": f"ALERT - {protocol} in {zone_name} - ALERT",
+                "text1": f"ALERT - {protocol} in {zone_name} - Vendor: {vendor} - ALERT",
                 "textColor": "orange",
                 "textFont": "roboto",
                 "textPosition": "middle",
@@ -148,40 +159,62 @@ async def transfer_data(payload: dict, background_tasks: BackgroundTasks):
                 "textScrollSpeed": "4",
                 "textSize": "medium"
             }
+
+            # Calculate the MD5 hash of the default target payload
+            payload_json = json.dumps(default_target_payload, separators=(',', ':'), sort_keys=True)
+            md5_hash = hashlib.md5(payload_json.encode()).digest()
+            md5_base64 = base64.b64encode(md5_hash).decode()
+
+            # Add the Content-MD5 header to the request
+            headers["Content-MD5"] = md5_base64
+
+            #Log
+            logger.info("Target JSON: %s", target_payload)
+
+            # Send the modified JSON payload to the target URL
+            response = await client.post(target_url, json=target_payload, auth=auth, headers=headers)
+            response = await client.post(target_strobe_on_url, json=strobe_on_payload, auth=auth, headers=headers)
+
+            # Log the headers of the target request
+            logger.info("Headers of the target request: %s", response.request.headers)
+
+            # Check if the request was successful
+            if response.status_code == 200:
+                logger.info("Data transferred successfully.")
+                return {"message": "Data transferred successfully."}
+            else:
+                logger.info("Response: %s", response)
+                error_text = response.text
+                logger.error("Failed to send data to the target URL. Error text: %s", error_text)
+                return {"error": "Failed to send data to the target URL."}
+        
         else:
             # If "protocol" is not above, keep the target payload as is
             target_payload = default_target_payload
 
-        # Calculate the MD5 hash of the default target payload
-        payload_json = json.dumps(default_target_payload, separators=(',', ':'), sort_keys=True)
-        md5_hash = hashlib.md5(payload_json.encode()).digest()
-        md5_base64 = base64.b64encode(md5_hash).decode()
+@app.post("/zone-detections")
+async def receive_ndjson(request: Request, background_tasks: BackgroundTasks):
+    try:
+        # Read the request body as bytes
+        body = await request.body()
 
-        # Add the Content-MD5 header to the request
-        headers["Content-MD5"] = md5_base64
+        # Convert the bytes to a string and split it by newline to get individual NDJSON lines
+        ndjson_lines = body.decode().split('\n')
 
-        #Log
-        logger.info("JSON: %s", target_payload)
-
-        # Send the modified JSON payload to the target URL
-        response = await client.post(target_url, json=target_payload, auth=auth, headers=headers)
-        response = await client.post(target_strobe_on_url, json=strobe_on_payload, auth=auth, headers=headers)
-
-        # Log the headers of the target request
-        logger.info("Headers of the target request: %s", response.request.headers)
-
-        # Check if the request was successful
-        if response.status_code == 200:
-            logger.info("Data transferred successfully.")
-            return {"message": "Data transferred successfully."}
-        else:
-            logger.info("Response: %s", response) 
-            error_text = response.text
-            logger.error("Failed to send data to the target URL. Error text: %s", error_text)
-            return {"error": "Failed to send data to the target URL."}
-
-    # await asyncio.sleep(10)  # Wait for X seconds
-    new_query_made = False
+        # Process each NDJSON line
+        results = []
+        for line in ndjson_lines:
+            try:
+                payload = json.loads(line)
+                # Call the transfer_data function to process the payload asynchronously
+                await transfer_data(payload, background_tasks)
+            except json.JSONDecodeError as e:
+                # Handle invalid JSON format in a line
+                results.append({"error": f"Invalid JSON format: {line}"})
+        
+        return results
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Error processing NDJSON data")
 
 if __name__ == "__main__":
     import uvicorn
