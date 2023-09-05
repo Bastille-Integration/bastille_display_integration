@@ -6,6 +6,7 @@ from fastapi import FastAPI, BackgroundTasks
 import httpx
 import asyncio
 import json
+import ndjson
 
 # Configure logging
 log_file = "app.log"  # Specify the log file name here
@@ -31,25 +32,33 @@ source_host = config["source_host"]
 source_path = config["source_path"]
 target_host = config["target_host"]
 target_path = config["target_path"]
+strobe_on_path = config["strobe_on_path"]
+strobe_off_path = config["strobe_off_path"]
+strobe_on_payload = config["strobe_on_payload"]
 default_target_payload = config["default_target_payload"]
 
 # Define Basic Authentication credentials
 auth_username = config["auth_username"]
 auth_password = config["auth_password"]
 
+# Create Basic Authentication credentials
+auth = (auth_username, auth_password)
+
+# Set the Content-Type header to application/json
+headers = {"Content-Type": "application/json"}
+
 # Define a flag to track whether a new source query has been made
 new_query_made = False
 
-# Store a reference to the task
 reset_task = None
 
 async def reset_new_query_flag():
-    await asyncio.sleep(10)  # Sleep for 30 seconds
+    await asyncio.sleep(10)  # Sleep for X seconds
     global new_query_made
     new_query_made = False
 
 async def send_default_payload():
-    await asyncio.sleep(20)  # Wait for X seconds
+    await asyncio.sleep(20)  # Sleep for X seconds
     global new_query_made
     logger.info("new_query_made value: %s", new_query_made) 
     if not new_query_made:
@@ -57,11 +66,8 @@ async def send_default_payload():
             # Construct the complete target URL
             target_url = f"http://{target_host}{target_path}"
 
-            # Create Basic Authentication credentials
-            auth = (auth_username, auth_password)
-
-            # Set the Content-Type header to application/json
-            headers = {"Content-Type": "application/json"}
+            # Construct the complete target URL for strobe
+            target_strobe_off_url = f"http://{target_host}{strobe_off_path}"
 
             # Calculate the MD5 hash of the default target payload
             payload_json = json.dumps(default_target_payload, separators=(',', ':'), sort_keys=True)
@@ -73,9 +79,11 @@ async def send_default_payload():
 
             # Send the default target payload
             response = await client.post(target_url, json=default_target_payload, auth=auth, headers=headers)
+            response = await client.post(target_strobe_off_url, auth=auth, headers=headers)
 
             # Log the headers of the target request
             logger.info("Headers of the target request: %s", response.request.headers)
+            logger.info("JSON: %s", default_target_payload)
 
             # Check if the request was successful
             if response.status_code == 200:
@@ -105,8 +113,11 @@ async def transfer_data(payload: dict, background_tasks: BackgroundTasks):
         # Construct the complete source URL
         source_url = f"http://{source_host}{source_path}"
 
-        # Construct the complete target URL
+        # Construct the complete target URL for text
         target_url = f"http://{target_host}{target_path}"
+
+        # Construct the complete target URL for strobe
+        target_strobe_on_url = f"http://{target_host}{strobe_on_path}"
 
         # Access the nested value 'emitter' within 'devices'
         emitter = payload.get("payload", {}).get("emitter", {})
@@ -116,12 +127,20 @@ async def transfer_data(payload: dict, background_tasks: BackgroundTasks):
         protocol = emitter.get("protocol")
         logging.info("protocol details: %s", protocol)  
 
+        # Access to tags
+        tags = payload.get("payload", {}).get("tags", {})
+        logging.info("tags details: %s", tags)
+
+        #Access to zones
+        zone_name = payload.get("payload", {}).get("zone_name", {})
+        logging.info("zone_name details: %s", zone_name) 
+
         # Check if the "protocol" value is "wifi" in the source payload
-        if protocol == "cellular":
+        if protocol in ["cellular", "wifi", "bluetooth"] and "authorized" not in tags: 
             # Create the target payload with "text1" set to "ALERT - Cellular in Conference Rm - ALERT"
             target_payload = {
                 "type": "image",
-                "text1": "ALERT - Cellular in Conference Rm - ALERT",
+                "text1": f"ALERT - {protocol} in {zone_name} - ALERT",
                 "textColor": "orange",
                 "textFont": "roboto",
                 "textPosition": "middle",
@@ -130,14 +149,8 @@ async def transfer_data(payload: dict, background_tasks: BackgroundTasks):
                 "textSize": "medium"
             }
         else:
-            # If "protocol" is not "cellular," keep the target payload as is
+            # If "protocol" is not above, keep the target payload as is
             target_payload = default_target_payload
-
-        # Create Basic Authentication credentials
-        auth = (auth_username, auth_password)
-
-        # Set the Content-Type header to application/json
-        headers = {"Content-Type": "application/json"}
 
         # Calculate the MD5 hash of the default target payload
         payload_json = json.dumps(default_target_payload, separators=(',', ':'), sort_keys=True)
@@ -152,6 +165,7 @@ async def transfer_data(payload: dict, background_tasks: BackgroundTasks):
 
         # Send the modified JSON payload to the target URL
         response = await client.post(target_url, json=target_payload, auth=auth, headers=headers)
+        response = await client.post(target_strobe_on_url, json=strobe_on_payload, auth=auth, headers=headers)
 
         # Log the headers of the target request
         logger.info("Headers of the target request: %s", response.request.headers)
