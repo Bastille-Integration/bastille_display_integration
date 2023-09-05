@@ -120,31 +120,31 @@ async def transfer_data(payload: dict, background_tasks: BackgroundTasks):
 
         # Access the nested value 'emitter' within 'devices'
         emitter = payload.get("payload", {}).get("emitter", {})
-        logging.info("emitter details: %s", emitter)
+        logger.info("emitter details: %s", emitter)
 
         # Access the nested value 'protocol' within 'emitter'
         protocol = emitter.get("protocol")
-        logging.info("protocol details: %s", protocol)  
+        logger.info("protocol details: %s", protocol)  
 
         # Access the nested value 'device_info' within 'payload'
         device_info = payload.get("payload", {}).get("device_info", {})
-        logging.info("device info: %s", device_info)
+        logger.info("device info: %s", device_info)
 
         # Access the nested value 'manufacturer' within 'device_info'
         manufacturer = device_info.get("manufacturer")
-        logging.info("manufacturer details: %s", manufacturer)
+        logger.info("manufacturer details: %s", manufacturer)
 
         # Access the nested value 'vendor' within 'emitter'
         vendor = emitter.get("vendor")
-        logging.info("vendor details: %s", vendor)
+        logger.info("vendor details: %s", vendor)
 
         # Access to tags
         tags = payload.get("payload", {}).get("tags", {})
-        logging.info("tags details: %s", tags)
+        logger.info("tags details: %s", tags)
 
         #Access to zones
         zone_name = payload.get("payload", {}).get("zone_name", {})
-        logging.info("zone_name details: %s", zone_name) 
+        logger.info("zone_name details: %s", zone_name) 
 
         # Check if the "protocol" value is "wifi" in the source payload
         if protocol in ["cellular", "wifi", "ble"] and "authorized" not in tags: 
