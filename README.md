@@ -1,6 +1,7 @@
 # algo_integration
 
-1. Make daemn.
+1. Make daemon
+   
 mv algo_api.service to /etc/systemd/system/
 
 Run the following:
