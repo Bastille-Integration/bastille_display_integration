@@ -1,0 +1,27 @@
+#Integration IP - 0.0.0.0 if global.
+source_host: 0.0.0.0
+#Integration path.
+source_path: /zone-detections
+#Integration port.
+source_port: 8000
+#Algo screen IP or host.
+target_host: 172.30.2.201
+#Algo screen username.
+auth_username: admin
+# Algo screen password.
+auth_password: algo
+# Algo screen will clear if no alerts are triggered for this amount of time.
+clear_time: 30
+# ONLY mintored protocols will alert.
+monitored_protocols: 
+  - cellular
+  - wifi
+  - ble
+# If device tagged with below tags, will NOT alert.
+allowed_tags:
+  - authorized
+  - exclude
+# JSON payload needed to turn on strobe. Pick color and pattern. 
+strobe_on_payload:
+  - pattern: 2
+  - color1: amber
