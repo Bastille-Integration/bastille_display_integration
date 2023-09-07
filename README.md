@@ -1,6 +1,14 @@
-# algo_integration
+# Requirements
 
-1. Make daemon
+python3.8 -m pip install -r requirements.txt
+
+
+# Config
+
+Edit config.yaml
+
+
+# Make daemon
    
 mv algo_api.service to /etc/systemd/system/
 
