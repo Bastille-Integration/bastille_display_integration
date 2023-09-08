@@ -24,10 +24,6 @@ logger.addHandler(file_handler)
 
 app = FastAPI()
 
-# Read configuration values from the JSON file
-#with open("config.json", "r") as config_file:
-#    config = json.load(config_file)
-
 # Read configuration values from the YAML file
 with open("config.yaml", "r") as config_file:
     config = yaml.safe_load(config_file)
@@ -37,7 +33,8 @@ source_host = config["source_host"]
 source_path = config["source_path"]
 source_port = config["source_port"]
 target_host = config["target_host"]
-strobe_on_payload = config["strobe_on_payload"]
+strobe_pattern = config["strobe_pattern"]
+strobe_color = config["strobe_color"]
 auth_username = config["auth_username"]
 auth_password = config["auth_password"]
 clear_time = config["clear_time"]
@@ -49,7 +46,7 @@ target_path = "/api/controls/screen/start"
 strobe_on_path = "/api/controls/strobe/start"
 strobe_off_path = "/api/controls/strobe/stop"
 
-#CLEAR JSON defined
+#Algo CLEAR JSON defined
 default_target_payload = {
     "type": "image",
     "text1": "CLEAR",
@@ -59,6 +56,12 @@ default_target_payload = {
     "textScroll": "0",
     "textScrollSpeed": "4",
     "textSize": "medium"
+    }
+
+#Algo strobe JSON defined
+strobe_on_payload = {
+    "pattern": strobe_pattern,
+    "color1": strobe_color
     }
 
 # Create Basic Authentication credentials
@@ -113,7 +116,7 @@ async def send_default_payload():
             else:
                 logger.error("Failed to clear alerts due to error. Recommend checking Algo.")
 
-#Handles JSON payload.
+#Handles JSON payload. Communicates to Algo based on logic/filters..
 async def transfer_data(payload: dict, background_tasks: BackgroundTasks):
     # Log the incoming JSON payload for debugging
     logger.info("Received JSON payload: %s", payload)
