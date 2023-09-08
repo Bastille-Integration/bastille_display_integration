@@ -11,7 +11,7 @@ auth_username: admin
 # Algo screen password.
 auth_password: algo
 # Algo screen will clear if no alerts are triggered for this amount of time.
-clear_time: 30
+clear_time: 100 
 # ONLY mintored protocols will alert.
 monitored_protocols: 
   - cellular
@@ -21,7 +21,6 @@ monitored_protocols:
 allowed_tags:
   - authorized
   - exclude
-# JSON payload needed to turn on strobe. Pick color and pattern. 
-strobe_on_payload:
-  - pattern: 2
-  - color1: amber
+# Strobe variables. Pick pattern and color. 
+strobe_pattern: 2
+strobe_color: amber
