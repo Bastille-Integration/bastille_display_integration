@@ -3,8 +3,8 @@ Description=Algo service
 
 [Service]
 User=bn
-WorkingDirectory=/home/bn/algo_testing
-ExecStart=/usr/bin/python3.8 /home/bn/algo_testing/algo.py
+WorkingDirectory=/home/bn/algo_integration
+ExecStart=/usr/bin/python3.8 /home/bn/algo_integration/algo.py
 Restart=always
 
 [Install]
