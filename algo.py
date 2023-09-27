@@ -217,7 +217,7 @@ async def transfer_data(payload: dict, background_tasks: BackgroundTasks):
                     return {"error": "Failed to send data to the target URL."}
         
             else:
-                # If "protocol" is not above, keep the target payload as is
+                # If "tag" is not above, keep the target payload as is
                 target_payload = default_target_payload
                 logger.info("Not sending alert due to known tag.")
 
@@ -249,7 +249,7 @@ async def receive_ndjson(request: Request, background_tasks: BackgroundTasks):
         
         return results
     except Exception as e:
-        raise HTTPException(status_code=400, detail="Error processing NDJSON data")
+        raise HTTPException(status_code=400, detail="Error processing data. Please ensure Algo is connected and API enabled.")
 
 if __name__ == "__main__":
     import uvicorn
