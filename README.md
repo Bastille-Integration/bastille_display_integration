@@ -15,8 +15,10 @@ Edit config.yaml
 
 
 # Make daemon
+
+Copy service file:
    
-mv algo_api.service to /etc/systemd/system/
+cp algo_api.service /etc/systemd/system/
 
 Run the following:
 
