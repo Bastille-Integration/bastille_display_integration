@@ -1,3 +1,7 @@
+# Clone Git Repository
+
+git clone https://github.com/dalybastille/algo_integration.git
+
 # Requirements
 
 Need to be running Python 3.8.
@@ -7,11 +11,6 @@ Pip needs to be 3.8: https://stackoverflow.com/questions/61717006/pip-for-python
 Run:
 
 pip install -r requirements.txt
-
-# Clone Git Repository
-
-git clone https://github.com/dalybastille/algo_integration.git
-
 
 # Config
 
