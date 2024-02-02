@@ -7,13 +7,13 @@ source_path: /zone-detections
 #Integration port.
 source_port: 8000
 #Algo screen IP or host.
-target_host: 172.30.2.118
+target_host: http://172.30.2.118
 #Algo screen username.
 auth_username: admin
 # Algo screen password.
 auth_password: algo
 # Algo screen will clear if no alerts are triggered for this amount of time.
-clear_time: 10
+clear_time: 100
 # ONLY monitored protocols will alert.
 monitored_protocols: 
   - cellular
