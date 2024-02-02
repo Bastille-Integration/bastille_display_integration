@@ -1,3 +1,5 @@
+#Logging
+log_file: app.log
 #Integration IP - 0.0.0.0 if global.
 source_host: 0.0.0.0
 #Integration path.
@@ -5,13 +7,13 @@ source_path: /zone-detections
 #Integration port.
 source_port: 8000
 #Algo screen IP or host.
-target_host: 172.30.2.201
+target_host: 172.30.2.118
 #Algo screen username.
 auth_username: admin
 # Algo screen password.
 auth_password: algo
 # Algo screen will clear if no alerts are triggered for this amount of time.
-clear_time: 100 
+clear_time: 10
 # ONLY monitored protocols will alert.
 monitored_protocols: 
   - cellular
@@ -24,3 +26,4 @@ allowed_tags:
 # Strobe variables. Pick pattern and color. 
 strobe_pattern: 2
 strobe_color: amber
+

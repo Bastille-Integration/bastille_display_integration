@@ -1,0 +1,409 @@
+2024-01-25 10:54:54,376 - __main__ - INFO - Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'Unknown', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'Office', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+2024-01-25 10:54:54,408 - __main__ - INFO - emitter details: {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'Unknown', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+2024-01-25 10:54:54,408 - __main__ - INFO - protocol details: wifi
+2024-01-25 10:54:54,409 - __main__ - INFO - device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+2024-01-25 10:54:54,409 - __main__ - INFO - manufacturer details: 
+2024-01-25 10:54:54,409 - __main__ - INFO - vendor details: Unknown
+2024-01-25 10:54:54,409 - __main__ - INFO - tags details: ['zone:Office', 'unauthorized']
+2024-01-25 10:54:54,409 - __main__ - INFO - zone_name details: Office
+2024-01-25 10:54:54,409 - __main__ - INFO - Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-25 10:56:39,822 - __main__ - INFO - Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'PyCharm', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+2024-01-25 10:56:39,854 - __main__ - INFO - emitter details: {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+2024-01-25 10:56:39,854 - __main__ - INFO - protocol details: wifi
+2024-01-25 10:56:39,855 - __main__ - INFO - device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+2024-01-25 10:56:39,855 - __main__ - INFO - manufacturer details: 
+2024-01-25 10:56:39,855 - __main__ - INFO - vendor details: PyCharm
+2024-01-25 10:56:39,855 - __main__ - INFO - tags details: ['zone:Office', 'unauthorized']
+2024-01-25 10:56:39,855 - __main__ - INFO - zone_name details: PyCharm
+2024-01-25 10:56:39,855 - __main__ - INFO - Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in PyCharm - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-25 10:56:40,259 - __main__ - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'HMz5HmFVIdW2R4Gz9570Uw==', 'content-length': '33', 'authorization': '[secure]'})
+2024-01-25 10:56:40,259 - __main__ - INFO - Data transferred successfully.
+2024-01-25 10:58:20,268 - __main__ - INFO - new_query_made value: False
+2024-01-25 10:58:20,602 - __main__ - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'content-length': '0', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'VKOhTykJN2FqCsIHOS4rkg==', 'authorization': '[secure]'})
+2024-01-25 10:58:20,602 - __main__ - INFO - JSON: {'type': 'image', 'text1': 'CLEAR', 'textColor': 'green', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '0', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-25 10:58:20,602 - __main__ - INFO - Clearing alerts due to not receiving new Zone Detections for 100 seconds.
+Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'PyCharm', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+emitter details: {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+protocol details: wifi
+device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+manufacturer details: 
+vendor details: PyCharm
+tags details: ['zone:Office', 'unauthorized']
+zone_name details: PyCharm
+Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in PyCharm - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'HMz5HmFVIdW2R4Gz9570Uw==', 'content-length': '33', 'authorization': '[secure]'})
+Data transferred successfully.
+Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'PyCharm', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+emitter details: {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+protocol details: wifi
+device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+manufacturer details: 
+vendor details: PyCharm
+tags details: ['zone:Office', 'unauthorized']
+zone_name details: PyCharm
+Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in PyCharm - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'HMz5HmFVIdW2R4Gz9570Uw==', 'content-length': '33', 'authorization': '[secure]'})
+Data transferred successfully.
+new_query_made value: False
+Headers of the target request: Headers({'host': '172.30.2.118', 'content-length': '0', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'VKOhTykJN2FqCsIHOS4rkg==', 'authorization': '[secure]'})
+JSON: {'type': 'image', 'text1': 'CLEAR', 'textColor': 'green', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '0', 'textScrollSpeed': '4', 'textSize': 'medium'}
+Clearing alerts due to not receiving new Zone Detections for 100 seconds.
+Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'PyCharm', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+2024-01-25 15:33:53,328 - __main__ - INFO - Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'PyCharm', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+emitter details: {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+2024-01-25 15:33:53,356 - __main__ - INFO - emitter details: {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+protocol details: wifi
+2024-01-25 15:33:53,356 - __main__ - INFO - protocol details: wifi
+device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+2024-01-25 15:33:53,356 - __main__ - INFO - device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+manufacturer details: 
+2024-01-25 15:33:53,356 - __main__ - INFO - manufacturer details: 
+vendor details: PyCharm
+2024-01-25 15:33:53,356 - __main__ - INFO - vendor details: PyCharm
+tags details: ['zone:Office', 'unauthorized']
+2024-01-25 15:33:53,356 - __main__ - INFO - tags details: ['zone:Office', 'unauthorized']
+zone_name details: PyCharm
+2024-01-25 15:33:53,356 - __main__ - INFO - zone_name details: PyCharm
+Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in PyCharm - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-25 15:33:53,356 - __main__ - INFO - Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in PyCharm - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-25 15:33:53,501 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-25 15:33:53,638 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/start "HTTP/1.1 200 OK"
+Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'HMz5HmFVIdW2R4Gz9570Uw==', 'content-length': '33', 'authorization': '[secure]'})
+2024-01-25 15:33:53,638 - __main__ - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'HMz5HmFVIdW2R4Gz9570Uw==', 'content-length': '33', 'authorization': '[secure]'})
+Data transferred successfully.
+2024-01-25 15:33:53,639 - __main__ - INFO - Data transferred successfully.
+new_query_made value: False
+2024-01-25 15:35:33,641 - __main__ - INFO - new_query_made value: False
+2024-01-25 15:35:33,821 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-25 15:35:33,947 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/stop "HTTP/1.1 200 OK"
+Headers of the target request: Headers({'host': '172.30.2.118', 'content-length': '0', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'VKOhTykJN2FqCsIHOS4rkg==', 'authorization': '[secure]'})
+2024-01-25 15:35:33,948 - __main__ - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'content-length': '0', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'VKOhTykJN2FqCsIHOS4rkg==', 'authorization': '[secure]'})
+JSON: {'type': 'image', 'text1': 'CLEAR', 'textColor': 'green', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '0', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-25 15:35:33,948 - __main__ - INFO - JSON: {'type': 'image', 'text1': 'CLEAR', 'textColor': 'green', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '0', 'textScrollSpeed': '4', 'textSize': 'medium'}
+Clearing alerts due to not receiving new Zone Detections for 100 seconds.
+2024-01-25 15:35:33,949 - __main__ - INFO - Clearing alerts due to not receiving new Zone Detections for 100 seconds.
+2024-01-25 15:42:17,181 - Algo Integration - INFO - Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'PyCharm', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+2024-01-25 15:42:17,203 - Algo Integration - INFO - emitter details: {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+2024-01-25 15:42:17,203 - Algo Integration - INFO - protocol details: wifi
+2024-01-25 15:42:17,204 - Algo Integration - INFO - device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+2024-01-25 15:42:17,204 - Algo Integration - INFO - manufacturer details: 
+2024-01-25 15:42:17,204 - Algo Integration - INFO - vendor details: PyCharm
+2024-01-25 15:42:17,204 - Algo Integration - INFO - tags details: ['zone:Office', 'unauthorized']
+2024-01-25 15:42:17,204 - Algo Integration - INFO - zone_name details: PyCharm
+2024-01-25 15:42:17,204 - Algo Integration - INFO - Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in PyCharm - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-25 15:42:17,356 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-25 15:42:17,502 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/start "HTTP/1.1 200 OK"
+2024-01-25 15:42:17,504 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'HMz5HmFVIdW2R4Gz9570Uw==', 'content-length': '33', 'authorization': '[secure]'})
+2024-01-25 15:42:17,504 - Algo Integration - INFO - Data transferred successfully.
+2024-01-25 15:43:57,507 - Algo Integration - INFO - new_query_made value: False
+2024-01-25 15:43:57,691 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-25 15:43:57,812 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/stop "HTTP/1.1 200 OK"
+2024-01-25 15:43:57,812 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'content-length': '0', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'VKOhTykJN2FqCsIHOS4rkg==', 'authorization': '[secure]'})
+2024-01-25 15:43:57,813 - Algo Integration - INFO - JSON: {'type': 'image', 'text1': 'CLEAR', 'textColor': 'green', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '0', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-25 15:43:57,813 - Algo Integration - INFO - Clearing alerts due to not receiving new Zone Detections for 100 seconds.
+2024-01-25 15:47:48,735 - asyncio - DEBUG - Using selector: KqueueSelector
+2024-01-25 15:48:41,751 - asyncio - DEBUG - Using selector: KqueueSelector
+2024-01-25 15:48:45,118 - Algo Integration - INFO - Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'PyCharm', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+2024-01-25 15:48:45,130 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-01-25 15:48:45,137 - httpx - DEBUG - load_verify_locations cafile='/Users/jdaly/PycharmProjects/algo_integration/venv/lib/python3.11/site-packages/certifi/cacert.pem'
+2024-01-25 15:48:45,142 - Algo Integration - INFO - emitter details: {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+2024-01-25 15:48:45,143 - Algo Integration - INFO - protocol details: wifi
+2024-01-25 15:48:45,143 - Algo Integration - INFO - device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+2024-01-25 15:48:45,143 - Algo Integration - INFO - manufacturer details: 
+2024-01-25 15:48:45,143 - Algo Integration - INFO - vendor details: PyCharm
+2024-01-25 15:48:45,143 - Algo Integration - INFO - tags details: ['zone:Office', 'unauthorized']
+2024-01-25 15:48:45,143 - Algo Integration - INFO - zone_name details: PyCharm
+2024-01-25 15:48:45,143 - Algo Integration - INFO - Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in PyCharm - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-25 15:48:45,145 - httpcore.connection - DEBUG - connect_tcp.started host='172.30.2.118' port=80 local_address=None timeout=5.0 socket_options=None
+2024-01-25 15:48:45,159 - httpcore.connection - DEBUG - connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x107bfa850>
+2024-01-25 15:48:45,159 - httpcore.http11 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2024-01-25 15:48:45,160 - httpcore.http11 - DEBUG - send_request_headers.complete
+2024-01-25 15:48:45,160 - httpcore.http11 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2024-01-25 15:48:45,160 - httpcore.http11 - DEBUG - send_request_body.complete
+2024-01-25 15:48:45,160 - httpcore.http11 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2024-01-25 15:48:45,286 - httpcore.http11 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Server', b'nginx'), (b'Date', b'Thu, 25 Jan 2024 22:48:45 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Cache-Control', b'no-cache, no-store, must-revalidate'), (b'Pragma', b'no-cache'), (b'Expires', b'0'), (b'X-Frame-Options', b'DENY'), (b'X-Content-Type-Options', b'nosniff')])
+2024-01-25 15:48:45,288 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-25 15:48:45,288 - httpcore.http11 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2024-01-25 15:48:45,288 - httpcore.http11 - DEBUG - receive_response_body.complete
+2024-01-25 15:48:45,289 - httpcore.http11 - DEBUG - response_closed.started
+2024-01-25 15:48:45,289 - httpcore.http11 - DEBUG - response_closed.complete
+2024-01-25 15:48:45,290 - httpcore.http11 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2024-01-25 15:48:45,291 - httpcore.http11 - DEBUG - send_request_headers.complete
+2024-01-25 15:48:45,291 - httpcore.http11 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2024-01-25 15:48:45,292 - httpcore.http11 - DEBUG - send_request_body.complete
+2024-01-25 15:48:45,292 - httpcore.http11 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2024-01-25 15:48:45,425 - httpcore.http11 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Server', b'nginx'), (b'Date', b'Thu, 25 Jan 2024 22:48:45 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Cache-Control', b'no-cache, no-store, must-revalidate'), (b'Pragma', b'no-cache'), (b'Expires', b'0'), (b'X-Frame-Options', b'DENY'), (b'X-Content-Type-Options', b'nosniff')])
+2024-01-25 15:48:45,426 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/start "HTTP/1.1 200 OK"
+2024-01-25 15:48:45,426 - httpcore.http11 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2024-01-25 15:48:45,426 - httpcore.http11 - DEBUG - receive_response_body.complete
+2024-01-25 15:48:45,426 - httpcore.http11 - DEBUG - response_closed.started
+2024-01-25 15:48:45,427 - httpcore.http11 - DEBUG - response_closed.complete
+2024-01-25 15:48:45,428 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'HMz5HmFVIdW2R4Gz9570Uw==', 'content-length': '33', 'authorization': '[secure]'})
+2024-01-25 15:48:45,429 - Algo Integration - INFO - Data transferred successfully.
+2024-01-25 15:48:45,429 - httpcore.connection - DEBUG - close.started
+2024-01-25 15:48:45,429 - httpcore.connection - DEBUG - close.complete
+2024-01-25 15:50:25,433 - Algo Integration - INFO - new_query_made value: False
+2024-01-25 15:50:25,438 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-01-25 15:50:25,439 - httpx - DEBUG - load_verify_locations cafile='/Users/jdaly/PycharmProjects/algo_integration/venv/lib/python3.11/site-packages/certifi/cacert.pem'
+2024-01-25 15:50:25,445 - httpcore.connection - DEBUG - connect_tcp.started host='172.30.2.118' port=80 local_address=None timeout=5.0 socket_options=None
+2024-01-25 15:50:25,457 - httpcore.connection - DEBUG - connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x105d2d710>
+2024-01-25 15:50:25,457 - httpcore.http11 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2024-01-25 15:50:25,457 - httpcore.http11 - DEBUG - send_request_headers.complete
+2024-01-25 15:50:25,457 - httpcore.http11 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2024-01-25 15:50:25,457 - httpcore.http11 - DEBUG - send_request_body.complete
+2024-01-25 15:50:25,457 - httpcore.http11 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2024-01-25 15:50:25,603 - httpcore.http11 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Server', b'nginx'), (b'Date', b'Thu, 25 Jan 2024 22:50:25 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Cache-Control', b'no-cache, no-store, must-revalidate'), (b'Pragma', b'no-cache'), (b'Expires', b'0'), (b'X-Frame-Options', b'DENY'), (b'X-Content-Type-Options', b'nosniff')])
+2024-01-25 15:50:25,603 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-25 15:50:25,603 - httpcore.http11 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2024-01-25 15:50:25,603 - httpcore.http11 - DEBUG - receive_response_body.complete
+2024-01-25 15:50:25,603 - httpcore.http11 - DEBUG - response_closed.started
+2024-01-25 15:50:25,604 - httpcore.http11 - DEBUG - response_closed.complete
+2024-01-25 15:50:25,604 - httpcore.http11 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2024-01-25 15:50:25,604 - httpcore.http11 - DEBUG - send_request_headers.complete
+2024-01-25 15:50:25,604 - httpcore.http11 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2024-01-25 15:50:25,604 - httpcore.http11 - DEBUG - send_request_body.complete
+2024-01-25 15:50:25,604 - httpcore.http11 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2024-01-25 15:50:25,724 - httpcore.http11 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Server', b'nginx'), (b'Date', b'Thu, 25 Jan 2024 22:50:25 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Cache-Control', b'no-cache, no-store, must-revalidate'), (b'Pragma', b'no-cache'), (b'Expires', b'0'), (b'X-Frame-Options', b'DENY'), (b'X-Content-Type-Options', b'nosniff')])
+2024-01-25 15:50:25,724 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/stop "HTTP/1.1 200 OK"
+2024-01-25 15:50:25,725 - httpcore.http11 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2024-01-25 15:50:25,725 - httpcore.http11 - DEBUG - receive_response_body.complete
+2024-01-25 15:50:25,725 - httpcore.http11 - DEBUG - response_closed.started
+2024-01-25 15:50:25,725 - httpcore.http11 - DEBUG - response_closed.complete
+2024-01-25 15:50:25,725 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'content-length': '0', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'VKOhTykJN2FqCsIHOS4rkg==', 'authorization': '[secure]'})
+2024-01-25 15:50:25,725 - Algo Integration - INFO - JSON: {'type': 'image', 'text1': 'CLEAR', 'textColor': 'green', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '0', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-25 15:50:25,725 - Algo Integration - INFO - Clearing alerts due to not receiving new Zone Detections for 100 seconds.
+2024-01-25 15:50:25,726 - httpcore.connection - DEBUG - close.started
+2024-01-25 15:50:25,726 - httpcore.connection - DEBUG - close.complete
+
+
+
+
+
+
+
+
+
+
+2024-01-25 16:07:41,203 - Algo Integration - INFO - Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'PyCharm', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+2024-01-25 16:07:41,224 - Algo Integration - INFO - emitter details: {'transmitter_id': '06:8d:db:b2:7c:9c', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+2024-01-25 16:07:41,224 - Algo Integration - INFO - protocol details: wifi
+2024-01-25 16:07:41,224 - Algo Integration - INFO - device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+2024-01-25 16:07:41,224 - Algo Integration - INFO - manufacturer details: 
+2024-01-25 16:07:41,224 - Algo Integration - INFO - vendor details: PyCharm
+2024-01-25 16:07:41,224 - Algo Integration - INFO - tags details: ['zone:Office', 'unauthorized']
+2024-01-25 16:07:41,224 - Algo Integration - INFO - zone_name details: PyCharm
+2024-01-25 16:07:41,225 - Algo Integration - INFO - Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in PyCharm - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-25 16:07:41,369 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-25 16:07:41,508 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/start "HTTP/1.1 200 OK"
+2024-01-25 16:07:41,509 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'HMz5HmFVIdW2R4Gz9570Uw==', 'content-length': '33', 'authorization': '[secure]'})
+2024-01-25 16:07:41,509 - Algo Integration - INFO - Data transferred successfully.
+2024-01-25 16:09:21,512 - Algo Integration - INFO - new_query_made value: False
+2024-01-25 16:09:21,699 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-25 16:09:21,823 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/stop "HTTP/1.1 200 OK"
+2024-01-25 16:09:21,824 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'content-length': '0', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'VKOhTykJN2FqCsIHOS4rkg==', 'authorization': '[secure]'})
+2024-01-25 16:09:21,824 - Algo Integration - INFO - JSON: {'type': 'image', 'text1': 'CLEAR', 'textColor': 'green', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '0', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-25 16:09:21,824 - Algo Integration - INFO - Clearing alerts due to not receiving new Zone Detections for 100 seconds.
+2024-01-31 14:55:35,304 - Algo Integration - INFO - Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:91', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'Office', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+2024-01-31 14:55:35,330 - Algo Integration - INFO - emitter details: {'transmitter_id': '06:8d:db:b2:7c:91', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+2024-01-31 14:55:35,330 - Algo Integration - INFO - protocol details: wifi
+2024-01-31 14:55:35,330 - Algo Integration - INFO - device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+2024-01-31 14:55:35,330 - Algo Integration - INFO - manufacturer details: 
+2024-01-31 14:55:35,330 - Algo Integration - INFO - vendor details: PyCharm
+2024-01-31 14:55:35,330 - Algo Integration - INFO - tags details: ['zone:Office', 'unauthorized']
+2024-01-31 14:55:35,330 - Algo Integration - INFO - zone_name details: Office
+2024-01-31 14:55:35,330 - Algo Integration - INFO - Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-31 14:55:35,492 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-31 14:55:35,625 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/start "HTTP/1.1 200 OK"
+2024-01-31 14:55:35,626 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'g1ktWCfAzZlT7KhLnCt3HA==', 'content-length': '33', 'authorization': '[secure]'})
+2024-01-31 14:55:35,626 - Algo Integration - INFO - Data transferred successfully.
+2024-01-31 14:55:54,981 - Algo Integration - INFO - Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:91', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'Office', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+2024-01-31 14:55:54,999 - Algo Integration - INFO - emitter details: {'transmitter_id': '06:8d:db:b2:7c:91', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+2024-01-31 14:55:54,999 - Algo Integration - INFO - protocol details: wifi
+2024-01-31 14:55:55,000 - Algo Integration - INFO - device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+2024-01-31 14:55:55,000 - Algo Integration - INFO - manufacturer details: 
+2024-01-31 14:55:55,000 - Algo Integration - INFO - vendor details: PyCharm
+2024-01-31 14:55:55,000 - Algo Integration - INFO - tags details: ['zone:Office', 'unauthorized']
+2024-01-31 14:55:55,000 - Algo Integration - INFO - zone_name details: Office
+2024-01-31 14:55:55,000 - Algo Integration - INFO - Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-31 14:55:55,165 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-31 14:55:55,304 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/start "HTTP/1.1 200 OK"
+2024-01-31 14:55:55,304 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'g1ktWCfAzZlT7KhLnCt3HA==', 'content-length': '33', 'authorization': '[secure]'})
+2024-01-31 14:55:55,304 - Algo Integration - INFO - Data transferred successfully.
+2024-01-31 15:04:07,952 - Algo Integration - INFO - Not sending alert due to unknown protocol.
+2024-01-31 15:08:35,471 - Algo Integration - INFO - Not sending alert due to known tag.
+2024-01-31 15:10:23,717 - Algo Integration - INFO - Not sending alert due to known tags None
+2024-01-31 15:11:55,651 - Algo Integration - INFO - Not sending alert due to known tags None
+2024-01-31 15:12:46,268 - Algo Integration - INFO - Not sending alert due to known tags None
+2024-01-31 15:14:02,845 - Algo Integration - INFO - Not sending alert due to known tags ['zone:Office', 'unauthorized']
+2024-01-31 16:32:45,751 - Algo Integration - INFO - Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:91', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'Office', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+2024-01-31 16:32:45,778 - Algo Integration - INFO - emitter details: {'transmitter_id': '06:8d:db:b2:7c:91', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+2024-01-31 16:32:45,778 - Algo Integration - INFO - protocol details: wifi
+2024-01-31 16:32:45,778 - Algo Integration - INFO - device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+2024-01-31 16:32:45,778 - Algo Integration - INFO - manufacturer details: 
+2024-01-31 16:32:45,778 - Algo Integration - INFO - vendor details: PyCharm
+2024-01-31 16:32:45,778 - Algo Integration - INFO - tags details: ['zone:Office', 'unauthorized']
+2024-01-31 16:32:45,778 - Algo Integration - INFO - zone_name details: Office
+2024-01-31 16:32:45,778 - Algo Integration - INFO - Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-31 16:32:45,922 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-31 16:32:46,057 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/start "HTTP/1.1 200 OK"
+2024-01-31 16:32:46,058 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'g1ktWCfAzZlT7KhLnCt3HA==', 'content-length': '33', 'authorization': '[secure]'})
+2024-01-31 16:32:46,058 - Algo Integration - INFO - Data transferred successfully.
+2024-01-31 16:32:56,060 - Algo Integration - INFO - new_query_made value: False
+2024-01-31 16:32:56,247 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-31 16:32:56,364 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/stop "HTTP/1.1 200 OK"
+2024-01-31 16:32:56,364 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'content-length': '0', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'VKOhTykJN2FqCsIHOS4rkg==', 'authorization': '[secure]'})
+2024-01-31 16:32:56,365 - Algo Integration - INFO - JSON: {'type': 'image', 'text1': 'CLEAR', 'textColor': 'green', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '0', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-31 16:32:56,365 - Algo Integration - INFO - Clearing alerts due to not receiving new Zone Detections for 10 seconds.
+2024-01-31 16:33:03,359 - Algo Integration - INFO - Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:91', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'Office', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+2024-01-31 16:33:03,372 - Algo Integration - INFO - emitter details: {'transmitter_id': '06:8d:db:b2:7c:91', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+2024-01-31 16:33:03,372 - Algo Integration - INFO - protocol details: wifi
+2024-01-31 16:33:03,372 - Algo Integration - INFO - device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+2024-01-31 16:33:03,372 - Algo Integration - INFO - manufacturer details: 
+2024-01-31 16:33:03,372 - Algo Integration - INFO - vendor details: PyCharm
+2024-01-31 16:33:03,372 - Algo Integration - INFO - tags details: ['zone:Office', 'unauthorized']
+2024-01-31 16:33:03,372 - Algo Integration - INFO - zone_name details: Office
+2024-01-31 16:33:03,372 - Algo Integration - INFO - Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-31 16:33:03,519 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-31 16:33:03,658 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/start "HTTP/1.1 200 OK"
+2024-01-31 16:33:03,662 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'g1ktWCfAzZlT7KhLnCt3HA==', 'content-length': '33', 'authorization': '[secure]'})
+2024-01-31 16:33:03,662 - Algo Integration - INFO - Data transferred successfully.
+2024-01-31 16:33:07,684 - Algo Integration - INFO - Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:91', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'Office', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+2024-01-31 16:33:07,700 - Algo Integration - INFO - emitter details: {'transmitter_id': '06:8d:db:b2:7c:91', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+2024-01-31 16:33:07,700 - Algo Integration - INFO - protocol details: wifi
+2024-01-31 16:33:07,700 - Algo Integration - INFO - device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+2024-01-31 16:33:07,700 - Algo Integration - INFO - manufacturer details: 
+2024-01-31 16:33:07,700 - Algo Integration - INFO - vendor details: PyCharm
+2024-01-31 16:33:07,700 - Algo Integration - INFO - tags details: ['zone:Office', 'unauthorized']
+2024-01-31 16:33:07,700 - Algo Integration - INFO - zone_name details: Office
+2024-01-31 16:33:07,700 - Algo Integration - INFO - Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-31 16:33:07,860 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-31 16:33:07,992 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/start "HTTP/1.1 200 OK"
+2024-01-31 16:33:07,993 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'g1ktWCfAzZlT7KhLnCt3HA==', 'content-length': '33', 'authorization': '[secure]'})
+2024-01-31 16:33:07,993 - Algo Integration - INFO - Data transferred successfully.
+2024-01-31 16:33:13,142 - Algo Integration - INFO - Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:91', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'Office', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+2024-01-31 16:33:13,160 - Algo Integration - INFO - emitter details: {'transmitter_id': '06:8d:db:b2:7c:91', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+2024-01-31 16:33:13,160 - Algo Integration - INFO - protocol details: wifi
+2024-01-31 16:33:13,160 - Algo Integration - INFO - device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+2024-01-31 16:33:13,160 - Algo Integration - INFO - manufacturer details: 
+2024-01-31 16:33:13,160 - Algo Integration - INFO - vendor details: PyCharm
+2024-01-31 16:33:13,160 - Algo Integration - INFO - tags details: ['zone:Office', 'unauthorized']
+2024-01-31 16:33:13,160 - Algo Integration - INFO - zone_name details: Office
+2024-01-31 16:33:13,161 - Algo Integration - INFO - Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-31 16:33:13,332 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-31 16:33:13,464 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/start "HTTP/1.1 200 OK"
+2024-01-31 16:33:13,467 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'g1ktWCfAzZlT7KhLnCt3HA==', 'content-length': '33', 'authorization': '[secure]'})
+2024-01-31 16:33:13,467 - Algo Integration - INFO - Data transferred successfully.
+2024-01-31 16:33:13,664 - Algo Integration - INFO - new_query_made value: True
+2024-01-31 16:33:17,995 - Algo Integration - INFO - new_query_made value: True
+2024-01-31 16:33:19,701 - Algo Integration - INFO - Received JSON payload: {'event_type': 'zone_detections', 'payload': {'area': {'site_id': 'main_site', 'concentrator_id': 'atl_concentrator_1', 'map_id': 'atl_map_1'}, 'first_seen': {'time_s': 1623180748, 'position': [42.40593038872611, 18.92719500579412]}, 'emitter': {'transmitter_id': '06:8d:db:b2:7c:91', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}, 'last_seen': {'position': [], 'time_s': None}, 'device_info': {'manufacturer': '', 'user': '', 'model': '', 'name': ''}, 'tags': ['zone:Office', 'unauthorized'], 'time_s': 1623180748, 'zone_name': 'Office', 'fields': {'ap_name': None, 'bssid': '06:8d:db:b2:7c:9c', 'mac1': 'ff:ff:ff:ff:ff:ff', 'mac2': '06:8d:db:b2:7c:9c', 'mac3': '06:8d:db:b2:7c:9c', 'mac4': None, 'channel': '2412', 'frame_type': 'Beacon', 'past_name': None, 'wlan_ra': 'ff:ff:ff:ff:ff:ff', 'wlan_ta': '06:8d:db:b2:7c:9c', 'wlan_mgt_rsn_akms_type': None, 'wps_manufacturer': None, 'wps_model_name': None, 'wps_model_number': None, 'mcs': None, 'datarate': '12.0', 'is_random_mac': True, 'max_rssi': -62.0, 'min_rssi': -85.0}}}
+2024-01-31 16:33:19,718 - Algo Integration - INFO - emitter details: {'transmitter_id': '06:8d:db:b2:7c:91', 'protocol': 'wifi', 'vendor': 'PyCharm', 'network': {'network_info': {'client': False, 'access_point': True}, 'name': '9R-Mobile'}}
+2024-01-31 16:33:19,718 - Algo Integration - INFO - protocol details: wifi
+2024-01-31 16:33:19,718 - Algo Integration - INFO - device info: {'manufacturer': '', 'user': '', 'model': '', 'name': ''}
+2024-01-31 16:33:19,718 - Algo Integration - INFO - manufacturer details: 
+2024-01-31 16:33:19,718 - Algo Integration - INFO - vendor details: PyCharm
+2024-01-31 16:33:19,718 - Algo Integration - INFO - tags details: ['zone:Office', 'unauthorized']
+2024-01-31 16:33:19,718 - Algo Integration - INFO - zone_name details: Office
+2024-01-31 16:33:19,719 - Algo Integration - INFO - Target JSON: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-31 16:33:19,876 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-31 16:33:20,025 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/start "HTTP/1.1 200 OK"
+2024-01-31 16:33:20,027 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'g1ktWCfAzZlT7KhLnCt3HA==', 'content-length': '33', 'authorization': '[secure]'})
+2024-01-31 16:33:20,027 - Algo Integration - INFO - Data transferred successfully.
+2024-01-31 16:33:23,470 - Algo Integration - INFO - new_query_made value: True
+2024-01-31 16:33:30,029 - Algo Integration - INFO - new_query_made value: False
+2024-01-31 16:33:30,237 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/screen/start "HTTP/1.1 200 OK"
+2024-01-31 16:33:30,358 - httpx - INFO - HTTP Request: POST http://172.30.2.118/api/controls/strobe/stop "HTTP/1.1 200 OK"
+2024-01-31 16:33:30,359 - Algo Integration - INFO - Headers of the target request: Headers({'host': '172.30.2.118', 'content-length': '0', 'accept': '*/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', 'user-agent': 'python-httpx/0.24.1', 'content-type': 'application/json', 'content-md5': 'VKOhTykJN2FqCsIHOS4rkg==', 'authorization': '[secure]'})
+2024-01-31 16:33:30,359 - Algo Integration - INFO - JSON: {'type': 'image', 'text1': 'CLEAR', 'textColor': 'green', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '0', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-01-31 16:33:30,359 - Algo Integration - INFO - Clearing alerts due to not receiving new Zone Detections for 10 seconds.
+2024-02-01 16:15:29,552 - Algo Integration - INFO - Sending alerts with payload: 
+2024-02-01 16:15:29,693 - Algo Integration - INFO - Turning on strobe
+2024-02-01 16:20:17,323 - Algo Integration - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 16:20:17,475 - Algo Integration - INFO - Turning on strobe.
+2024-02-01 16:25:48,147 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 16:25:48,311 - Algo Class - INFO - Turning on strobe.
+2024-02-01 16:25:58,480 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-01 16:25:58,618 - Algo Class - INFO - Turning strobe off.
+2024-02-01 16:27:16,605 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 16:27:16,756 - Algo Class - INFO - Turning on strobe.
+2024-02-01 16:27:18,694 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 16:27:18,849 - Algo Class - INFO - Turning on strobe.
+2024-02-01 16:27:22,565 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 16:27:22,714 - Algo Class - INFO - Turning on strobe.
+2024-02-01 16:27:26,932 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 16:27:27,085 - Algo Class - INFO - Turning on strobe.
+2024-02-01 16:27:37,261 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-01 16:27:37,412 - Algo Class - INFO - Turning strobe off.
+2024-02-01 16:42:43,463 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 16:42:43,622 - Algo Class - INFO - Turning on strobe.
+2024-02-01 16:42:43,622 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 16:42:53,784 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-01 16:42:53,914 - Algo Class - INFO - Turning strobe off.
+2024-02-01 16:43:00,456 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 16:43:00,624 - Algo Class - INFO - Turning on strobe.
+2024-02-01 16:43:00,625 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 16:43:04,376 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 16:43:04,535 - Algo Class - INFO - Turning on strobe.
+2024-02-01 16:43:04,535 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 16:43:09,000 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 16:43:09,152 - Algo Class - INFO - Turning on strobe.
+2024-02-01 16:43:09,152 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 16:43:13,714 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 16:43:13,864 - Algo Class - INFO - Turning on strobe.
+2024-02-01 16:43:13,865 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 16:43:24,036 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-01 16:43:24,171 - Algo Class - INFO - Turning strobe off.
+2024-02-01 16:44:26,758 - ndjson Class - ERROR - Invalid JSON format: {"event_type": "zone_detections", "payload": {"area": {"site_id": "main_site", "concentrator_id": "atl_concentrator_1", "map_id": "atl_map_1"}, "first_seen": {"time_s": 1623180748, "position": [42.40593038872611, 18.92719500579412]}, "emitter": {"transmitter_id": "06:8d:db:b2:7c:91", "protocol": "wifi", "vendor": "PyCharm", "network": {"network_info": {"client": false, "access_point": true}, "name": "9R-Mobile"}}, "last_seen": {"position": [], "time_s": null}, "device_info": {"manufacturer": "", "user": "", "model": "", "name": ""}, "tags": ["zone:Office", "unauthorized"], "time_s": 1623180748, "zone_name": "Office", "fields": {"ap_name": null, "bssid": "06:8d:db:b2:7c:9c", "mac1": "ff:ff:ff:ff:ff:ff", "mac2": "06:8d:db:b2:7c:9c", "mac3": "06:8d:db:b2:7c:9c", "mac4": null, "channel": "2412", "frame_type": "Beacon", "past_name": null, "wlan_ra": "ff:ff:ff:ff:ff:ff", "wlan_ta": "06:8d:db:b2:7c:9c", "wlan_mgt_rsn_akms_type": null, "wps_manufacturer": null, "wps_model_name": null, "wps_model_number": null, "mcs": null, "datarate": "12.0", "is_random_mac": true, "max_rssi": -62.0, "min_rssi": -85.0}}
+2024-02-01 16:44:26,760 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 16:44:36,928 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-01 16:44:37,076 - Algo Class - INFO - Turning strobe off.
+2024-02-01 16:44:44,241 - ndjson Class - ERROR - Invalid JSON format: {"event_type": "zone_detections", "payload": {"area": {"site_id": "main_site", "concentrator_id": "atl_concentrator_1", "map_id": "atl_map_1"}, "first_seen": {"time_s": 1623180748, "position": [42.40593038872611, 18.92719500579412]}, "emitter": {"transmitter_id": "06:8d:db:b2:7c:91", "protocol": "wifi", "vendor": "PyCharm", "network": {"network_info": {"client": false, "access_point": true}, "name": "9R-Mobile"}}, "last_seen": {"position": [], "time_s": null}, "device_info": {"manufacturer": "", "user": "", "model": "", "name": ""}, "tags": ["zone:Office", "unauthorized"], "time_s": 1623180748, "zone_name": "Office", "fields": {"ap_name": null, "bssid": "06:8d:db:b2:7c:9c", "mac1": "ff:ff:ff:ff:ff:ff", "mac2": "06:8d:db:b2:7c:9c", "mac3": "06:8d:db:b2:7c:9c", "mac4": null, "channel": "2412", "frame_type": "Beacon", "past_name": null, "wlan_ra": "ff:ff:ff:ff:ff:ff", "wlan_ta": "06:8d:db:b2:7c:9c", "wlan_mgt_rsn_akms_type": null, "wps_manufacturer": null, "wps_model_name": null, "wps_model_number": null, "mcs": null, "datarate": "12.0", "is_random_mac": true, "max_rssi": -62.0, "min_rssi": -85.0}}
+2024-02-01 16:44:44,241 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 16:44:54,396 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-01 16:44:54,524 - Algo Class - INFO - Turning strobe off.
+2024-02-01 16:45:48,420 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 16:45:48,566 - Algo Class - INFO - Turning on strobe.
+2024-02-01 16:45:48,567 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 16:45:56,844 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 16:45:56,995 - Algo Class - INFO - Turning on strobe.
+2024-02-01 16:45:56,995 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 16:46:07,163 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-01 16:46:07,295 - Algo Class - INFO - Turning strobe off.
+2024-02-01 17:03:10,903 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 17:03:11,069 - Algo Class - INFO - Turning on strobe.
+2024-02-01 17:03:11,069 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 17:03:21,231 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-01 17:03:21,364 - Algo Class - INFO - Turning strobe off.
+2024-02-01 17:03:46,129 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 17:03:46,282 - Algo Class - INFO - Turning on strobe.
+2024-02-01 17:03:46,282 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 17:03:50,665 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 17:03:50,819 - Algo Class - INFO - Turning on strobe.
+2024-02-01 17:03:50,820 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 17:03:52,887 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 17:03:53,041 - Algo Class - INFO - Turning on strobe.
+2024-02-01 17:03:53,041 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 17:04:03,221 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-01 17:04:03,353 - Algo Class - INFO - Turning strobe off.
+2024-02-01 17:05:22,482 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 17:05:22,634 - Algo Class - INFO - Turning on strobe.
+2024-02-01 17:05:22,635 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 17:05:32,798 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-01 17:05:32,931 - Algo Class - INFO - Turning strobe off.
+2024-02-01 17:13:04,215 - Algo Main - INFO - Not sending alert due to known tags ['zone:Office', 'exclude']
+2024-02-01 17:13:04,218 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 17:13:14,386 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-01 17:13:14,525 - Algo Class - INFO - Turning strobe off.
+2024-02-01 17:13:50,155 - Algo Main - INFO - Not sending alert due to known tags ['zone:Office', 'exclude']
+2024-02-01 17:13:50,156 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 17:14:00,310 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-01 17:14:00,449 - Algo Class - INFO - Turning strobe off.
+2024-02-01 17:14:10,086 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 17:14:10,237 - Algo Class - INFO - Turning on strobe.
+2024-02-01 17:14:10,237 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 17:14:20,412 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-01 17:14:20,545 - Algo Class - INFO - Turning strobe off.
+2024-02-01 17:15:46,129 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-01 17:15:46,282 - Algo Class - INFO - Turning on strobe.
+2024-02-01 17:15:46,282 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-01 17:15:56,443 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-01 17:15:56,574 - Algo Class - INFO - Turning strobe off.
