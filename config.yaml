@@ -41,5 +41,5 @@ strobe_color: amber
 #        "warble3-high.wav",
 #        "warble4-trill.wav"
 # Set tone on/off and recording from above default list (or record your own)
-tone: False
+tone: True
 tone_wav: joe_voice.wav

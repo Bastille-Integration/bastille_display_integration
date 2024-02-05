@@ -74,7 +74,7 @@ def create_alert(body):
             # Tone
             if tone:
                 tone_payload = {
-                        "path": "joe_voice.wav",
+                        "path": tone_wav,
                         "loop": "false"
                     }
                 a.tone(tone_payload=tone_payload)
