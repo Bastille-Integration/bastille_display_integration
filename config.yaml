@@ -26,4 +26,20 @@ allowed_tags:
 # Strobe variables. Pick pattern and color. 
 strobe_pattern: 2
 strobe_color: amber
-
+#    "tonelist":
+#        "bell-na.wav",
+#        "bell-uk.wav",
+#        "buzzer.wav",
+#        "chime.wav",
+#        "dogs.wav",
+#        "gong.wav",
+#        "page-notif.wav",
+#        "speech-test.wav",
+#        "tone-1kHz-max.wav",
+#        "warble1-low.wav",
+#        "warble2-med.wav",
+#        "warble3-high.wav",
+#        "warble4-trill.wav"
+# Set tone on/off and recording from above default list (or record your own)
+tone: False
+tone_wav: joe_voice.wav

@@ -5,6 +5,7 @@ headers = {"Content-Type": "application/json"}
 target_path = "/api/controls/screen/start"
 strobe_on_path = "/api/controls/strobe/start"
 strobe_off_path = "/api/controls/strobe/stop"
+tone_path = "/api/controls/tone/start"
 
 
 class Algo:
@@ -27,6 +28,13 @@ class Algo:
             self.logger.info("Turning on strobe.")
         else:
             self.logger.error("Failed to turn on strobe. Recommend checking Algo. Received: %s", response.status_code)
+
+    def tone(self, tone_payload):
+        response = requests.post(url=f'{self.host}{tone_path}', auth=self.auth, headers=headers, json=tone_payload)
+        if response.status_code == 200:
+            self.logger.info("Starting tone.")
+        else:
+            self.logger.error("Failed to turn on tone. Recommend checking Algo. Received: %s", response.status_code)
 
     def alert_clear(self, clear_payload):
         response = requests.post(url=f'{self.host}{target_path}', auth=self.auth, headers=headers, json=clear_payload)

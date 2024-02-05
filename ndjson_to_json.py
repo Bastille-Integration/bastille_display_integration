@@ -9,8 +9,9 @@ class NDJson:
         self.payload = payload
         ndjson_lines = payload.decode().split('\n')
         for line in ndjson_lines:
+            self.logger.info(line)
             try:
                 output = json.loads(line)
                 yield output
             except json.JSONDecodeError as e:
-                self.logger.error("Invalid JSON format: %s", line)
+                self.logger.error("Invalid JSON format: %s", e)

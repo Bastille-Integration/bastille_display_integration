@@ -25,6 +25,9 @@ auth_password = config["auth_password"]
 clear_time = config["clear_time"]
 monitored_protocols = config["monitored_protocols"]
 allowed_tags = config["allowed_tags"]
+tone = config["tone"]
+tone_wav = config["tone_wav"]
+
 
 # Configure logging
 logging.basicConfig(filename=log_file, level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -68,6 +71,14 @@ def create_alert(body):
                 "color1": strobe_color
             }
             a.strobe_on(strobe_on_payload)
+            # Tone
+            if tone:
+                tone_payload = {
+                        "path": "joe_voice.wav",
+                        "loop": "false"
+                    }
+                a.tone(tone_payload=tone_payload)
+
 
 async def turn_off_alert():
     await asyncio.sleep(clear_time)  # Sleep for X seconds

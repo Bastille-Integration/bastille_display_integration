@@ -7,3 +7,260 @@
 2024-02-01 17:29:31,719 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
 2024-02-01 17:29:41,883 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
 2024-02-01 17:29:42,034 - Algo Class - INFO - Turning strobe off.
+2024-02-02 16:44:07,761 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 16:44:08,037 - Algo Class - INFO - Turning on strobe.
+2024-02-02 16:44:08,278 - Algo Class - INFO - Starting tone.
+2024-02-02 16:44:08,279 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 16:44:46,182 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 16:44:46,322 - Algo Class - INFO - Turning on strobe.
+2024-02-02 16:44:46,473 - Algo Class - INFO - Starting tone.
+2024-02-02 16:44:46,657 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Server Room - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 16:44:46,897 - Algo Class - INFO - Turning on strobe.
+2024-02-02 16:44:47,086 - Algo Class - INFO - Starting tone.
+2024-02-02 16:44:47,253 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Kitchen - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 16:44:47,487 - Algo Class - INFO - Turning on strobe.
+2024-02-02 16:44:47,770 - Algo Class - INFO - Starting tone.
+2024-02-02 16:44:47,771 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 16:44:56,430 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 16:44:56,568 - Algo Class - INFO - Turning on strobe.
+2024-02-02 16:44:56,710 - Algo Class - INFO - Starting tone.
+2024-02-02 16:44:56,878 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Server Room - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 16:44:57,018 - Algo Class - INFO - Turning on strobe.
+2024-02-02 16:44:57,162 - Algo Class - INFO - Starting tone.
+2024-02-02 16:44:57,338 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Kitchen - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 16:44:57,483 - Algo Class - INFO - Turning on strobe.
+2024-02-02 16:44:57,630 - Algo Class - INFO - Starting tone.
+2024-02-02 16:44:57,631 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 16:46:37,793 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-02 16:46:37,952 - Algo Class - INFO - Turning strobe off.
+2024-02-02 18:33:21,047 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Office - Vendor: PyCharm - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:33:21,184 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:33:21,331 - Algo Class - INFO - Starting tone.
+2024-02-02 18:33:21,333 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:37:35,921 - Algo Main - INFO - Not sending alert due to unknown protocol None.
+2024-02-02 18:37:35,923 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:37:35,924 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:39:16,147 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-02 18:39:16,281 - Algo Class - INFO - Turning strobe off.
+2024-02-02 18:39:24,765 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:39:25,046 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:39:25,046 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:39:25,046 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:40:03,310 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:40:03,452 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:40:03,453 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:40:03,453 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:40:09,746 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:40:09,916 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:40:09,916 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:40:09,916 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:40:18,128 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: AzureWav - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:40:18,368 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:40:18,368 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:40:18,368 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:40:36,584 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:40:36,733 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:40:36,734 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:40:36,734 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:41:02,940 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:41:03,077 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:41:03,077 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:41:03,078 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:41:13,376 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:41:13,542 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:41:13,543 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:41:13,544 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:41:19,760 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: AzureWav - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:41:19,901 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:41:20,050 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: AzureWav - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:41:20,187 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:41:20,188 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:41:20,189 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:41:54,397 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: AzureWav - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:41:54,537 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:41:54,538 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:41:54,539 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:42:00,778 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Google - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:42:00,981 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:42:00,981 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:42:00,981 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:42:15,278 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: AzureWav - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:42:15,422 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:42:15,422 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:42:15,422 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:42:17,450 - Algo Main - INFO - Not sending alert due to unknown protocol bt.
+2024-02-02 18:42:17,451 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:42:17,451 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:42:37,490 - Algo Main - INFO - Not sending alert due to unknown protocol bt.
+2024-02-02 18:42:37,491 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:42:37,492 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:43:01,743 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: AzureWav - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:43:01,928 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:43:01,928 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:43:01,928 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:43:05,970 - Algo Main - INFO - Not sending alert due to unknown protocol bt.
+2024-02-02 18:43:06,122 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: AzureWav - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:43:06,260 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:43:06,261 - ndjson Class - ERROR - Invalid JSON format: 
+2024-02-02 18:43:06,261 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:43:24,633 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Google - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:43:24,863 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:43:25,022 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Google - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:43:25,221 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:43:25,222 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:43:25,222 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:43:35,346 - Algo Main - INFO - Not sending alert due to unknown protocol bt.
+2024-02-02 18:43:35,347 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:43:35,347 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:43:45,566 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:43:45,704 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:43:45,874 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Google - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:43:46,052 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:43:46,053 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:43:46,053 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:43:56,327 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Google - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:43:56,471 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:43:56,472 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:43:56,472 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:44:02,572 - Algo Main - INFO - Not sending alert due to unknown protocol bt.
+2024-02-02 18:44:02,572 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:44:02,572 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:44:22,811 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:44:23,060 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:44:23,061 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:44:23,061 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:44:25,392 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:44:25,543 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:44:25,762 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:44:25,946 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:44:25,947 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:44:25,947 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:44:34,073 - Algo Main - INFO - Not sending alert due to unknown protocol bt.
+2024-02-02 18:44:34,074 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:44:34,074 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:44:36,291 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: AzureWav - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:44:36,447 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:44:36,447 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:44:36,447 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:44:48,684 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:44:48,847 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:44:48,848 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:44:48,848 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:44:55,213 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:44:55,395 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:44:55,395 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:44:55,395 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:44:57,452 - Algo Main - INFO - Not sending alert due to unknown protocol bt.
+2024-02-02 18:44:57,453 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:44:57,453 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:45:09,685 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: AzureWav - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:45:09,822 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:45:09,823 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:45:09,823 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:45:15,923 - Algo Main - INFO - Not sending alert due to unknown protocol bt.
+2024-02-02 18:45:15,924 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:45:15,924 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:45:18,152 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:45:18,328 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:45:18,329 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:45:18,329 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:45:24,733 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:45:24,906 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:45:24,907 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:45:24,907 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:45:33,190 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Google - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:45:33,383 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:45:33,383 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:45:33,384 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:45:51,636 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Google - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:45:51,771 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:45:51,771 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:45:51,772 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:46:16,029 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Google - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:46:16,181 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:46:16,181 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:46:16,182 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:46:24,463 - ndjson Class - INFO - {"event_type":"zone_detections","payload":{"area":{"site_id":"main_site","concentrator_id":"2awfrz","map_id":"tfi8j3"},"first_seen":{"time_s":1706924818,"position":[27.47,1.96]},"emitter":{"transmitter_id":"d0:e7:82:c5:ff:d8","protocol":"wifi","vendor":"AzureWav","network":{"network_info":{"client":true,"access_point":false},"name":"go_sharks!"}},"last_seen":{"position":[10.65,2.06],"time_s":1706924872},"device_info":{"manufacturer":"AzureWav","user":"","model":"","name":""},"tags":["algo","zone:Joe-Office"],"first_seen_lifetime":1675908150,"time_s":1706924818,"zone_name":"Joe-Office","fields":{"mac1":"58:cb:52:ae:43:9f","mac2":"d0:e7:82:c5:ff:d8","channel":"2412","frame_length":88,"frame_type":"Block Ack","wlan_ra":"58:cb:52:ae:43:9f","wlan_ta":"d0:e7:82:c5:ff:d8","datarate":"24.0","is_random_mac":false,"min_rssi":-58.0,"max_rssi":-58.0,"avg_rssi":-58.0,"std_rssi":0.0,"message_count":1,"data_volume_index":1672,"network_encryption":"wpa2","is_connected":true}},"webhook_name":"Algo","filter_name":"Algo"}
+2024-02-02 18:46:24,620 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: AzureWav - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:46:24,771 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:46:24,772 - ndjson Class - INFO - 
+2024-02-02 18:46:24,772 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:46:24,773 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:46:26,806 - ndjson Class - INFO - {"event_type":"zone_detections","payload":{"area":{"site_id":"main_site","concentrator_id":"2awfrz","map_id":"tfi8j3"},"first_seen":{"time_s":1706924894,"position":[27.47,1.96]},"emitter":{"transmitter_id":"c8:2a:dd:8e:ef:85","protocol":"wifi","vendor":"Google","network":{"network_info":{"client":true,"access_point":false},"name":"go_sharks!"}},"last_seen":{"position":[]},"device_info":{"manufacturer":"Google","user":"Joe","model":"","name":"Joe Phone"},"tags":["algo","zone:Joe-Office"],"first_seen_lifetime":1694057028,"time_s":1706924894,"zone_name":"Joe-Office","fields":{"bssid":"58:cb:52:ae:43:9f","mac1":"58:cb:52:ae:43:9f","mac2":"c8:2a:dd:8e:ef:85","mac3":"58:cb:52:ae:43:9f","channel":"2417","frame_length":84,"frame_type":"Null","wlan_ra":"58:cb:52:ae:43:9f","wlan_ta":"c8:2a:dd:8e:ef:85","datarate":"1.0","is_random_mac":false,"min_rssi":-46.0,"max_rssi":-46.0,"avg_rssi":-46.0,"std_rssi":0.0,"message_count":1,"data_volume_index":1596,"network_encryption":"wpa2","is_connected":true}},"webhook_name":"Algo","filter_name":"Algo"}
+2024-02-02 18:46:26,964 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Google - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:46:27,103 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:46:27,104 - ndjson Class - INFO - 
+2024-02-02 18:46:27,104 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:46:27,104 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:47:01,202 - ndjson Class - INFO - {"event_type":"zone_detections","payload":{"area":{"site_id":"main_site","concentrator_id":"2awfrz","map_id":"tfi8j3"},"first_seen":{"time_s":1706924930,"position":[27.47,1.96]},"emitter":{"transmitter_id":"cc5041f6:slave1","protocol":"bt","vendor":"Unknown","network":{"network_info":{},"name":"cc5041f6"}},"last_seen":{"position":[]},"device_info":{"manufacturer":"Unknown","user":"","model":"","name":""},"tags":["algo","zone:Joe-Office"],"first_seen_lifetime":1676828532,"time_s":1706924930,"zone_name":"Joe-Office","fields":{"piconet":"cc5041f6","piconet_src":"slave1","piconet_dst":"master","is_inquiry_or_scan_request":false,"uap":"cc","lap":"5041f6","frame_length":7,"packet_type":"0","is_connected":true,"is_random_mac":false,"min_rssi":-29.31,"max_rssi":-29.31,"avg_rssi":-29.31,"std_rssi":0.0,"message_count":25,"data_volume_index":700}},"webhook_name":"Algo","filter_name":"Algo"}
+2024-02-02 18:47:01,204 - Algo Main - INFO - Not sending alert due to unknown protocol bt.
+2024-02-02 18:47:01,204 - ndjson Class - INFO - 
+2024-02-02 18:47:01,204 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:47:01,204 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:47:03,308 - ndjson Class - INFO - {"event_type":"zone_detections","payload":{"area":{"site_id":"main_site","concentrator_id":"2awfrz","map_id":"tfi8j3"},"first_seen":{"time_s":1706924894,"position":[27.47,1.96]},"emitter":{"transmitter_id":"c8:2a:dd:8e:ef:85","protocol":"wifi","vendor":"Google","network":{"network_info":{"client":true,"access_point":false},"name":"go_sharks!"}},"last_seen":{"position":[27.47,1.96],"time_s":1706924912},"device_info":{"manufacturer":"Google","user":"Joe","model":"","name":"Joe Phone"},"tags":["algo","zone:Joe-Office"],"first_seen_lifetime":1694057028,"time_s":1706924894,"zone_name":"Joe-Office","fields":{"bssid":"58:cb:52:ae:43:9f","mac1":"58:cb:52:ae:43:9f","mac2":"c8:2a:dd:8e:ef:85","mac3":"58:cb:52:ae:43:9f","channel":"2417","frame_length":84,"frame_type":"Null","wlan_ra":"58:cb:52:ae:43:9f","wlan_ta":"c8:2a:dd:8e:ef:85","datarate":"1.0","is_random_mac":false,"min_rssi":-46.0,"max_rssi":-46.0,"avg_rssi":-46.0,"std_rssi":0.0,"message_count":1,"data_volume_index":1596,"network_encryption":"wpa2","is_connected":true}},"webhook_name":"Algo","filter_name":"Algo"}
+2024-02-02 18:47:03,530 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Google - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:47:03,707 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:47:03,708 - ndjson Class - INFO - 
+2024-02-02 18:47:03,708 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:47:03,708 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:47:07,765 - ndjson Class - INFO - {"event_type":"zone_detections","payload":{"area":{"site_id":"main_site","concentrator_id":"2awfrz","map_id":"tfi8j3"},"first_seen":{"time_s":1706924936,"position":[17.5,2.02]},"emitter":{"transmitter_id":"c8:2a:dd:8e:ef:85","protocol":"wifi","vendor":"Google","network":{"network_info":{"client":true,"access_point":false},"name":"go_sharks!"}},"last_seen":{"position":[]},"device_info":{"manufacturer":"Google","user":"Joe","model":"","name":"Joe Phone"},"tags":["algo","zone:Joe-Office"],"first_seen_lifetime":1694057028,"time_s":1706924936,"zone_name":"Joe-Office","fields":{"bssid":"58:cb:52:ae:43:9f","mac1":"58:cb:52:ae:43:9f","mac2":"c8:2a:dd:8e:ef:85","mac3":"58:cb:52:ae:43:9f","channel":"2412","frame_length":84,"frame_type":"Null","wlan_ra":"58:cb:52:ae:43:9f","wlan_ta":"c8:2a:dd:8e:ef:85","datarate":"1.0","is_random_mac":false,"min_rssi":-47.83,"max_rssi":-46.0,"avg_rssi":-46.92,"std_rssi":0.91,"message_count":2,"data_volume_index":3192,"network_encryption":"wpa2","is_connected":true}},"webhook_name":"Algo","filter_name":"Algo"}
+2024-02-02 18:47:07,934 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Google - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:47:08,150 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:47:08,150 - ndjson Class - INFO - 
+2024-02-02 18:47:08,150 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:47:08,150 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:47:10,172 - ndjson Class - INFO - {"event_type":"zone_detections","payload":{"area":{"site_id":"main_site","concentrator_id":"2awfrz","map_id":"tfi8j3"},"first_seen":{"time_s":1706924938,"position":[20.07,2.0]},"emitter":{"transmitter_id":"32:c2:ea:9e:4c:61","protocol":"wifi","vendor":"Unknown","network":{"network_info":{"client":true,"access_point":false},"name":"go_sharks!"}},"last_seen":{"position":[]},"device_info":{"manufacturer":"Unknown","user":"","model":"","name":""},"tags":["algo","zone:Joe-Office"],"first_seen_lifetime":1690406634,"time_s":1706924938,"zone_name":"Joe-Office","fields":{"mac1":"58:cb:52:ae:44:09","mac2":"32:c2:ea:9e:4c:61","channel":"5745","frame_length":76,"frame_type":"RTS","wlan_ra":"58:cb:52:ae:44:09","wlan_ta":"32:c2:ea:9e:4c:61","datarate":"24.0","is_random_mac":false,"min_rssi":-67.94,"max_rssi":-64.38,"avg_rssi":-66.16,"std_rssi":1.78,"message_count":13,"data_volume_index":18772,"network_encryption":"wpa2","is_connected":true}},"webhook_name":"Algo","filter_name":"Algo"}
+2024-02-02 18:47:10,322 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:47:10,456 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:47:10,456 - ndjson Class - INFO - 
+2024-02-02 18:47:10,456 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:47:10,456 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:47:12,491 - ndjson Class - INFO - {"event_type":"zone_detections","payload":{"area":{"site_id":"main_site","concentrator_id":"2awfrz","map_id":"tfi8j3"},"first_seen":{"time_s":1706924942,"position":[9.72,2.06]},"emitter":{"transmitter_id":"d0:e7:82:c5:ff:d8","protocol":"wifi","vendor":"AzureWav","network":{"network_info":{"client":true,"access_point":false},"name":"go_sharks!"}},"last_seen":{"position":[]},"device_info":{"manufacturer":"AzureWav","user":"","model":"","name":""},"tags":["algo","zone:Joe-Office"],"first_seen_lifetime":1675908150,"time_s":1706924942,"zone_name":"Joe-Office","fields":{"mac1":"58:cb:52:ae:43:9f","mac2":"d0:e7:82:c5:ff:d8","channel":"2412","frame_length":88,"frame_type":"Block Ack","wlan_ra":"58:cb:52:ae:43:9f","wlan_ta":"d0:e7:82:c5:ff:d8","datarate":"24.0","is_random_mac":false,"min_rssi":-59.0,"max_rssi":-56.0,"avg_rssi":-57.5,"std_rssi":1.5,"message_count":1,"data_volume_index":1672,"network_encryption":"wpa2","is_connected":true}},"webhook_name":"Algo","filter_name":"Algo"}
+2024-02-02 18:47:12,673 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: AzureWav - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:47:12,840 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:47:12,840 - ndjson Class - INFO - 
+2024-02-02 18:47:12,840 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:47:12,840 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:47:14,902 - ndjson Class - INFO - {"event_type":"zone_detections","payload":{"area":{"site_id":"main_site","concentrator_id":"2awfrz","map_id":"tfi8j3"},"first_seen":{"time_s":1706924832,"position":[27.47,1.96]},"emitter":{"transmitter_id":"9a:9d:5d:e3:48:90","protocol":"wifi","vendor":"Unknown","network":{"network_info":{"client":false,"access_point":true},"name":"XFINITY"}},"last_seen":{"position":[27.47,1.96],"time_s":1706924924},"device_info":{"manufacturer":"Unknown","user":"","model":"","name":""},"tags":["algo","zone:Joe-Office"],"first_seen_lifetime":1690326666,"time_s":1706924832,"zone_name":"Joe-Office","fields":{"ap_name":"XFINITY","bssid":"9a:9d:5d:e3:48:90","mac1":"ff:ff:ff:ff:ff:ff","mac2":"9a:9d:5d:e3:48:90","mac3":"9a:9d:5d:e3:48:90","channel":"5785","frame_length":424,"frame_type":"Beacon","wlan_mgt_fixed_capabilities_privacy":"1","wlan_mgt_rsn_akms_type":"1","wlan_mgt_tag_number":"0,1,5,7,32,35,48,11,59,45,61,127,107,108,191,192,195,255,255,255,221,221,221,221,221","wlan_mgt_wfa_ie_type":"2","wlan_ra":"ff:ff:ff:ff:ff:ff","wlan_ta":"9a:9d:5d:e3:48:90","datarate":"6.0","is_random_mac":false,"min_rssi":-60.0,"max_rssi":-60.0,"avg_rssi":-60.0,"std_rssi":0.0,"message_count":1,"data_volume_index":8056,"network_encryption":"wpa","is_connected":true}},"webhook_name":"Algo","filter_name":"Algo"}
+2024-02-02 18:47:15,056 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:47:15,215 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:47:15,215 - ndjson Class - INFO - 
+2024-02-02 18:47:15,215 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:47:15,215 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:47:17,304 - ndjson Class - INFO - {"event_type":"zone_detections","payload":{"area":{"site_id":"main_site","concentrator_id":"2awfrz","map_id":"tfi8j3"},"first_seen":{"time_s":1706924946,"position":[27.47,1.96]},"emitter":{"transmitter_id":"9a:9d:5d:e3:48:90","protocol":"wifi","vendor":"Unknown","network":{"network_info":{"client":false,"access_point":true},"name":"XFINITY"}},"last_seen":{"position":[]},"device_info":{"manufacturer":"Unknown","user":"","model":"","name":""},"tags":["algo","zone:Joe-Office"],"first_seen_lifetime":1690326666,"time_s":1706924946,"zone_name":"Joe-Office","fields":{"ap_name":"XFINITY","bssid":"9a:9d:5d:e3:48:90","mac1":"ff:ff:ff:ff:ff:ff","mac2":"9a:9d:5d:e3:48:90","mac3":"9a:9d:5d:e3:48:90","channel":"5785","frame_length":424,"frame_type":"Beacon","wlan_mgt_fixed_capabilities_privacy":"1","wlan_mgt_rsn_akms_type":"1","wlan_mgt_tag_number":"0,1,5,7,32,35,48,11,59,45,61,127,107,108,191,192,195,255,255,255,221,221,221,221,221","wlan_mgt_wfa_ie_type":"2","wlan_ra":"ff:ff:ff:ff:ff:ff","wlan_ta":"9a:9d:5d:e3:48:90","datarate":"6.0","is_random_mac":false,"min_rssi":-60.0,"max_rssi":-60.0,"avg_rssi":-60.0,"std_rssi":0.0,"message_count":1,"data_volume_index":8056,"network_encryption":"wpa","is_connected":true}},"webhook_name":"Algo","filter_name":"Algo"}
+2024-02-02 18:47:17,477 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:47:17,716 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:47:17,717 - ndjson Class - INFO - 
+2024-02-02 18:47:17,717 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:47:17,717 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:47:27,783 - ndjson Class - INFO - {"event_type":"zone_detections","payload":{"area":{"site_id":"main_site","concentrator_id":"2awfrz","map_id":"tfi8j3"},"first_seen":{"time_s":1706924930,"position":[27.47,1.96]},"emitter":{"transmitter_id":"cc5041f6:slave1","protocol":"bt","vendor":"Unknown","network":{"network_info":{},"name":"cc5041f6"}},"last_seen":{"position":[27.47,1.96],"time_s":1706924938},"device_info":{"manufacturer":"Unknown","user":"","model":"","name":""},"tags":["algo","zone:Joe-Office"],"first_seen_lifetime":1676828532,"time_s":1706924930,"zone_name":"Joe-Office","fields":{"piconet":"cc5041f6","piconet_src":"slave1","piconet_dst":"master","is_inquiry_or_scan_request":false,"uap":"cc","lap":"5041f6","frame_length":7,"packet_type":"0","is_connected":true,"is_random_mac":false,"min_rssi":-29.31,"max_rssi":-29.31,"avg_rssi":-29.31,"std_rssi":0.0,"message_count":25,"data_volume_index":700}},"webhook_name":"Algo","filter_name":"Algo"}
+2024-02-02 18:47:27,784 - Algo Main - INFO - Not sending alert due to unknown protocol bt.
+2024-02-02 18:47:27,784 - ndjson Class - INFO - 
+2024-02-02 18:47:27,784 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:47:27,785 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:47:29,806 - ndjson Class - INFO - {"event_type":"zone_detections","payload":{"area":{"site_id":"main_site","concentrator_id":"2awfrz","map_id":"tfi8j3"},"first_seen":{"time_s":1706924938,"position":[20.07,2.0]},"emitter":{"transmitter_id":"32:c2:ea:9e:4c:61","protocol":"wifi","vendor":"Unknown","network":{"network_info":{"client":true,"access_point":false},"name":"go_sharks!"}},"last_seen":{"time_s":1706924938,"position":[20.07,2.0]},"device_info":{"manufacturer":"Unknown","user":"","model":"","name":""},"tags":["algo","zone:Joe-Office"],"first_seen_lifetime":1690406634,"time_s":1706924938,"zone_name":"Joe-Office","fields":{"mac1":"58:cb:52:ae:44:09","mac2":"32:c2:ea:9e:4c:61","channel":"5745","frame_length":76,"frame_type":"RTS","wlan_ra":"58:cb:52:ae:44:09","wlan_ta":"32:c2:ea:9e:4c:61","datarate":"24.0","is_random_mac":false,"min_rssi":-67.94,"max_rssi":-64.38,"avg_rssi":-66.16,"std_rssi":1.78,"message_count":13,"data_volume_index":18772,"network_encryption":"wpa2","is_connected":true}},"webhook_name":"Algo","filter_name":"Algo"}
+2024-02-02 18:47:29,957 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:47:30,095 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:47:30,095 - ndjson Class - INFO - 
+2024-02-02 18:47:30,095 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:47:30,096 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:47:32,213 - ndjson Class - INFO - {"event_type":"zone_detections","payload":{"area":{"site_id":"main_site","concentrator_id":"2awfrz","map_id":"tfi8j3"},"first_seen":{"time_s":1706924962,"position":[20.64,2.0]},"emitter":{"transmitter_id":"32:c2:ea:9e:4c:61","protocol":"wifi","vendor":"Unknown","network":{"network_info":{"client":true,"access_point":false},"name":"go_sharks!"}},"last_seen":{"position":[]},"device_info":{"manufacturer":"Unknown","user":"","model":"","name":""},"tags":["algo","zone:Joe-Office"],"first_seen_lifetime":1690406634,"time_s":1706924962,"zone_name":"Joe-Office","fields":{"mac1":"58:cb:52:ae:44:09","mac2":"32:c2:ea:9e:4c:61","channel":"5765","frame_length":76,"frame_type":"RTS","wlan_ra":"58:cb:52:ae:44:09","wlan_ta":"32:c2:ea:9e:4c:61","datarate":"24.0","is_random_mac":false,"min_rssi":-68.94,"max_rssi":-64.95,"avg_rssi":-66.94,"std_rssi":1.99,"message_count":19,"data_volume_index":27436,"network_encryption":"wpa2","is_connected":true}},"webhook_name":"Algo","filter_name":"Algo"}
+2024-02-02 18:47:32,393 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Unknown - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:47:32,559 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:47:32,560 - ndjson Class - INFO - 
+2024-02-02 18:47:32,560 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:47:32,560 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:47:42,626 - ndjson Class - INFO - {"event_type":"zone_detections","payload":{"area":{"site_id":"main_site","concentrator_id":"2awfrz","map_id":"tfi8j3"},"first_seen":{"time_s":1706924936,"position":[17.5,2.02]},"emitter":{"transmitter_id":"c8:2a:dd:8e:ef:85","protocol":"wifi","vendor":"Google","network":{"network_info":{"client":true,"access_point":false},"name":"go_sharks!"}},"last_seen":{"position":[1.53,2.11],"time_s":1706924952},"device_info":{"manufacturer":"Google","user":"Joe","model":"","name":"Joe Phone"},"tags":["algo","zone:Joe-Office"],"first_seen_lifetime":1694057028,"time_s":1706924936,"zone_name":"Joe-Office","fields":{"bssid":"58:cb:52:ae:43:9f","mac1":"58:cb:52:ae:43:9f","mac2":"c8:2a:dd:8e:ef:85","mac3":"58:cb:52:ae:43:9f","channel":"2412","frame_length":84,"frame_type":"Null","wlan_ra":"58:cb:52:ae:43:9f","wlan_ta":"c8:2a:dd:8e:ef:85","datarate":"1.0","is_random_mac":false,"min_rssi":-47.83,"max_rssi":-46.0,"avg_rssi":-46.92,"std_rssi":0.91,"message_count":2,"data_volume_index":3192,"network_encryption":"wpa2","is_connected":true}},"webhook_name":"Algo","filter_name":"Algo"}
+2024-02-02 18:47:42,814 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Google - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:47:43,016 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:47:43,017 - ndjson Class - INFO - 
+2024-02-02 18:47:43,017 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:47:43,017 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:48:05,099 - ndjson Class - INFO - {"event_type":"zone_detections","payload":{"area":{"site_id":"main_site","concentrator_id":"2awfrz","map_id":"tfi8j3"},"first_seen":{"time_s":1706924994,"position":[20.65,2.0]},"emitter":{"transmitter_id":"c8:2a:dd:8e:ef:85","protocol":"wifi","vendor":"Google","network":{"network_info":{"client":true,"access_point":false},"name":"go_sharks!"}},"last_seen":{"position":[]},"device_info":{"manufacturer":"Google","user":"Joe","model":"","name":"Joe Phone"},"tags":["algo","zone:Joe-Office"],"first_seen_lifetime":1694057028,"time_s":1706924994,"zone_name":"Joe-Office","fields":{"mac1":"58:cb:52:ae:43:9f","mac2":"c8:2a:dd:8e:ef:85","channel":"2412","frame_length":88,"frame_type":"Block Ack","wlan_ra":"58:cb:52:ae:43:9f","wlan_ta":"c8:2a:dd:8e:ef:85","datarate":"24.0","is_random_mac":false,"min_rssi":-49.0,"max_rssi":-45.0,"avg_rssi":-47.0,"std_rssi":2.0,"message_count":1,"data_volume_index":1672,"network_encryption":"wpa2","is_connected":true}},"webhook_name":"Algo","filter_name":"Algo"}
+2024-02-02 18:48:05,264 - Algo Class - INFO - Sending alerts with payload: {'type': 'image', 'text1': 'ALERT - wifi in Joe-Office - Vendor: Google - ALERT', 'textColor': 'orange', 'textFont': 'roboto', 'textPosition': 'middle', 'textScroll': '1', 'textScrollSpeed': '4', 'textSize': 'medium'}
+2024-02-02 18:48:05,399 - Algo Class - INFO - Turning on strobe.
+2024-02-02 18:48:05,400 - ndjson Class - INFO - 
+2024-02-02 18:48:05,400 - ndjson Class - ERROR - Invalid JSON format: Expecting value: line 1 column 1 (char 0)
+2024-02-02 18:48:05,401 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-02 18:49:45,560 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-02 18:49:45,682 - Algo Class - INFO - Turning strobe off.
