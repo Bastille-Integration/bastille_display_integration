@@ -13,6 +13,7 @@ with open("config.yaml", "r") as config_file:
     config = yaml.safe_load(config_file)
 
 # Extract configuration values
+vendor = config["vendor"]
 log_file = config["log_file"]
 source_host = config["source_host"]
 source_path = config["source_path"]
