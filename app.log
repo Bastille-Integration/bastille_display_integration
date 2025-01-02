@@ -269,3 +269,5 @@
 2024-02-04 17:36:02,551 - Algo Class - INFO - Turning on strobe.
 2024-02-04 17:36:02,748 - Algo Class - INFO - Starting tone.
 2024-02-04 17:36:02,749 - Algo Main - INFO - Resetting wait time before CLEARing alerts.
+2024-02-04 17:37:42,945 - Algo Class - INFO - Clearing alerts due to not receiving new Zone Detections.
+2024-02-04 17:37:43,106 - Algo Class - INFO - Turning strobe off.
