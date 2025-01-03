@@ -5,6 +5,7 @@ import asyncio
 from ndjson_to_json import NDJson
 from bastille_webhook_parser import BastilleWebhookParser
 from algo import Algo
+from freeport import Freeport
 
 reset_task=None
 
@@ -19,6 +20,7 @@ source_host = config["source_host"]
 source_path = config["source_path"]
 source_port = config["source_port"]
 target_host = config["target_host"]
+target_port = config["target_port"]
 strobe_pattern = config["strobe_pattern"]
 strobe_color = config["strobe_color"]
 auth_username = config["auth_username"]
@@ -29,14 +31,16 @@ allowed_tags = config["allowed_tags"]
 tone = config["tone"]
 tone_wav = config["tone_wav"]
 
-
 # Configure logging
 logging.basicConfig(filename=log_file, level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-logger = logging.getLogger("Algo Main")
+logger = logging.getLogger("Main")
 
 app = FastAPI()
-# Create Algo object
-a = Algo(host=target_host, username=auth_username, password=auth_password, log_file=log_file)
+# Create Algo or Freeport object
+if vendor == "Algo":
+    a = Algo(host=target_host, username=auth_username, password=auth_password, log_file=log_file)
+if vendor == "Freeport":
+    f = Freeport(host=target_host, port= target_port, username=auth_username, password=auth_password, log_file=log_file)
 
 def create_alert(body):
     #Covert NDjson to json
@@ -65,6 +69,7 @@ def create_alert(body):
                 "textScrollSpeed": "4",
                 "textSize": "medium"
             }
+        if vendor == "Algo":
             a.alert_screen(target_payload)
             # Algo strobe
             strobe_on_payload = {
@@ -75,11 +80,12 @@ def create_alert(body):
             # Tone
             if tone:
                 tone_payload = {
-                        "path": tone_wav,
-                        "loop": "false"
-                    }
+                    "path": tone_wav,
+                    "loop": "false"
+                }
                 a.tone(tone_payload=tone_payload)
-
+        else:
+            f.screen_change(option="alert", protocol=protocol, device=vendor, zone=zone)
 
 async def turn_off_alert():
     await asyncio.sleep(clear_time)  # Sleep for X seconds
@@ -96,9 +102,12 @@ async def turn_off_alert():
             "textScrollSpeed": "4",
             "textSize": "medium"
         }
-        a.alert_clear(clear_target_payload)
-        # Algo strobe off
-        a.strobe_off()
+        if vendor == "Algo":
+            a.alert_clear(clear_target_payload)
+            # Algo strobe off
+            a.strobe_off()
+        if vendor == "Freeport":
+            f.screen_change(option="clear")
 
 async def reset_new_query_flag():
     global new_query_made
@@ -106,7 +115,7 @@ async def reset_new_query_flag():
     # Sleep for X seconds - reduce by 1 to ensure new_query_made turns false before CLEAR starts
     await asyncio.sleep(clear_time-1)
 
-    #Tuyrning False will allow CLEAR to run
+    #Turning False will allow CLEAR to run
     new_query_made = False
 
 @app.post(source_path)

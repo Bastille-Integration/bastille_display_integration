@@ -1,13 +1,15 @@
 import socket
 import ssl
+import logging
 
 class Freeport:
-    def __init__(self, host: str, port: int, username: str, password: str):
+    def __init__(self, host: str, port: int, username: str, password: str, log_file):
         self.host = host
         self.port = port
         self.username = username
         self.password = password
-
+        logging.basicConfig(filename=log_file, level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        self.logger = logging.getLogger("Freeport Class")
     def screen_change(self, option: str, protocol: str = None, device: str = None, zone: str = None):
         self.option = option
         self.protocol = protocol
@@ -36,25 +38,27 @@ class Freeport:
             # Wrap the socket with SSL for TLS
             tls_socket = context.wrap_socket(raw_socket, server_hostname=self.host)
 
-            print(f"Connected to {self.host}:{self.port} using TLS")
+            self.logger.info(f"Connected to {self.host}:{self.port} using TLS")
+            #print(f"Connected to {self.host}:{self.port} using TLS")
 
             # Read server prompts and authenticate
             buffer_size = 4096  # Adjust as needed
             authenticated = False
             while True:
                 response = tls_socket.recv(buffer_size).decode()
-                print("Server says:")
-                print(response)
+                self.logger.info(f"Server says: {response}")
+                #print("Server says:")
+                #print(response)
 
                 if "login:" in response.lower():  # Check if the server asks for login
                     tls_socket.sendall(f"{self.username}\n".encode())
-                    print(f"Sent username: {self.username}")
+                    self.logger.info(f"Sent username: {self.username}")
                 elif "password:" in response.lower():  # Check if the server asks for password
                     tls_socket.sendall(f"{self.password}\n".encode())
-                    print(f"Sent password: {'*' * len(self.password)}")
+                    self.logger.info(f"Sent password: {'*' * len(self.password)}")
                 elif "welcome" in response.lower():  # Check for a successful login message (customize as needed)
                     authenticated = True
-                    print("Login successful.")
+                    self.logger.info("Login successful.")
                     break
 
             if self.option == "alert":
@@ -90,24 +94,24 @@ class Freeport:
             if authenticated:
                 # Run multiple commands
                 for command in commands:
-                    print(f"Running command: {command}")
+                    self.logger.info(f"Running command: {command}")
                     tls_socket.sendall(f"{command}\n".encode())
 
                     # Wait for the server's response
                     response = wait_for_response(tls_socket, expected_keyword="SUCCESS")
-                    #print(f"Output for '{command}':")
-                    print(response)
+                    self.logger.info (f"{response}")
+                    #print(response)
 
                     # Check for SUCCESS in the response
                     if "SUCCESS" not in response:
-                        print(f"Command '{command}' did not return SUCCESS. Stopping further execution.")
+                        self.logger.info(f"Command '{command}' did not return SUCCESS. Stopping further execution.")
                         break
                     else:
-                        print("Moving on to next command.")
+                        self.logger.info("Moving on to next command.")
 
             # Close the connection
             tls_socket.close()
-            print("Connection closed.")
+            self.logger.info("Connection closed.")
         except Exception as e:
-            print(f"Failed to connect to {self.host}:{self.port}")
-            print(f"Error: {e}")
+            self.logger.info(f"Failed to connect to {self.host}:{self.port}")
+            self.logger.info(f"Error: {e}")

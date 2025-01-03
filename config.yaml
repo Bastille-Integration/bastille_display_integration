@@ -1,3 +1,5 @@
+#Vendor - Algo or Freeport
+vendor: Freeport
 #Logging
 log_file: app.log
 #Integration IP - 0.0.0.0 if global.
@@ -7,13 +9,21 @@ source_path: /zone-detections
 #Integration port.
 source_port: 8000
 #Algo screen IP or host.
-target_host: http://172.30.2.118
+#target_host: http://172.30.2.118
+#Freeport IP
+target_host: 172.30.2.240
+#Algo or Freeport API port.
+target_port: 2311
 #Algo screen username.
-auth_username: admin
+#auth_username: admin
 # Algo screen password.
-auth_password: algo
+#auth_password: algo
+#Freeport screen username.
+auth_username: bn
+# Freeport screen password.
+auth_password: bn
 # Algo screen will clear if no alerts are triggered for this amount of time.
-clear_time: 100
+clear_time: 300
 # ONLY monitored protocols will alert.
 monitored_protocols: 
   - cellular
