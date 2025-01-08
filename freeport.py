@@ -21,8 +21,6 @@ class Freeport:
             while True:
                 data = sock.recv(buffer_size).decode()
                 response += data
-                #print("Server response fragment:")
-                #print(data)
                 if expected_keyword in response or not data.strip():
                     break
             return response
@@ -39,7 +37,6 @@ class Freeport:
             tls_socket = context.wrap_socket(raw_socket, server_hostname=self.host)
 
             self.logger.info(f"Connected to {self.host}:{self.port} using TLS")
-            #print(f"Connected to {self.host}:{self.port} using TLS")
 
             # Read server prompts and authenticate
             buffer_size = 4096  # Adjust as needed
@@ -47,8 +44,6 @@ class Freeport:
             while True:
                 response = tls_socket.recv(buffer_size).decode()
                 self.logger.info(f"Server says: {response}")
-                #print("Server says:")
-                #print(response)
 
                 if "login:" in response.lower():  # Check if the server asks for login
                     tls_socket.sendall(f"{self.username}\n".encode())
