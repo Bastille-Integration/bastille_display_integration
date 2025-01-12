@@ -1,0 +1,11 @@
+[Unit]
+Description=Bastille Display Integration Service
+
+[Service]
+User=bn
+WorkingDirectory=/home/bn/bastille_display_integration
+ExecStart=/usr/bin/python3.8 /home/bn/bastille_display_integration/main.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
