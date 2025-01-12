@@ -1,6 +1,6 @@
 # Clone Git Repository
 
-git clone https://github.com/dalybastille/algo_integration.git
+git clone https://github.com/dalybastille/bastille_display_integration.git
 
 # Requirements
 
