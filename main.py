@@ -127,11 +127,12 @@ async def receive_ndjson(request: Request, background_tasks: BackgroundTasks):
 
     # Create alert based on Bastille webhook
     webhook = await request.body()
-    try:
-        create_alert(webhook)
-        return "success"
-    except Exception as e:
-        return "failure"
+    create_alert(webhook)
+    # try:
+    #     create_alert(webhook)
+    #     return "success"
+    # except Exception as e:
+    #     return "failure"
 
     # Cancel any previously scheduled reset_new_query_flag task
     if reset_task and not reset_task.done():
