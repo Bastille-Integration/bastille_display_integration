@@ -128,6 +128,7 @@ async def receive_ndjson(request: Request, background_tasks: BackgroundTasks):
     # Create alert based on Bastille webhook
     webhook = await request.body()
     create_alert(webhook)
+
     # try:
     #     create_alert(webhook)
     #     return "success"
