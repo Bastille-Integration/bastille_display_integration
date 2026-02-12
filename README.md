@@ -1,16 +1,20 @@
 # Clone Git Repository
 
+Below instructions assumes you are in the /home/bn directory.
+
 git clone https://github.com/dalybastille/bastille_display_integration.git
 
 # Requirements
 
-Need to be running Python 3.8.
+Latest running on Ubuntu 24.04.
 
-Pip needs to be 3.8: https://stackoverflow.com/questions/61717006/pip-for-python-3-8.
+Running Python 3.12.
 
-Run:
-
-pip install -r requirements.txt
+Run the following:
+- sudo apt install python3-fastapi
+- sudo apt install python3-httpx
+- python3 -m pip install ndjson --break-system-packages
+- python3 -m pip install PyYAML --break-system-packages
 
 # Config
 
@@ -19,18 +23,6 @@ Edit config.yaml
 
 # Make daemon
 
-Make changes to algo_api.service file. Following directory paths need to be where you install:
-
-WorkingDirectory=/home/bn/algo_integration
-
-ExecStart=/usr/bin/python3.8 /home/bn/algo_integration/algo.py
-
-Copy service file:
-   
-cp algo_api.service /etc/systemd/system/
-
-Run the following:
-
+sudo cp bastille_display_integration.service /etc/systemd/system/
 sudo systemctl daemon-reload
-
-sudo systemctl start algo_api
+sudo systemctl start bastille_display_integration.service 
