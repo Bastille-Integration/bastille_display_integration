@@ -24,5 +24,7 @@ Edit config.yaml
 # Make daemon
 
 sudo cp bastille_display_integration.service /etc/systemd/system/
+
 sudo systemctl daemon-reload
+
 sudo systemctl start bastille_display_integration.service 
