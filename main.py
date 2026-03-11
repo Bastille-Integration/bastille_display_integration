@@ -51,7 +51,7 @@ def create_alert(body):
         i = BastilleWebhookParser(i)
         protocol = i.parse("protocol")
         zone = i.parse("zone")
-        vendor = i.parse("vendor")
+        manufacturer = i.parse("vendor")
         tags = i.parse("tags")
         #Prepare and send Algo text
         if protocol not in monitored_protocols:
@@ -61,7 +61,7 @@ def create_alert(body):
         else:
             target_payload = {
                 "type": "image",
-                "text1": f"ALERT - {protocol} in {zone} - Vendor: {vendor} - ALERT",
+                "text1": f"ALERT - {protocol} in {zone} - Vendor: {manufacturer} - ALERT",
                 "textColor": "orange",
                 "textFont": "roboto",
                 "textPosition": "middle",
@@ -70,6 +70,7 @@ def create_alert(body):
                 "textSize": "medium"
             }
         if vendor == "Algo":
+            logger.info(f'Sending alert to Algo')
             a.alert_screen(target_payload)
             # Algo strobe
             strobe_on_payload = {
@@ -84,8 +85,9 @@ def create_alert(body):
                     "loop": "false"
                 }
                 a.tone(tone_payload=tone_payload)
-        else:
-            f.screen_change(option="alert", protocol=protocol, device=vendor, zone=zone)
+        if vendor == "Freeport":
+            logger.info(f'Sending alert to Freeport')
+            f.screen_change(option="alert", protocol=protocol, device=manufacturer, zone=zone)
 
 async def turn_off_alert():
     await asyncio.sleep(clear_time)  # Sleep for X seconds
