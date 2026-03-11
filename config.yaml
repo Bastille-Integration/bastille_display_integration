@@ -1,31 +1,17 @@
-#Vendor - Algo or Freeport
-vendor: Freeport
+## GLOBAL
+#
 #Logging
 log_file: app.log
 #Integration IP - 0.0.0.0 if global.
 source_host: 0.0.0.0
-#Integration path.
+#Integration path where Bastille webhooks will be sent.
 source_path: /zone-detections
-#Integration port.
-source_port: 8000
-#Algo screen IP or host.
-#target_host: http://172.30.2.118
-#Freeport IP
-target_host: 172.30.2.240
-#Algo or Freeport API port.
-target_port: 2311
-#Algo screen username.
-#auth_username: admin
-# Algo screen password.
-#auth_password: algo
-#Freeport screen username.
-auth_username: bn
-# Freeport screen password.
-auth_password: bn
+#Integration port where Bastille webhooks will be sent.
+source_port: 8001
 # Algo screen will clear if no alerts are triggered for this amount of time.
-clear_time: 300
+clear_time: 60
 # ONLY monitored protocols will alert.
-monitored_protocols: 
+monitored_protocols:
   - cellular
   - wifi
   - ble
@@ -33,9 +19,25 @@ monitored_protocols:
 allowed_tags:
   - authorized
   - exclude
-# Strobe variables. Pick pattern and color. 
+#
+## FREEPORT
+#
+#vendor: Freeport 
+#target_host: 10.35.44.51 
+#target_port: 80
+#auth_username: bn
+#auth_password: bn
+#
+# ALGO
+#
+vendor: Algo
+target_host: http://172.30.2.119
+target_port: 80
+auth_username: admin
+auth_password: algo
+text_color: red
 strobe_pattern: 2
-strobe_color: amber
+strobe_color: red
 #    "tonelist":
 #        "bell-na.wav",
 #        "bell-uk.wav",
@@ -52,4 +54,4 @@ strobe_color: amber
 #        "warble4-trill.wav"
 # Set tone on/off and recording from above default list (or record your own)
 tone: True
-tone_wav: joe_voice.wav
+tone_wav: bell-na.wav
