@@ -6,6 +6,8 @@ log_file: app.log
 source_host: 0.0.0.0
 #Integration path where Bastille webhooks will be sent.
 source_path: /zone-detections
+#Integration path where Bastille ADAM findings will be sent.
+adam_path: /adam-findings
 #Integration port where Bastille webhooks will be sent.
 source_port: 8001
 # Algo screen will clear if no alerts are triggered for this amount of time.

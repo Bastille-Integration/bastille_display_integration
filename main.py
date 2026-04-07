@@ -4,6 +4,7 @@ import logging
 import asyncio
 from ndjson_to_json import NDJson
 from bastille_webhook_parser import BastilleWebhookParser
+from adam_webhook_parser import AdamWebhookParser
 from algo import Algo
 from freeport import Freeport
 
@@ -18,6 +19,7 @@ vendor = config["vendor"]
 log_file = config["log_file"]
 source_host = config["source_host"]
 source_path = config["source_path"]
+adam_path = config["adam_path"]
 source_port = config["source_port"]
 target_host = config["target_host"]
 target_port = config["target_port"]
@@ -89,6 +91,53 @@ def create_alert(body):
             logger.info(f'Sending alert to Freeport')
             f.screen_change(option="alert", protocol=protocol, device=manufacturer, zone=zone)
 
+def create_adam_alert(body):
+    parsed = AdamWebhookParser(body)
+    protocol = parsed.parse("protocol")
+    zone = parsed.parse("zone")
+    manufacturer = parsed.parse("vendor")
+    severity = parsed.parse("severity")
+    reasons = parsed.parse("reasons")
+    tags = parsed.parse("tags")
+
+    if protocol and protocol not in monitored_protocols:
+        logger.info(f'ADAM: Not sending alert due to unmonitored protocol {protocol}.')
+        return
+    if any(i in tags for i in allowed_tags):
+        logger.info(f'ADAM: Not sending alert due to known tags {tags}')
+        return
+
+    reason_text = ", ".join(reasons) if reasons else "unknown"
+    alert_text = f"ADAM ALERT - {severity.upper() if severity else 'UNKNOWN'} - {reason_text} - {protocol} in {zone} - Vendor: {manufacturer}"
+
+    target_payload = {
+        "type": "image",
+        "text1": alert_text,
+        "textColor": "red" if severity in ("high", "critical") else "orange",
+        "textFont": "roboto",
+        "textPosition": "middle",
+        "textScroll": "1",
+        "textScrollSpeed": "4",
+        "textSize": "medium"
+    }
+    if vendor == "Algo":
+        logger.info(f'Sending ADAM alert to Algo')
+        a.alert_screen(target_payload)
+        strobe_on_payload = {
+            "pattern": strobe_pattern,
+            "color1": strobe_color
+        }
+        a.strobe_on(strobe_on_payload)
+        if tone:
+            tone_payload = {
+                "path": tone_wav,
+                "loop": "false"
+            }
+            a.tone(tone_payload=tone_payload)
+    if vendor == "Freeport":
+        logger.info(f'Sending ADAM alert to Freeport')
+        f.screen_change(option="alert", protocol=protocol, device=manufacturer, zone=zone)
+
 async def turn_off_alert():
     await asyncio.sleep(clear_time)  # Sleep for X seconds
     global new_query_made
@@ -144,6 +193,27 @@ async def receive_ndjson(request: Request, background_tasks: BackgroundTasks):
     # Schedule the reset_new_query_flag function to run in the background after 30 seconds
     reset_task = asyncio.create_task(reset_new_query_flag())
     logger.info("Resetting wait time before CLEARing alerts.")
+
+    # Start a background job to CLEAR alerts
+    background_tasks.add_task(turn_off_alert)
+
+@app.post(adam_path)
+async def receive_adam_finding(request: Request, background_tasks: BackgroundTasks):
+    global reset_task
+    global new_query_made
+    new_query_made = True
+
+    # Parse ADAM finding JSON
+    body = await request.json()
+    create_adam_alert(body)
+
+    # Cancel any previously scheduled reset_new_query_flag task
+    if reset_task and not reset_task.done():
+        reset_task.cancel()
+
+    # Schedule the reset_new_query_flag function to run in the background
+    reset_task = asyncio.create_task(reset_new_query_flag())
+    logger.info("ADAM: Resetting wait time before CLEARing alerts.")
 
     # Start a background job to CLEAR alerts
     background_tasks.add_task(turn_off_alert)
