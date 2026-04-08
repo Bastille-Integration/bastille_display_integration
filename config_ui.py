@@ -118,11 +118,51 @@ async def get_status(credentials: HTTPBasicCredentials = Depends(verify_credenti
     config_ui = get_service_info("bastille_config_ui.service")
     cfg = load_config()
 
+    # Display target health check
+    target_health = {"reachable": False, "detail": "Not checked"}
+    vendor_name = cfg.get("vendor", "")
+    target_host = cfg.get("target_host", "")
+    target_port = cfg.get("target_port", 80)
+
+    if vendor_name == "Algo" and target_host:
+        try:
+            resp = requests.get(
+                target_host,
+                auth=(cfg.get("auth_username", ""), cfg.get("auth_password", "")),
+                timeout=5
+            )
+            target_health = {"reachable": True, "detail": f"HTTP {resp.status_code}"}
+        except requests.exceptions.ConnectionError:
+            target_health = {"reachable": False, "detail": "Connection refused"}
+        except requests.exceptions.Timeout:
+            target_health = {"reachable": False, "detail": "Connection timed out"}
+        except Exception as e:
+            target_health = {"reachable": False, "detail": str(e)}
+
+    elif vendor_name == "Freeport" and target_host:
+        import socket
+        import ssl as ssl_mod
+        try:
+            raw = socket.create_connection((target_host, int(target_port)), timeout=5)
+            ctx = ssl_mod.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl_mod.CERT_NONE
+            tls = ctx.wrap_socket(raw, server_hostname=target_host)
+            tls.close()
+            target_health = {"reachable": True, "detail": f"TLS connection OK on port {target_port}"}
+        except socket.timeout:
+            target_health = {"reachable": False, "detail": "Connection timed out"}
+        except ConnectionRefusedError:
+            target_health = {"reachable": False, "detail": "Connection refused"}
+        except Exception as e:
+            target_health = {"reachable": False, "detail": str(e)}
+
     return {
         "services": {
             "integration": integration,
             "config_ui": config_ui,
         },
+        "target_health": target_health,
         "config_summary": {
             "vendor": cfg.get("vendor", "N/A"),
             "source_host": cfg.get("source_host", "N/A"),
@@ -780,7 +820,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <div class="card-title" style="margin-bottom: 0;">Status</div>
       <button class="status-refresh" onclick="loadStatus()">Refresh</button>
     </div>
-    <div class="status-grid">
+    <div class="status-grid" style="grid-template-columns: 1fr 1fr 1fr;">
       <div class="status-box">
         <div class="status-box-title">Integration Service</div>
         <div class="status-indicator">
@@ -796,6 +836,14 @@ HTML_PAGE = r"""<!DOCTYPE html>
           <span id="uiStatusText">Loading...</span>
         </div>
         <div class="status-detail" id="uiStatusDetail"></div>
+      </div>
+      <div class="status-box">
+        <div class="status-box-title">Display Target</div>
+        <div class="status-indicator">
+          <span class="status-dot unknown" id="targetStatusDot"></span>
+          <span id="targetStatusText">Checking...</span>
+        </div>
+        <div class="status-detail" id="targetStatusDetail"></div>
       </div>
     </div>
     <div class="config-summary-wrap" id="configSummary"></div>
@@ -1624,6 +1672,21 @@ async function loadStatus() {
     const data = await res.json();
     setServiceStatus('intStatusDot', 'intStatusText', 'intStatusDetail', data.services.integration);
     setServiceStatus('uiStatusDot', 'uiStatusText', 'uiStatusDetail', data.services.config_ui);
+    // Display target health
+    const th = data.target_health || {};
+    const tDot = document.getElementById('targetStatusDot');
+    const tText = document.getElementById('targetStatusText');
+    const tDetail = document.getElementById('targetStatusDetail');
+    if (th.reachable) {
+      tDot.className = 'status-dot active';
+      tText.textContent = 'Reachable';
+      tText.style.color = 'var(--success)';
+    } else {
+      tDot.className = 'status-dot inactive';
+      tText.textContent = 'Unreachable';
+      tText.style.color = 'var(--danger)';
+    }
+    tDetail.textContent = th.detail || '';
     renderConfigSummary(data.config_summary);
   } catch (e) {
     document.getElementById('intStatusText').textContent = 'Error';
