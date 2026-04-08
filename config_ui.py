@@ -97,6 +97,46 @@ async def put_config(request: Request, credentials: HTTPBasicCredentials = Depen
     return {"status": "ok"}
 
 
+@app.get("/api/status", response_class=JSONResponse)
+async def get_status(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    def get_service_info(service_name):
+        info = {}
+        for prop in ["ActiveState", "SubState", "MainPID", "ActiveEnterTimestamp"]:
+            try:
+                result = subprocess.run(
+                    ["systemctl", "show", service_name, f"--property={prop}"],
+                    capture_output=True, text=True, timeout=5
+                )
+                val = result.stdout.strip().split("=", 1)[-1]
+                info[prop] = val
+            except Exception:
+                info[prop] = "unknown"
+        return info
+
+    integration = get_service_info("bastille_display_integration.service")
+    config_ui = get_service_info("bastille_config_ui.service")
+    cfg = load_config()
+
+    return {
+        "services": {
+            "integration": integration,
+            "config_ui": config_ui,
+        },
+        "config_summary": {
+            "vendor": cfg.get("vendor", "N/A"),
+            "source_host": cfg.get("source_host", "N/A"),
+            "source_port": cfg.get("source_port", "N/A"),
+            "source_path": cfg.get("source_path", "N/A"),
+            "adam_path": cfg.get("adam_path", "N/A"),
+            "source_ssl": cfg.get("source_ssl", False),
+            "target_host": cfg.get("target_host", "N/A"),
+            "target_port": cfg.get("target_port", "N/A"),
+            "monitored_protocols": cfg.get("monitored_protocols", []),
+            "clear_time": cfg.get("clear_time", "N/A"),
+        }
+    }
+
+
 @app.post("/api/restart", response_class=JSONResponse)
 async def restart_service(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
     import threading
@@ -477,6 +517,73 @@ HTML_PAGE = r"""<!DOCTYPE html>
   .ssl-fields { margin-top: 1rem; }
   .ssl-fields.hidden { display: none; }
 
+  .status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .status-box {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+  }
+  .status-box-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+  .status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .status-dot.active { background: var(--success); }
+  .status-dot.inactive { background: var(--danger); }
+  .status-dot.unknown { background: var(--text-muted); }
+  .status-detail {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+  .config-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.35rem 1rem;
+    margin-top: 0.75rem;
+  }
+  .config-summary-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .config-summary-item .key { color: var(--text-muted); }
+  .config-summary-item .val { color: var(--text); font-weight: 500; }
+  .status-refresh {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .status-refresh:hover { border-color: var(--accent); color: var(--accent); }
+
   .test-type-select {
     display: flex;
     gap: 0.75rem;
@@ -534,6 +641,33 @@ HTML_PAGE = r"""<!DOCTYPE html>
     <h1><span>Bastille</span> Display Integration</h1>
     <span class="badge" id="vendorBadge">-</span>
   </header>
+
+  <!-- Status Dashboard -->
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <div class="card-title" style="margin-bottom: 0;">Status</div>
+      <button class="status-refresh" onclick="loadStatus()">Refresh</button>
+    </div>
+    <div class="status-grid">
+      <div class="status-box">
+        <div class="status-box-title">Integration Service</div>
+        <div class="status-indicator">
+          <span class="status-dot unknown" id="intStatusDot"></span>
+          <span id="intStatusText">Loading...</span>
+        </div>
+        <div class="status-detail" id="intStatusDetail"></div>
+      </div>
+      <div class="status-box">
+        <div class="status-box-title">Config UI Service</div>
+        <div class="status-indicator">
+          <span class="status-dot unknown" id="uiStatusDot"></span>
+          <span id="uiStatusText">Loading...</span>
+        </div>
+        <div class="status-detail" id="uiStatusDetail"></div>
+      </div>
+    </div>
+    <div class="config-summary-grid" id="configSummary"></div>
+  </div>
 
   <!-- Vendor Selection -->
   <div class="card">
@@ -1198,8 +1332,74 @@ async function sendTest(type) {
   }
 }
 
+// Status dashboard
+function setServiceStatus(dotId, textId, detailId, info) {
+  const dot = document.getElementById(dotId);
+  const text = document.getElementById(textId);
+  const detail = document.getElementById(detailId);
+  const state = info.ActiveState;
+  const sub = info.SubState;
+
+  if (state === 'active') {
+    dot.className = 'status-dot active';
+    text.textContent = 'Running';
+    text.style.color = 'var(--success)';
+  } else if (state === 'inactive' || state === 'failed') {
+    dot.className = 'status-dot inactive';
+    text.textContent = state === 'failed' ? 'Failed' : 'Stopped';
+    text.style.color = 'var(--danger)';
+  } else {
+    dot.className = 'status-dot unknown';
+    text.textContent = state || 'Unknown';
+    text.style.color = 'var(--text-muted)';
+  }
+
+  let details = sub ? 'State: ' + sub : '';
+  if (info.MainPID && info.MainPID !== '0') details += ' | PID: ' + info.MainPID;
+  if (info.ActiveEnterTimestamp && info.ActiveEnterTimestamp !== '') details += ' | Since: ' + info.ActiveEnterTimestamp;
+  detail.textContent = details;
+}
+
+function renderConfigSummary(summary) {
+  const el = document.getElementById('configSummary');
+  const labels = {
+    vendor: 'Vendor',
+    source_host: 'Listen Host',
+    source_port: 'Listen Port',
+    source_path: 'Zone Detections',
+    adam_path: 'ADAM Findings',
+    source_ssl: 'SSL',
+    target_host: 'Target Host',
+    target_port: 'Target Port',
+    monitored_protocols: 'Protocols',
+    clear_time: 'Clear Time',
+  };
+  el.innerHTML = '';
+  for (const [key, label] of Object.entries(labels)) {
+    let val = summary[key];
+    if (typeof val === 'boolean') val = val ? 'Enabled' : 'Disabled';
+    if (Array.isArray(val)) val = val.join(', ');
+    if (key === 'clear_time') val = val + 's';
+    el.innerHTML += '<div class="config-summary-item"><span class="key">' + label + '</span><span class="val">' + val + '</span></div>';
+  }
+}
+
+async function loadStatus() {
+  try {
+    const res = await fetch('/api/status');
+    const data = await res.json();
+    setServiceStatus('intStatusDot', 'intStatusText', 'intStatusDetail', data.services.integration);
+    setServiceStatus('uiStatusDot', 'uiStatusText', 'uiStatusDetail', data.services.config_ui);
+    renderConfigSummary(data.config_summary);
+  } catch (e) {
+    document.getElementById('intStatusText').textContent = 'Error';
+    document.getElementById('uiStatusText').textContent = 'Error';
+  }
+}
+
 // Initial load
 loadConfig();
+loadStatus();
 </script>
 </body>
 </html>
