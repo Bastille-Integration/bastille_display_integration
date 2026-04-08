@@ -1,5 +1,8 @@
 ## GLOBAL
 #
+# Config UI credentials
+ui_username: bn
+ui_password: bn
 #Logging
 log_file: app.log
 #Integration IP - 0.0.0.0 if global.

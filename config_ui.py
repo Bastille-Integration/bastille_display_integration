@@ -1,5 +1,7 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends, HTTPException, status
 from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+import secrets
 import yaml
 import os
 import subprocess
@@ -32,6 +34,24 @@ TONE_OPTIONS = [
 ]
 
 app = FastAPI()
+security = HTTPBasic()
+
+# UI credentials from config, default to bn/bn
+_cfg = yaml.safe_load(open(CONFIG_PATH, "r"))
+UI_USERNAME = _cfg.get("ui_username", "bn")
+UI_PASSWORD = _cfg.get("ui_password", "bn")
+
+
+def verify_credentials(credentials: HTTPBasicCredentials = Depends(security)):
+    username_correct = secrets.compare_digest(credentials.username, UI_USERNAME)
+    password_correct = secrets.compare_digest(credentials.password, UI_PASSWORD)
+    if not (username_correct and password_correct):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials
 
 
 def generate_self_signed_cert():
@@ -61,12 +81,12 @@ def save_config(config):
 
 
 @app.get("/api/config", response_class=JSONResponse)
-async def get_config():
+async def get_config(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
     return load_config()
 
 
 @app.put("/api/config", response_class=JSONResponse)
-async def put_config(request: Request):
+async def put_config(request: Request, credentials: HTTPBasicCredentials = Depends(verify_credentials)):
     body = await request.json()
     save_config(body)
     logger.info("Configuration saved.")
@@ -74,7 +94,7 @@ async def put_config(request: Request):
 
 
 @app.post("/api/restart", response_class=JSONResponse)
-async def restart_service():
+async def restart_service(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
     try:
         result = subprocess.run(
             ["sudo", "systemctl", "restart", "bastille_display_integration.service"],
@@ -92,7 +112,7 @@ async def restart_service():
 
 
 @app.get("/", response_class=HTMLResponse)
-async def config_page():
+async def config_page(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
     config = load_config()
     tone_options_json = str(TONE_OPTIONS).replace("'", '"')
     return HTML_PAGE.replace("__TONE_OPTIONS__", tone_options_json)
