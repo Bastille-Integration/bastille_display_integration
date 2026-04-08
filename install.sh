@@ -15,6 +15,10 @@ echo "=== Bastille Display Integration - Installer ==="
 # --- Dependencies ---
 echo ""
 echo "[1/6] Installing system dependencies..."
+echo "Waiting for apt lock to be released..."
+while fuser /var/lib/apt/lists/lock /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
+  sleep 2
+done
 apt-get update -qq
 apt-get install -y -qq python3 python3-pip python3-fastapi python3-httpx openssl
 
