@@ -6,7 +6,7 @@ After=network.target
 [Service]
 User=bn
 WorkingDirectory=/home/bn/bastille_display_integration
-ExecStart=/usr/bin/python3.8 /home/bn/bastille_display_integration/main.py
+ExecStart=/usr/bin/python3 /home/bn/bastille_display_integration/main.py
 Restart=always
 
 [Install]
