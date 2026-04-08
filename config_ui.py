@@ -981,11 +981,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <div class="form-grid">
         <div class="form-group">
           <label>Protocol</label>
-          <select id="test_zd_protocol">
-            <option value="wifi">Wi-Fi</option>
-            <option value="cellular">Cellular</option>
-            <option value="ble">BLE</option>
-          </select>
+          <select id="test_zd_protocol"></select>
         </div>
         <div class="form-group">
           <label>Zone Name</label>
@@ -1016,11 +1012,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <div class="form-grid">
         <div class="form-group">
           <label>Protocol</label>
-          <select id="test_adam_protocol">
-            <option value="wifi">Wi-Fi</option>
-            <option value="cellular">Cellular</option>
-            <option value="ble">BLE</option>
-          </select>
+          <select id="test_adam_protocol"></select>
         </div>
         <div class="form-group">
           <label>Severity</label>
@@ -1166,6 +1158,7 @@ function renderProtocols() {
     }
     container.appendChild(label);
   });
+  populateTestProtocolSelects();
 }
 
 function addProtocol() {
@@ -1182,6 +1175,21 @@ function addProtocol() {
 document.getElementById('newProtoInput').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') { e.preventDefault(); addProtocol(); }
 });
+
+function populateTestProtocolSelects() {
+  ['test_zd_protocol', 'test_adam_protocol'].forEach(id => {
+    const sel = document.getElementById(id);
+    const prev = sel.value;
+    sel.innerHTML = '';
+    allProtocols.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p;
+      opt.textContent = p;
+      sel.appendChild(opt);
+    });
+    if (prev && allProtocols.includes(prev)) sel.value = prev;
+  });
+}
 
 // Tag management
 function renderTags() {
