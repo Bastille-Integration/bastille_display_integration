@@ -133,7 +133,12 @@ async def get_status(credentials: HTTPBasicCredentials = Depends(verify_credenti
             "target_host": cfg.get("target_host", "N/A"),
             "target_port": cfg.get("target_port", "N/A"),
             "monitored_protocols": cfg.get("monitored_protocols", []),
+            "allowed_tags": cfg.get("allowed_tags", []),
             "clear_time": cfg.get("clear_time", "N/A"),
+            "strobe_pattern": cfg.get("strobe_pattern", "N/A"),
+            "strobe_color": cfg.get("strobe_color", "N/A"),
+            "tone": cfg.get("tone", False),
+            "tone_wav": cfg.get("tone_wav", "N/A"),
         }
     }
 
@@ -574,21 +579,37 @@ HTML_PAGE = r"""<!DOCTYPE html>
     color: var(--text-muted);
     margin-top: 0.25rem;
   }
-  .config-summary-grid {
+  .config-summary-wrap {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.35rem 1rem;
-    margin-top: 0.75rem;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .config-summary-section {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+  }
+  .config-summary-section-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--border);
   }
   .config-summary-item {
     display: flex;
     justify-content: space-between;
     font-size: 0.8rem;
-    padding: 0.25rem 0;
-    border-bottom: 1px solid var(--border);
+    padding: 0.2rem 0;
   }
   .config-summary-item .key { color: var(--text-muted); }
   .config-summary-item .val { color: var(--text); font-weight: 500; }
+  .config-summary-section.full { grid-column: 1 / -1; }
   .status-refresh {
     background: none;
     border: 1px solid var(--border);
@@ -775,7 +796,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
         <div class="status-detail" id="uiStatusDetail"></div>
       </div>
     </div>
-    <div class="config-summary-grid" id="configSummary"></div>
+    <div class="config-summary-wrap" id="configSummary"></div>
   </div>
 
   <!-- Vendor Selection -->
@@ -1546,28 +1567,44 @@ function setServiceStatus(dotId, textId, detailId, info) {
   detail.textContent = details;
 }
 
-function renderConfigSummary(summary) {
+function renderConfigSummary(s) {
   const el = document.getElementById('configSummary');
-  const labels = {
-    vendor: 'Vendor',
-    source_host: 'Listen Host',
-    source_port: 'Listen Port',
-    source_path: 'Zone Detections',
-    adam_path: 'ADAM Findings',
-    source_ssl: 'SSL',
-    target_host: 'Target Host',
-    target_port: 'Target Port',
-    monitored_protocols: 'Protocols',
-    clear_time: 'Clear Time',
-  };
-  el.innerHTML = '';
-  for (const [key, label] of Object.entries(labels)) {
-    let val = summary[key];
-    if (typeof val === 'boolean') val = val ? 'Enabled' : 'Disabled';
-    if (Array.isArray(val)) val = val.join(', ');
-    if (key === 'clear_time') val = val + 's';
-    el.innerHTML += '<div class="config-summary-item"><span class="key">' + label + '</span><span class="val">' + val + '</span></div>';
+  function fmt(v) {
+    if (typeof v === 'boolean') return v ? 'Enabled' : 'Disabled';
+    if (Array.isArray(v)) return v.length ? v.join(', ') : 'None';
+    return v != null ? v : 'N/A';
   }
+  function row(key, val) {
+    return '<div class="config-summary-item"><span class="key">' + key + '</span><span class="val">' + fmt(val) + '</span></div>';
+  }
+  function section(title, rows, full) {
+    return '<div class="config-summary-section' + (full ? ' full' : '') + '">' +
+      '<div class="config-summary-section-title">' + title + '</div>' + rows + '</div>';
+  }
+
+  el.innerHTML =
+    section('Webhook Listener',
+      row('Host', s.source_host) +
+      row('Port', s.source_port) +
+      row('SSL', s.source_ssl) +
+      row('Zone Detections', s.source_path) +
+      row('ADAM Findings', s.adam_path)
+    ) +
+    section('Display Target',
+      row('Vendor', s.vendor) +
+      row('Host', s.target_host) +
+      row('Port', s.target_port) +
+      row('Clear Time', s.clear_time + 's') +
+      (s.vendor === 'Algo' ?
+        row('Strobe', s.strobe_color + ' / pattern ' + s.strobe_pattern) +
+        row('Tone', s.tone ? s.tone_wav : 'Disabled')
+        : '')
+    ) +
+    section('Filtering',
+      row('Protocols', s.monitored_protocols) +
+      row('Allowed Tags', s.allowed_tags),
+      true
+    );
 }
 
 async function loadStatus() {
