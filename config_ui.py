@@ -744,10 +744,10 @@ HTML_PAGE = r"""<!DOCTYPE html>
   <!-- Monitored Protocols -->
   <div class="card">
     <div class="card-title">Monitored Protocols</div>
-    <div class="checkbox-group" id="protocols">
-      <label class="checkbox-pill"><input type="checkbox" value="cellular"> Cellular</label>
-      <label class="checkbox-pill"><input type="checkbox" value="wifi"> Wi-Fi</label>
-      <label class="checkbox-pill"><input type="checkbox" value="ble"> BLE</label>
+    <div class="checkbox-group" id="protocols"></div>
+    <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem; align-items: center;">
+      <input type="text" id="newProtoInput" placeholder="Add protocol..." style="flex: 1;">
+      <button class="btn btn-primary" style="padding: 0.5rem 1rem;" onclick="addProtocol()">Add</button>
     </div>
   </div>
 
@@ -1002,6 +1002,61 @@ function selectVendor(v) {
   badge.className = 'badge ' + (v === 'Algo' ? 'badge-algo' : 'badge-freeport');
 }
 
+// Protocol management
+const defaultProtocols = ['cellular', 'wifi', 'ble'];
+let allProtocols = [...defaultProtocols];
+let enabledProtocols = [];
+
+function renderProtocols() {
+  const container = document.getElementById('protocols');
+  container.innerHTML = '';
+  allProtocols.forEach(proto => {
+    const label = document.createElement('label');
+    label.className = 'checkbox-pill';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.value = proto;
+    cb.checked = enabledProtocols.includes(proto);
+    cb.addEventListener('change', function() {
+      if (this.checked) {
+        if (!enabledProtocols.includes(proto)) enabledProtocols.push(proto);
+      } else {
+        enabledProtocols = enabledProtocols.filter(p => p !== proto);
+      }
+    });
+    label.appendChild(cb);
+    label.appendChild(document.createTextNode(' ' + proto));
+    if (!defaultProtocols.includes(proto)) {
+      const rm = document.createElement('button');
+      rm.textContent = '\u00d7';
+      rm.style.cssText = 'background:none;border:none;color:var(--text-muted);cursor:pointer;margin-left:0.3rem;font-size:0.9rem;';
+      rm.onclick = function(e) {
+        e.preventDefault();
+        allProtocols = allProtocols.filter(p => p !== proto);
+        enabledProtocols = enabledProtocols.filter(p => p !== proto);
+        renderProtocols();
+      };
+      label.appendChild(rm);
+    }
+    container.appendChild(label);
+  });
+}
+
+function addProtocol() {
+  const input = document.getElementById('newProtoInput');
+  const val = input.value.trim().toLowerCase();
+  if (val && !allProtocols.includes(val)) {
+    allProtocols.push(val);
+    enabledProtocols.push(val);
+    renderProtocols();
+  }
+  input.value = '';
+}
+
+document.getElementById('newProtoInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { e.preventDefault(); addProtocol(); }
+});
+
 // Tag management
 function renderTags() {
   const wrap = document.getElementById('tagWrap');
@@ -1062,9 +1117,9 @@ async function loadConfig() {
 
     // Protocols
     const protos = cfg.monitored_protocols || [];
-    document.querySelectorAll('#protocols input').forEach(cb => {
-      cb.checked = protos.includes(cb.value);
-    });
+    allProtocols = [...new Set([...defaultProtocols, ...protos])];
+    enabledProtocols = [...protos];
+    renderProtocols();
 
     // Tags
     currentTags = cfg.allowed_tags || [];
@@ -1099,9 +1154,6 @@ async function loadConfig() {
 
 // Save config to server
 async function saveConfig() {
-  const protocols = [];
-  document.querySelectorAll('#protocols input:checked').forEach(cb => protocols.push(cb.value));
-
   const cfg = {
     log_file: document.getElementById('log_file').value,
     source_host: document.getElementById('source_host').value,
@@ -1109,7 +1161,7 @@ async function saveConfig() {
     adam_path: document.getElementById('adam_path').value,
     source_port: parseInt(document.getElementById('source_port').value),
     clear_time: parseInt(document.getElementById('clear_time').value),
-    monitored_protocols: protocols,
+    monitored_protocols: enabledProtocols,
     allowed_tags: currentTags,
     vendor: currentVendor,
     source_ssl: currentProto === 'https',
