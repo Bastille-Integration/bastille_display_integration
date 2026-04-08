@@ -1,0 +1,723 @@
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse, JSONResponse
+import yaml
+import os
+import subprocess
+import logging
+import uvicorn
+
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.yaml")
+CERT_DIR = os.path.join(os.path.dirname(__file__), "certs")
+CERT_FILE = os.path.join(CERT_DIR, "cert.pem")
+KEY_FILE = os.path.join(CERT_DIR, "key.pem")
+UI_PORT = 8443
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logger = logging.getLogger("ConfigUI")
+
+TONE_OPTIONS = [
+    "bell-na.wav",
+    "bell-uk.wav",
+    "buzzer.wav",
+    "chime.wav",
+    "dogs.wav",
+    "gong.wav",
+    "page-notif.wav",
+    "speech-test.wav",
+    "tone-1kHz-max.wav",
+    "warble1-low.wav",
+    "warble2-med.wav",
+    "warble3-high.wav",
+    "warble4-trill.wav",
+]
+
+app = FastAPI()
+
+
+def generate_self_signed_cert():
+    """Generate a self-signed certificate if one does not exist."""
+    if os.path.exists(CERT_FILE) and os.path.exists(KEY_FILE):
+        logger.info("SSL certificates already exist.")
+        return
+    os.makedirs(CERT_DIR, exist_ok=True)
+    logger.info("Generating self-signed SSL certificate...")
+    subprocess.run([
+        "openssl", "req", "-x509", "-newkey", "rsa:2048",
+        "-keyout", KEY_FILE, "-out", CERT_FILE,
+        "-days", "365", "-nodes",
+        "-subj", "/CN=bastille-config-ui"
+    ], check=True)
+    logger.info("SSL certificate generated.")
+
+
+def load_config():
+    with open(CONFIG_PATH, "r") as f:
+        return yaml.safe_load(f)
+
+
+def save_config(config):
+    with open(CONFIG_PATH, "w") as f:
+        yaml.dump(config, f, default_flow_style=False, sort_keys=False)
+
+
+@app.get("/api/config", response_class=JSONResponse)
+async def get_config():
+    return load_config()
+
+
+@app.put("/api/config", response_class=JSONResponse)
+async def put_config(request: Request):
+    body = await request.json()
+    save_config(body)
+    logger.info("Configuration saved.")
+    return {"status": "ok"}
+
+
+@app.get("/", response_class=HTMLResponse)
+async def config_page():
+    config = load_config()
+    tone_options_json = str(TONE_OPTIONS).replace("'", '"')
+    return HTML_PAGE.replace("__TONE_OPTIONS__", tone_options_json)
+
+
+HTML_PAGE = r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bastille Display Integration - Configuration</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --border: #2a2d3a;
+    --accent: #4f8ff7;
+    --accent-hover: #6da3ff;
+    --text: #e1e4ed;
+    --text-muted: #8b8fa3;
+    --success: #3cb043;
+    --danger: #d30000;
+    --warning: #f5a623;
+    --input-bg: #12141c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem;
+  }
+  .container { max-width: 780px; margin: 0 auto; }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  h1 { font-size: 1.5rem; font-weight: 600; }
+  h1 span { color: var(--accent); }
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  .badge-algo { background: #1e3a5f; color: #6da3ff; }
+  .badge-freeport { background: #3a1e5f; color: #b06dff; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .form-group { display: flex; flex-direction: column; }
+  .form-group.full { grid-column: 1 / -1; }
+  label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  input, select {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.55rem 0.75rem;
+    color: var(--text);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input:focus, select:focus { border-color: var(--accent); }
+  input[type="number"] { width: 100%; }
+
+  .vendor-select {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .vendor-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .vendor-btn:hover { border-color: var(--accent); color: var(--text); }
+  .vendor-btn.active { border-color: var(--accent); color: var(--accent); background: #1a2640; }
+
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .checkbox-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--input-bg);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .checkbox-pill:has(input:checked) {
+    border-color: var(--accent);
+    background: #1a2640;
+    color: var(--accent);
+  }
+  .checkbox-pill input { display: none; }
+
+  .tag-input-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.4rem 0.55rem;
+    min-height: 38px;
+    align-items: center;
+    cursor: text;
+  }
+  .tag-input-wrap:focus-within { border-color: var(--accent); }
+  .tag {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: #1a2640;
+    color: var(--accent);
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+  .tag button {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.9rem;
+    line-height: 1;
+    padding: 0;
+  }
+  .tag button:hover { color: var(--danger); }
+  .tag-input {
+    border: none;
+    background: none;
+    color: var(--text);
+    font-size: 0.85rem;
+    outline: none;
+    flex: 1;
+    min-width: 80px;
+    padding: 0.15rem 0;
+  }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+  }
+  .toggle-label { font-size: 0.9rem; }
+  .toggle {
+    position: relative;
+    width: 44px;
+    height: 24px;
+  }
+  .toggle input { display: none; }
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .toggle-slider::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: var(--text);
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.2s;
+  }
+  .toggle input:checked + .toggle-slider { background: var(--accent); }
+  .toggle input:checked + .toggle-slider::after { transform: translateX(20px); }
+
+  .vendor-section { display: none; }
+  .vendor-section.active { display: block; }
+
+  .actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+  }
+  .btn {
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--text-muted); color: var(--text); }
+
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    pointer-events: none;
+    z-index: 100;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.success { background: var(--success); }
+  .toast.error { background: var(--danger); }
+
+  .color-swatch {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .swatch:hover { border-color: var(--text-muted); }
+  .swatch.active { border-color: #fff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1><span>Bastille</span> Display Integration</h1>
+    <span class="badge" id="vendorBadge">-</span>
+  </header>
+
+  <!-- Vendor Selection -->
+  <div class="card">
+    <div class="card-title">Display Vendor</div>
+    <div class="vendor-select">
+      <button class="vendor-btn" data-vendor="Algo" onclick="selectVendor('Algo')">Algo</button>
+      <button class="vendor-btn" data-vendor="Freeport" onclick="selectVendor('Freeport')">Freeport</button>
+    </div>
+  </div>
+
+  <!-- Global Settings -->
+  <div class="card">
+    <div class="card-title">Global Settings</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Log File</label>
+        <input type="text" id="log_file">
+      </div>
+      <div class="form-group">
+        <label>Clear Time (seconds)</label>
+        <input type="number" id="clear_time" min="1">
+      </div>
+      <div class="form-group">
+        <label>Listener Host</label>
+        <input type="text" id="source_host">
+      </div>
+      <div class="form-group">
+        <label>Listener Port</label>
+        <input type="number" id="source_port" min="1" max="65535">
+      </div>
+      <div class="form-group">
+        <label>Zone Detections Path</label>
+        <input type="text" id="source_path">
+      </div>
+      <div class="form-group">
+        <label>ADAM Findings Path</label>
+        <input type="text" id="adam_path">
+      </div>
+    </div>
+  </div>
+
+  <!-- Monitored Protocols -->
+  <div class="card">
+    <div class="card-title">Monitored Protocols</div>
+    <div class="checkbox-group" id="protocols">
+      <label class="checkbox-pill"><input type="checkbox" value="cellular"> Cellular</label>
+      <label class="checkbox-pill"><input type="checkbox" value="wifi"> Wi-Fi</label>
+      <label class="checkbox-pill"><input type="checkbox" value="ble"> BLE</label>
+    </div>
+  </div>
+
+  <!-- Allowed Tags -->
+  <div class="card">
+    <div class="card-title">Allowed Tags (devices with these tags will NOT alert)</div>
+    <div class="tag-input-wrap" id="tagWrap" onclick="this.querySelector('input').focus()">
+      <input class="tag-input" id="tagInput" placeholder="Type and press Enter...">
+    </div>
+  </div>
+
+  <!-- Algo Settings -->
+  <div class="vendor-section" id="algoSection">
+    <div class="card">
+      <div class="card-title">Algo Connection</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Target Host</label>
+          <input type="text" id="algo_target_host" placeholder="http://172.30.2.119">
+        </div>
+        <div class="form-group">
+          <label>Target Port</label>
+          <input type="number" id="algo_target_port" min="1" max="65535">
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="algo_username">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="algo_password">
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Algo Display</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Text Color</label>
+          <select id="algo_text_color">
+            <option value="red">Red</option>
+            <option value="orange">Orange</option>
+            <option value="yellow">Yellow</option>
+            <option value="green">Green</option>
+            <option value="blue">Blue</option>
+            <option value="white">White</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Strobe Pattern</label>
+          <select id="algo_strobe_pattern">
+            <option value="1">1 - Slow</option>
+            <option value="2">2 - Medium</option>
+            <option value="3">3 - Fast</option>
+            <option value="4">4 - Pulse</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Strobe Color</label>
+          <select id="algo_strobe_color">
+            <option value="red">Red</option>
+            <option value="orange">Orange</option>
+            <option value="yellow">Yellow</option>
+            <option value="green">Green</option>
+            <option value="blue">Blue</option>
+            <option value="white">White</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Algo Audio</div>
+      <div class="toggle-row">
+        <span class="toggle-label">Enable Tone</span>
+        <label class="toggle">
+          <input type="checkbox" id="algo_tone">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="form-group" id="toneWavGroup" style="margin-top: 0.75rem;">
+        <label>Tone Sound</label>
+        <select id="algo_tone_wav"></select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Freeport Settings -->
+  <div class="vendor-section" id="freeportSection">
+    <div class="card">
+      <div class="card-title">Freeport Connection</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Target Host</label>
+          <input type="text" id="freeport_target_host" placeholder="10.35.44.51">
+        </div>
+        <div class="form-group">
+          <label>Target Port</label>
+          <input type="number" id="freeport_target_port" min="1" max="65535">
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="freeport_username">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="freeport_password">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-secondary" onclick="loadConfig()">Discard Changes</button>
+    <button class="btn btn-primary" onclick="saveConfig()">Save Configuration</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const TONE_OPTIONS = __TONE_OPTIONS__;
+let currentTags = [];
+let currentVendor = 'Algo';
+
+// Populate tone select
+const toneSelect = document.getElementById('algo_tone_wav');
+TONE_OPTIONS.forEach(t => {
+  const opt = document.createElement('option');
+  opt.value = t;
+  opt.textContent = t.replace('.wav', '');
+  toneSelect.appendChild(opt);
+});
+
+// Tone toggle visibility
+document.getElementById('algo_tone').addEventListener('change', function() {
+  document.getElementById('toneWavGroup').style.display = this.checked ? 'flex' : 'none';
+});
+
+// Vendor selection
+function selectVendor(v) {
+  currentVendor = v;
+  document.querySelectorAll('.vendor-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.vendor === v);
+  });
+  document.getElementById('algoSection').classList.toggle('active', v === 'Algo');
+  document.getElementById('freeportSection').classList.toggle('active', v === 'Freeport');
+  const badge = document.getElementById('vendorBadge');
+  badge.textContent = v;
+  badge.className = 'badge ' + (v === 'Algo' ? 'badge-algo' : 'badge-freeport');
+}
+
+// Tag management
+function renderTags() {
+  const wrap = document.getElementById('tagWrap');
+  wrap.querySelectorAll('.tag').forEach(t => t.remove());
+  const input = document.getElementById('tagInput');
+  currentTags.forEach((tag, i) => {
+    const el = document.createElement('span');
+    el.className = 'tag';
+    el.innerHTML = tag + ' <button onclick="removeTag(' + i + ')">&times;</button>';
+    wrap.insertBefore(el, input);
+  });
+}
+
+function removeTag(i) {
+  currentTags.splice(i, 1);
+  renderTags();
+}
+
+document.getElementById('tagInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && this.value.trim()) {
+    e.preventDefault();
+    const v = this.value.trim();
+    if (!currentTags.includes(v)) {
+      currentTags.push(v);
+      renderTags();
+    }
+    this.value = '';
+  }
+  if (e.key === 'Backspace' && !this.value && currentTags.length) {
+    currentTags.pop();
+    renderTags();
+  }
+});
+
+// Toast notification
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast ' + type + ' show';
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// Load config from server
+async function loadConfig() {
+  try {
+    const res = await fetch('/api/config');
+    const cfg = await res.json();
+
+    document.getElementById('log_file').value = cfg.log_file || '';
+    document.getElementById('clear_time').value = cfg.clear_time || 60;
+    document.getElementById('source_host').value = cfg.source_host || '0.0.0.0';
+    document.getElementById('source_port').value = cfg.source_port || 8001;
+    document.getElementById('source_path').value = cfg.source_path || '/zone-detections';
+    document.getElementById('adam_path').value = cfg.adam_path || '/adam-findings';
+
+    // Protocols
+    const protos = cfg.monitored_protocols || [];
+    document.querySelectorAll('#protocols input').forEach(cb => {
+      cb.checked = protos.includes(cb.value);
+    });
+
+    // Tags
+    currentTags = cfg.allowed_tags || [];
+    renderTags();
+
+    // Vendor
+    selectVendor(cfg.vendor || 'Algo');
+
+    // Algo fields
+    document.getElementById('algo_target_host').value = cfg.target_host || '';
+    document.getElementById('algo_target_port').value = cfg.target_port || 80;
+    document.getElementById('algo_username').value = cfg.auth_username || '';
+    document.getElementById('algo_password').value = cfg.auth_password || '';
+    document.getElementById('algo_text_color').value = cfg.text_color || 'red';
+    document.getElementById('algo_strobe_pattern').value = String(cfg.strobe_pattern || 2);
+    document.getElementById('algo_strobe_color').value = cfg.strobe_color || 'red';
+    document.getElementById('algo_tone').checked = cfg.tone === true || cfg.tone === 'True';
+    document.getElementById('algo_tone_wav').value = cfg.tone_wav || 'bell-na.wav';
+    document.getElementById('toneWavGroup').style.display =
+      document.getElementById('algo_tone').checked ? 'flex' : 'none';
+
+    // Freeport fields
+    document.getElementById('freeport_target_host').value = cfg.target_host || '';
+    document.getElementById('freeport_target_port').value = cfg.target_port || 80;
+    document.getElementById('freeport_username').value = cfg.auth_username || '';
+    document.getElementById('freeport_password').value = cfg.auth_password || '';
+
+  } catch (e) {
+    toast('Failed to load configuration', 'error');
+  }
+}
+
+// Save config to server
+async function saveConfig() {
+  const protocols = [];
+  document.querySelectorAll('#protocols input:checked').forEach(cb => protocols.push(cb.value));
+
+  const cfg = {
+    log_file: document.getElementById('log_file').value,
+    source_host: document.getElementById('source_host').value,
+    source_path: document.getElementById('source_path').value,
+    adam_path: document.getElementById('adam_path').value,
+    source_port: parseInt(document.getElementById('source_port').value),
+    clear_time: parseInt(document.getElementById('clear_time').value),
+    monitored_protocols: protocols,
+    allowed_tags: currentTags,
+    vendor: currentVendor,
+  };
+
+  if (currentVendor === 'Algo') {
+    cfg.target_host = document.getElementById('algo_target_host').value;
+    cfg.target_port = parseInt(document.getElementById('algo_target_port').value);
+    cfg.auth_username = document.getElementById('algo_username').value;
+    cfg.auth_password = document.getElementById('algo_password').value;
+    cfg.text_color = document.getElementById('algo_text_color').value;
+    cfg.strobe_pattern = parseInt(document.getElementById('algo_strobe_pattern').value);
+    cfg.strobe_color = document.getElementById('algo_strobe_color').value;
+    cfg.tone = document.getElementById('algo_tone').checked;
+    cfg.tone_wav = document.getElementById('algo_tone_wav').value;
+  } else {
+    cfg.target_host = document.getElementById('freeport_target_host').value;
+    cfg.target_port = parseInt(document.getElementById('freeport_target_port').value);
+    cfg.auth_username = document.getElementById('freeport_username').value;
+    cfg.auth_password = document.getElementById('freeport_password').value;
+  }
+
+  try {
+    const res = await fetch('/api/config', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cfg)
+    });
+    if (res.ok) {
+      toast('Configuration saved. Restart the integration service to apply changes.', 'success');
+    } else {
+      toast('Failed to save configuration', 'error');
+    }
+  } catch (e) {
+    toast('Failed to save configuration', 'error');
+  }
+}
+
+// Initial load
+loadConfig();
+</script>
+</body>
+</html>
+"""
+
+if __name__ == "__main__":
+    generate_self_signed_cert()
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=UI_PORT,
+        ssl_keyfile=KEY_FILE,
+        ssl_certfile=CERT_FILE,
+    )
