@@ -1147,6 +1147,12 @@ HTML_PAGE = r"""<!DOCTYPE html>
     <div class="test-result" id="testResult"></div>
   </div>
 
+  <div class="card">
+    <div class="card-title">Clear Alerts</div>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">Remove all recorded alerts from the alert log.</p>
+    <button class="btn btn-secondary" style="color: var(--danger); border-color: var(--danger);" onclick="clearAlerts()">Clear All Alerts</button>
+  </div>
+
   </div><!-- end tabTesting -->
 
   <div class="tab-content" id="tabAlerts">
