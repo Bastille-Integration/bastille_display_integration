@@ -262,6 +262,28 @@ async def receive_adam_finding(request: Request, background_tasks: BackgroundTas
     background_tasks.add_task(turn_off_alert)
 
 
+@app.post("/clear-display")
+async def clear_display():
+    clear_target_payload = {
+        "type": "image",
+        "text1": "CLEAR",
+        "textColor": "green",
+        "textFont": "roboto",
+        "textPosition": "middle",
+        "textScroll": "0",
+        "textScrollSpeed": "4",
+        "textSize": "medium"
+    }
+    if vendor == "Algo":
+        a.alert_clear(clear_target_payload)
+        a.strobe_off()
+        logger.info("Display cleared via API.")
+    if vendor == "Freeport":
+        f.screen_change(option="clear")
+        logger.info("Display cleared via API.")
+    return {"status": "ok"}
+
+
 if __name__ == "__main__":
     import uvicorn
     kwargs = {"host": source_host, "port": source_port}

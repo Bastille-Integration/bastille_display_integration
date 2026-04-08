@@ -228,6 +228,24 @@ async def cert_status(credentials: HTTPBasicCredentials = Depends(verify_credent
     }
 
 
+@app.post("/api/clear-display", response_class=JSONResponse)
+async def proxy_clear_display(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    cfg = load_config()
+    scheme = "https" if cfg.get("source_ssl") else "http"
+    host = cfg.get("source_host", "0.0.0.0")
+    if host == "0.0.0.0":
+        host = "127.0.0.1"
+    port = cfg.get("source_port", 8001)
+    url = f"{scheme}://{host}:{port}/clear-display"
+    try:
+        resp = requests.post(url, timeout=10, verify=False)
+        return {"status": "ok", "code": resp.status_code}
+    except requests.exceptions.ConnectionError:
+        return JSONResponse(status_code=502, content={"status": "error", "detail": "Could not connect to integration service. Is it running?"})
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"status": "error", "detail": str(e)})
+
+
 @app.post("/api/test", response_class=JSONResponse)
 async def send_test(request: Request, credentials: HTTPBasicCredentials = Depends(verify_credentials)):
     body = await request.json()
@@ -1148,9 +1166,9 @@ HTML_PAGE = r"""<!DOCTYPE html>
   </div>
 
   <div class="card">
-    <div class="card-title">Clear Alerts</div>
-    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">Remove all recorded alerts from the alert log.</p>
-    <button class="btn btn-secondary" style="color: var(--danger); border-color: var(--danger);" onclick="clearAlerts()">Clear All Alerts</button>
+    <div class="card-title">Clear Display</div>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">Send a clear command to the display target, removing any active alert and stopping strobes/tones.</p>
+    <button class="btn btn-secondary" style="color: var(--warning); border-color: var(--warning);" onclick="clearDisplay()">Clear Display</button>
   </div>
 
   </div><!-- end tabTesting -->
@@ -1697,6 +1715,21 @@ async function loadStatus() {
   } catch (e) {
     document.getElementById('intStatusText').textContent = 'Error';
     document.getElementById('uiStatusText').textContent = 'Error';
+  }
+}
+
+// Clear display target
+async function clearDisplay() {
+  try {
+    const res = await fetch('/api/clear-display', { method: 'POST' });
+    if (res.ok) {
+      toast('Clear command sent to display.', 'success');
+    } else {
+      const data = await res.json();
+      toast('Failed to clear display: ' + (data.detail || 'unknown error'), 'error');
+    }
+  } catch (e) {
+    toast('Failed to clear display: ' + e.message, 'error');
   }
 }
 
