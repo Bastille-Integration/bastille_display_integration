@@ -15,10 +15,21 @@ echo "=== Bastille Display Integration - Installer ==="
 # --- Dependencies ---
 echo ""
 echo "[1/6] Installing system dependencies..."
-echo "Waiting for apt lock to be released..."
-while fuser /var/lib/apt/lists/lock /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
-  sleep 2
-done
+if fuser /var/lib/apt/lists/lock /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend >/dev/null 2>&1; then
+  echo "Another apt process is running:"
+  ps -eo pid,comm | grep -E "apt|dpkg" | grep -v grep
+  read -p "Kill the existing apt process and continue? (y/n): " KILL_APT
+  if [ "$KILL_APT" = "y" ] || [ "$KILL_APT" = "Y" ]; then
+    killall apt-get apt dpkg 2>/dev/null || true
+    sleep 2
+    echo "Apt process killed."
+  else
+    echo "Waiting for apt lock to be released..."
+    while fuser /var/lib/apt/lists/lock /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
+      sleep 2
+    done
+  fi
+fi
 apt-get update -qq
 apt-get install -y -qq python3 python3-pip python3-fastapi python3-httpx openssl
 
