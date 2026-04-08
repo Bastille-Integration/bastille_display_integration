@@ -73,6 +73,24 @@ async def put_config(request: Request):
     return {"status": "ok"}
 
 
+@app.post("/api/restart", response_class=JSONResponse)
+async def restart_service():
+    try:
+        result = subprocess.run(
+            ["sudo", "systemctl", "restart", "bastille_display_integration.service"],
+            capture_output=True, text=True, timeout=15
+        )
+        if result.returncode == 0:
+            logger.info("Integration service restarted.")
+            return {"status": "ok"}
+        else:
+            logger.error("Failed to restart service: %s", result.stderr)
+            return JSONResponse(status_code=500, content={"status": "error", "detail": result.stderr.strip()})
+    except subprocess.TimeoutExpired:
+        logger.error("Restart command timed out.")
+        return JSONResponse(status_code=500, content={"status": "error", "detail": "Restart command timed out"})
+
+
 @app.get("/", response_class=HTMLResponse)
 async def config_page():
     config = load_config()
@@ -315,6 +333,9 @@ HTML_PAGE = r"""<!DOCTYPE html>
   }
   .btn-primary { background: var(--accent); color: #fff; }
   .btn-primary:hover { background: var(--accent-hover); }
+  .btn-warning { background: var(--warning); color: #000; }
+  .btn-warning:hover { background: #ffc04d; }
+  .btn-warning:disabled { opacity: 0.5; cursor: not-allowed; }
   .btn-secondary {
     background: transparent;
     color: var(--text-muted);
@@ -526,6 +547,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
   <div class="actions">
     <button class="btn btn-secondary" onclick="loadConfig()">Discard Changes</button>
     <button class="btn btn-primary" onclick="saveConfig()">Save Configuration</button>
+    <button class="btn btn-warning" id="restartBtn" onclick="saveAndRestart()">Save &amp; Restart Service</button>
   </div>
 </div>
 
@@ -703,6 +725,31 @@ async function saveConfig() {
   } catch (e) {
     toast('Failed to save configuration', 'error');
   }
+}
+
+// Save config and restart the integration service
+async function saveAndRestart() {
+  const btn = document.getElementById('restartBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+
+  // Save first
+  await saveConfig();
+
+  btn.textContent = 'Restarting...';
+  try {
+    const res = await fetch('/api/restart', { method: 'POST' });
+    if (res.ok) {
+      toast('Configuration saved and service restarting.', 'success');
+    } else {
+      const data = await res.json();
+      toast('Restart failed: ' + (data.detail || 'unknown error'), 'error');
+    }
+  } catch (e) {
+    toast('Restart failed: could not reach server (service may be restarting)', 'success');
+  }
+  btn.disabled = false;
+  btn.textContent = 'Save & Restart Service';
 }
 
 // Initial load

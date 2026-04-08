@@ -1,0 +1,3 @@
+# Allow bn user to restart the Bastille Display Integration service without a password.
+# Install: sudo cp bastille-sudoers /etc/sudoers.d/bastille && sudo chmod 440 /etc/sudoers.d/bastille
+bn ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart bastille_display_integration.service
