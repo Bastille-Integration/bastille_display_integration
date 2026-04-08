@@ -39,7 +39,9 @@ python3 -m pip install ndjson PyYAML --break-system-packages --quiet
 # --- Sudoers ---
 echo ""
 echo "[2/6] Configuring sudoers for service restart..."
-cp "$INSTALL_DIR/bastille-sudoers" /etc/sudoers.d/bastille
+# Write sudoers rule directly to avoid file copy issues
+echo "$SERVICE_USER ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart bastille_display_integration.service" > /etc/sudoers.d/bastille
+chown root:root /etc/sudoers.d/bastille
 chmod 440 /etc/sudoers.d/bastille
 # Validate sudoers syntax
 if ! visudo -c -f /etc/sudoers.d/bastille >/dev/null 2>&1; then
@@ -48,6 +50,7 @@ if ! visudo -c -f /etc/sudoers.d/bastille >/dev/null 2>&1; then
   exit 1
 fi
 echo "Sudoers configured for user '$SERVICE_USER'."
+echo "Verifying: $(cat /etc/sudoers.d/bastille)"
 
 # --- SSL Certificates ---
 echo ""
