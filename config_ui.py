@@ -6,6 +6,8 @@ import yaml
 import os
 import subprocess
 import logging
+import json
+import requests
 import uvicorn
 
 INTEGRATION_CERT_DIR = os.path.join(os.path.dirname(__file__), "certs")
@@ -141,6 +143,36 @@ async def cert_status(credentials: HTTPBasicCredentials = Depends(verify_credent
         "cert_exists": os.path.exists(cert_path),
         "key_exists": os.path.exists(key_path),
     }
+
+
+@app.post("/api/test", response_class=JSONResponse)
+async def send_test(request: Request, credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    body = await request.json()
+    test_type = body.get("test_type")
+    payload = body.get("payload")
+    cfg = load_config()
+    scheme = "https" if cfg.get("source_ssl") else "http"
+    host = cfg.get("source_host", "0.0.0.0")
+    if host == "0.0.0.0":
+        host = "127.0.0.1"
+    port = cfg.get("source_port", 8001)
+    if test_type == "zone_detection":
+        path = cfg.get("source_path", "/zone-detections")
+        url = f"{scheme}://{host}:{port}{path}"
+        data = json.dumps(payload)
+        headers = {"Content-Type": "application/x-ndjson"}
+    else:
+        path = cfg.get("adam_path", "/adam-findings")
+        url = f"{scheme}://{host}:{port}{path}"
+        data = json.dumps(payload)
+        headers = {"Content-Type": "application/json"}
+    try:
+        resp = requests.post(url, data=data, headers=headers, timeout=10, verify=False)
+        return {"status": "ok", "code": resp.status_code, "response": resp.text}
+    except requests.exceptions.ConnectionError:
+        return JSONResponse(status_code=502, content={"status": "error", "detail": "Could not connect to integration service. Is it running?"})
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"status": "error", "detail": str(e)})
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -447,6 +479,41 @@ HTML_PAGE = r"""<!DOCTYPE html>
   .cert-status.missing { background: #3a1a1a; color: var(--danger); }
   .ssl-fields { margin-top: 1rem; }
   .ssl-fields.hidden { display: none; }
+
+  .test-type-select {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .test-type-btn {
+    flex: 1;
+    padding: 0.6rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .test-type-btn:hover { border-color: var(--accent); color: var(--text); }
+  .test-type-btn.active { border-color: var(--accent); color: var(--accent); background: #1a2640; }
+  .test-fields { display: none; }
+  .test-fields.active { display: block; }
+  .test-result {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-family: monospace;
+    display: none;
+    word-break: break-all;
+  }
+  .test-result.show { display: block; }
+  .test-result.ok { background: #1a3a1a; color: var(--success); border: 1px solid #2a4a2a; }
+  .test-result.fail { background: #3a1a1a; color: var(--danger); border: 1px solid #4a2a2a; }
   .color-swatch {
     display: flex;
     gap: 0.4rem;
@@ -659,6 +726,108 @@ HTML_PAGE = r"""<!DOCTYPE html>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Test Alert -->
+  <div class="card">
+    <div class="card-title">Test Alert</div>
+    <div class="test-type-select">
+      <button class="test-type-btn" data-test="zone_detection" onclick="selectTestType('zone_detection')">Zone Detection</button>
+      <button class="test-type-btn" data-test="adam_finding" onclick="selectTestType('adam_finding')">ADAM Finding</button>
+    </div>
+
+    <!-- Zone Detection Test Fields -->
+    <div class="test-fields" id="testZoneFields">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Protocol</label>
+          <select id="test_zd_protocol">
+            <option value="wifi">Wi-Fi</option>
+            <option value="cellular">Cellular</option>
+            <option value="ble">BLE</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Zone Name</label>
+          <input type="text" id="test_zd_zone" value="Training 1A">
+        </div>
+        <div class="form-group">
+          <label>Vendor</label>
+          <input type="text" id="test_zd_vendor" value="LGInnotek">
+        </div>
+        <div class="form-group">
+          <label>Manufacturer</label>
+          <input type="text" id="test_zd_manufacturer" value="Unknown">
+        </div>
+        <div class="form-group">
+          <label>Transmitter ID</label>
+          <input type="text" id="test_zd_transmitter" value="f8:96:fe:3c:a3:c3">
+        </div>
+        <div class="form-group">
+          <label>Tags (comma-separated)</label>
+          <input type="text" id="test_zd_tags" value="Connected, Unknown Connected Wi-Fi Network">
+        </div>
+      </div>
+      <button class="btn btn-primary" style="margin-top: 1rem;" onclick="sendTest('zone_detection')">Send Zone Detection Test</button>
+    </div>
+
+    <!-- ADAM Finding Test Fields -->
+    <div class="test-fields" id="testAdamFields">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Protocol</label>
+          <select id="test_adam_protocol">
+            <option value="wifi">Wi-Fi</option>
+            <option value="cellular">Cellular</option>
+            <option value="ble">BLE</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Severity</label>
+          <select id="test_adam_severity">
+            <option value="critical">Critical</option>
+            <option value="high" selected>High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Reason</label>
+          <input type="text" id="test_adam_reason" value="malicious_device_pineapple">
+        </div>
+        <div class="form-group">
+          <label>Zone (from tag)</label>
+          <input type="text" id="test_adam_zone" value="Training 1A">
+        </div>
+        <div class="form-group">
+          <label>Vendor</label>
+          <input type="text" id="test_adam_vendor" value="LGInnotek">
+        </div>
+        <div class="form-group">
+          <label>Transmitter ID</label>
+          <input type="text" id="test_adam_transmitter" value="f8:96:fe:3c:a3:c3">
+        </div>
+        <div class="form-group">
+          <label>Network Name</label>
+          <input type="text" id="test_adam_network" value="NXP Micro AP">
+        </div>
+        <div class="form-group">
+          <label>Tags (comma-separated)</label>
+          <input type="text" id="test_adam_tags" value="Connected, zone:Training 1A">
+        </div>
+        <div class="form-group">
+          <label>Severity Score (1-5)</label>
+          <input type="number" id="test_adam_score" value="3" min="1" max="5">
+        </div>
+        <div class="form-group">
+          <label>Webhook Name</label>
+          <input type="text" id="test_adam_webhook_name" value="Test Data">
+        </div>
+      </div>
+      <button class="btn btn-primary" style="margin-top: 1rem;" onclick="sendTest('adam_finding')">Send ADAM Finding Test</button>
+    </div>
+
+    <div class="test-result" id="testResult"></div>
   </div>
 
   <div class="actions">
@@ -932,6 +1101,104 @@ async function saveAndRestart() {
   }
   btn.disabled = false;
   btn.textContent = 'Save & Restart Service';
+}
+
+// Test type selection
+let currentTestType = null;
+function selectTestType(t) {
+  currentTestType = t;
+  document.querySelectorAll('.test-type-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.test === t);
+  });
+  document.getElementById('testZoneFields').classList.toggle('active', t === 'zone_detection');
+  document.getElementById('testAdamFields').classList.toggle('active', t === 'adam_finding');
+  document.getElementById('testResult').classList.remove('show');
+}
+
+// Build and send test payloads
+function buildZoneDetectionPayload() {
+  const now = Math.floor(Date.now() / 1000);
+  return {
+    payload: {
+      emitter: {
+        transmitter_id: document.getElementById('test_zd_transmitter').value,
+        protocol: document.getElementById('test_zd_protocol').value,
+        vendor: document.getElementById('test_zd_vendor').value,
+      },
+      device_info: {
+        manufacturer: document.getElementById('test_zd_manufacturer').value,
+      },
+      zone_name: document.getElementById('test_zd_zone').value,
+      tags: document.getElementById('test_zd_tags').value.split(',').map(s => s.trim()).filter(Boolean),
+      time_s: now,
+    }
+  };
+}
+
+function buildAdamFindingPayload() {
+  const now = Math.floor(Date.now() / 1000);
+  const tags = document.getElementById('test_adam_tags').value.split(',').map(s => s.trim()).filter(Boolean);
+  const reason = document.getElementById('test_adam_reason').value.trim();
+  return {
+    id: 'test-' + now,
+    event_type: 'findings',
+    payload: {
+      status: 'new',
+      detected_at: now,
+      reasons: reason ? reason.split(',').map(s => s.trim()) : [],
+      severity: document.getElementById('test_adam_severity').value,
+      severity_score: parseInt(document.getElementById('test_adam_score').value),
+      finding_id: 'test-' + now,
+      published_at: now,
+      area: { site_id: 'test_site', concentrator_id: 'test', map_id: 'test' },
+      area_id: 'test_site-test-test',
+      reference_snapshot: {
+        emitter: {
+          transmitter_id: document.getElementById('test_adam_transmitter').value,
+          protocol: document.getElementById('test_adam_protocol').value,
+          vendor: document.getElementById('test_adam_vendor').value,
+          network: { name: document.getElementById('test_adam_network').value },
+        },
+        tags: tags,
+        time_s: now,
+        device_info: { manufacturer: '', user: '', model: '', name: '' },
+      },
+      reason_details: {},
+    },
+    webhook_name: document.getElementById('test_adam_webhook_name').value,
+    filter_name: 'Test',
+  };
+}
+
+async function sendTest(type) {
+  const resultEl = document.getElementById('testResult');
+  resultEl.classList.remove('show', 'ok', 'fail');
+
+  let payload;
+  if (type === 'zone_detection') {
+    payload = buildZoneDetectionPayload();
+  } else {
+    payload = buildAdamFindingPayload();
+  }
+
+  try {
+    const res = await fetch('/api/test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ test_type: type, payload: payload })
+    });
+    const data = await res.json();
+    if (res.ok && data.status === 'ok') {
+      resultEl.textContent = 'Test sent successfully (HTTP ' + data.code + ')';
+      resultEl.className = 'test-result show ok';
+    } else {
+      resultEl.textContent = 'Test failed: ' + (data.detail || 'HTTP ' + data.code);
+      resultEl.className = 'test-result show fail';
+    }
+  } catch (e) {
+    resultEl.textContent = 'Test failed: ' + e.message;
+    resultEl.className = 'test-result show fail';
+  }
 }
 
 // Initial load
