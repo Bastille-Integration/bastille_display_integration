@@ -1,3 +1,4 @@
 certs/
 app.log
+alerts.json
 __pycache__/

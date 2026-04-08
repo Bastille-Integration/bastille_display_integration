@@ -2,6 +2,9 @@ from fastapi import FastAPI, HTTPException, Request, BackgroundTasks  # Import R
 import yaml
 import logging
 import asyncio
+import json
+import os
+from datetime import datetime, timezone
 from ndjson_to_json import NDJson
 from bastille_webhook_parser import BastilleWebhookParser
 from adam_webhook_parser import AdamWebhookParser
@@ -49,6 +52,35 @@ if vendor == "Algo":
 if vendor == "Freeport":
     f = Freeport(host=target_host, port= target_port, username=auth_username, password=auth_password, log_file=log_file)
 
+ALERTS_FILE = os.path.join(os.path.dirname(__file__), "alerts.json")
+MAX_ALERTS = 500
+
+def save_alert(alert_type, protocol, zone, vendor_name, severity=None, reasons=None, tags=None, status="sent"):
+    alert = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "type": alert_type,
+        "protocol": protocol,
+        "zone": zone,
+        "vendor": vendor_name,
+        "severity": severity,
+        "reasons": reasons,
+        "tags": tags,
+        "status": status,
+        "display_vendor": vendor,
+    }
+    try:
+        if os.path.exists(ALERTS_FILE):
+            with open(ALERTS_FILE, "r") as af:
+                alerts = json.load(af)
+        else:
+            alerts = []
+        alerts.insert(0, alert)
+        alerts = alerts[:MAX_ALERTS]
+        with open(ALERTS_FILE, "w") as af:
+            json.dump(alerts, af)
+    except Exception as e:
+        logger.error(f"Failed to save alert: {e}")
+
 def create_alert(body):
     #Covert NDjson to json
     payload = NDJson(log_file=log_file)
@@ -63,9 +95,12 @@ def create_alert(body):
         #Prepare and send Algo text
         if protocol not in monitored_protocols:
             logger.info(f'Not sending alert due to unknown protocol {protocol}.')
+            save_alert("zone_detection", protocol, zone, manufacturer, tags=tags, status="filtered_protocol")
         elif any(i in tags for i in allowed_tags):
             logger.info(f'Not sending alert due to known tags {tags}')
+            save_alert("zone_detection", protocol, zone, manufacturer, tags=tags, status="filtered_tag")
         else:
+            save_alert("zone_detection", protocol, zone, manufacturer, tags=tags)
             target_payload = {
                 "type": "image",
                 "text1": f"ALERT - {protocol} in {zone} - Vendor: {manufacturer} - ALERT",
@@ -107,11 +142,14 @@ def create_adam_alert(body):
 
     if protocol and protocol not in monitored_protocols:
         logger.info(f'ADAM: Not sending alert due to unmonitored protocol {protocol}.')
+        save_alert("adam_finding", protocol, zone, manufacturer, severity=severity, reasons=reasons, tags=tags, status="filtered_protocol")
         return
     if any(i in tags for i in allowed_tags):
         logger.info(f'ADAM: Not sending alert due to known tags {tags}')
+        save_alert("adam_finding", protocol, zone, manufacturer, severity=severity, reasons=reasons, tags=tags, status="filtered_tag")
         return
 
+    save_alert("adam_finding", protocol, zone, manufacturer, severity=severity, reasons=reasons, tags=tags)
     reason_text = ", ".join(reasons) if reasons else "unknown"
     alert_text = f"ADAM ALERT - {severity.upper() if severity else 'UNKNOWN'} - {reason_text} - {protocol} in {zone} - Vendor: {manufacturer}"
 

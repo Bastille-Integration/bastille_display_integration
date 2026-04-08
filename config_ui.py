@@ -11,6 +11,7 @@ import requests
 import uvicorn
 
 INTEGRATION_CERT_DIR = os.path.join(os.path.dirname(__file__), "certs")
+ALERTS_FILE = os.path.join(os.path.dirname(__file__), "alerts.json")
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.yaml")
 CERT_DIR = os.path.join(os.path.dirname(__file__), "certs")
@@ -210,6 +211,22 @@ async def send_test(request: Request, credentials: HTTPBasicCredentials = Depend
         return JSONResponse(status_code=502, content={"status": "error", "detail": "Could not connect to integration service. Is it running?"})
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "detail": str(e)})
+
+
+@app.get("/api/alerts", response_class=JSONResponse)
+async def get_alerts(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    if os.path.exists(ALERTS_FILE):
+        with open(ALERTS_FILE, "r") as f:
+            alerts = json.load(f)
+        return alerts
+    return []
+
+
+@app.delete("/api/alerts", response_class=JSONResponse)
+async def clear_alerts(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    if os.path.exists(ALERTS_FILE):
+        os.remove(ALERTS_FILE)
+    return {"status": "ok"}
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -584,6 +601,91 @@ HTML_PAGE = r"""<!DOCTYPE html>
   }
   .status-refresh:hover { border-color: var(--accent); color: var(--accent); }
 
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--border);
+  }
+  .tab-btn {
+    padding: 0.65rem 1.5rem;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .alerts-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .alerts-toolbar .count { font-size: 0.85rem; color: var(--text-muted); }
+  .alert-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+  }
+  .alert-table th {
+    text-align: left;
+    padding: 0.5rem 0.6rem;
+    border-bottom: 2px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-weight: 600;
+  }
+  .alert-table td {
+    padding: 0.45rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .alert-table tr:hover td { background: var(--input-bg); }
+  .severity-badge {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 3px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .severity-critical { background: #5c0a0a; color: #ff6b6b; }
+  .severity-high { background: #4a1a0a; color: #ff8c42; }
+  .severity-medium { background: #4a3a0a; color: #ffc04d; }
+  .severity-low { background: #1a3a1a; color: #6dff6d; }
+  .status-badge {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .status-sent { background: #1a3a1a; color: var(--success); }
+  .status-filtered { background: #3a3a1a; color: var(--warning); }
+  .type-badge {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+  .type-zone { background: #1e3a5f; color: #6da3ff; }
+  .type-adam { background: #3a1e5f; color: #b06dff; }
+  .alert-empty {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
   .test-type-select {
     display: flex;
     gap: 0.75rem;
@@ -641,6 +743,13 @@ HTML_PAGE = r"""<!DOCTYPE html>
     <h1><span>Bastille</span> Display Integration</h1>
     <span class="badge" id="vendorBadge">-</span>
   </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('config')">Configuration</button>
+    <button class="tab-btn" onclick="switchTab('alerts')">Alerts</button>
+  </div>
+
+  <div class="tab-content active" id="tabConfig">
 
   <!-- Status Dashboard -->
   <div class="card">
@@ -966,6 +1075,23 @@ HTML_PAGE = r"""<!DOCTYPE html>
     <button class="btn btn-primary" onclick="saveConfig()">Save Configuration</button>
     <button class="btn btn-warning" id="restartBtn" onclick="saveAndRestart()">Save &amp; Restart Service</button>
   </div>
+  </div><!-- end tabConfig -->
+
+  <div class="tab-content" id="tabAlerts">
+    <div class="card">
+      <div class="alerts-toolbar">
+        <span class="count" id="alertCount">0 alerts</span>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="status-refresh" onclick="loadAlerts()">Refresh</button>
+          <button class="status-refresh" style="color: var(--danger); border-color: var(--danger);" onclick="clearAlerts()">Clear All</button>
+        </div>
+      </div>
+      <div id="alertsContainer">
+        <div class="alert-empty">No alerts recorded yet.</div>
+      </div>
+    </div>
+  </div><!-- end tabAlerts -->
+
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1446,6 +1572,81 @@ async function loadStatus() {
   } catch (e) {
     document.getElementById('intStatusText').textContent = 'Error';
     document.getElementById('uiStatusText').textContent = 'Error';
+  }
+}
+
+// Tab switching
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+  document.querySelector('[onclick="switchTab(\'' + tab + '\')"]').classList.add('active');
+  document.getElementById(tab === 'config' ? 'tabConfig' : 'tabAlerts').classList.add('active');
+  if (tab === 'alerts') loadAlerts();
+}
+
+// Alerts
+function formatTimestamp(iso) {
+  const d = new Date(iso);
+  return d.toLocaleString();
+}
+
+function severityClass(s) {
+  if (!s) return '';
+  return 'severity-badge severity-' + s.toLowerCase();
+}
+
+function statusBadge(s) {
+  if (s === 'sent') return '<span class="status-badge status-sent">Sent</span>';
+  if (s && s.startsWith('filtered')) return '<span class="status-badge status-filtered">Filtered</span>';
+  return '<span class="status-badge">' + (s || '') + '</span>';
+}
+
+function typeBadge(t) {
+  if (t === 'zone_detection') return '<span class="type-badge type-zone">Zone Detection</span>';
+  if (t === 'adam_finding') return '<span class="type-badge type-adam">ADAM Finding</span>';
+  return t || '';
+}
+
+async function loadAlerts() {
+  try {
+    const res = await fetch('/api/alerts');
+    const alerts = await res.json();
+    const container = document.getElementById('alertsContainer');
+    document.getElementById('alertCount').textContent = alerts.length + ' alert' + (alerts.length !== 1 ? 's' : '');
+
+    if (alerts.length === 0) {
+      container.innerHTML = '<div class="alert-empty">No alerts recorded yet.</div>';
+      return;
+    }
+
+    let html = '<table class="alert-table"><thead><tr>' +
+      '<th>Time</th><th>Type</th><th>Protocol</th><th>Zone</th><th>Vendor</th><th>Severity</th><th>Status</th>' +
+      '</tr></thead><tbody>';
+    alerts.forEach(a => {
+      html += '<tr>' +
+        '<td>' + formatTimestamp(a.timestamp) + '</td>' +
+        '<td>' + typeBadge(a.type) + '</td>' +
+        '<td>' + (a.protocol || '-') + '</td>' +
+        '<td>' + (a.zone || '-') + '</td>' +
+        '<td>' + (a.vendor || '-') + '</td>' +
+        '<td>' + (a.severity ? '<span class="' + severityClass(a.severity) + '">' + a.severity + '</span>' : '-') + '</td>' +
+        '<td>' + statusBadge(a.status) + '</td>' +
+        '</tr>';
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  } catch (e) {
+    document.getElementById('alertsContainer').innerHTML = '<div class="alert-empty">Failed to load alerts.</div>';
+  }
+}
+
+async function clearAlerts() {
+  try {
+    await fetch('/api/alerts', { method: 'DELETE' });
+    loadAlerts();
+    toast('Alerts cleared.', 'success');
+  } catch (e) {
+    toast('Failed to clear alerts.', 'error');
   }
 }
 
