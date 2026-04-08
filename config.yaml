@@ -13,6 +13,11 @@ source_path: /zone-detections
 adam_path: /adam-findings
 #Integration port where Bastille webhooks will be sent.
 source_port: 8001
+# Enable HTTPS for the webhook listener (true/false)
+source_ssl: false
+# Paths to SSL cert and key for webhook listener (only used if source_ssl is true)
+source_ssl_cert: certs/integration_cert.pem
+source_ssl_key: certs/integration_key.pem
 # Algo screen will clear if no alerts are triggered for this amount of time.
 clear_time: 60
 # ONLY monitored protocols will alert.

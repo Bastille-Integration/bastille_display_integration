@@ -21,6 +21,9 @@ source_host = config["source_host"]
 source_path = config["source_path"]
 adam_path = config["adam_path"]
 source_port = config["source_port"]
+source_ssl = config.get("source_ssl", False)
+source_ssl_cert = config.get("source_ssl_cert")
+source_ssl_key = config.get("source_ssl_key")
 target_host = config["target_host"]
 target_port = config["target_port"]
 auth_username = config["auth_username"]
@@ -223,4 +226,8 @@ async def receive_adam_finding(request: Request, background_tasks: BackgroundTas
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host=source_host, port=source_port)
+    kwargs = {"host": source_host, "port": source_port}
+    if source_ssl and source_ssl_cert and source_ssl_key:
+        kwargs["ssl_keyfile"] = source_ssl_key
+        kwargs["ssl_certfile"] = source_ssl_cert
+    uvicorn.run(app, **kwargs)

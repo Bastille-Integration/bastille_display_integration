@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Depends, HTTPException, status
+from fastapi import FastAPI, Request, Depends, HTTPException, status, File, UploadFile
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 import secrets
@@ -7,6 +7,8 @@ import os
 import subprocess
 import logging
 import uvicorn
+
+INTEGRATION_CERT_DIR = os.path.join(os.path.dirname(__file__), "certs")
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.yaml")
 CERT_DIR = os.path.join(os.path.dirname(__file__), "certs")
@@ -109,6 +111,36 @@ async def restart_service(credentials: HTTPBasicCredentials = Depends(verify_cre
     except subprocess.TimeoutExpired:
         logger.error("Restart command timed out.")
         return JSONResponse(status_code=500, content={"status": "error", "detail": "Restart command timed out"})
+
+
+@app.post("/api/upload-cert", response_class=JSONResponse)
+async def upload_cert(
+    cert: UploadFile = File(...),
+    key: UploadFile = File(...),
+    credentials: HTTPBasicCredentials = Depends(verify_credentials),
+):
+    os.makedirs(INTEGRATION_CERT_DIR, exist_ok=True)
+    cert_path = os.path.join(INTEGRATION_CERT_DIR, "integration_cert.pem")
+    key_path = os.path.join(INTEGRATION_CERT_DIR, "integration_key.pem")
+    cert_data = await cert.read()
+    key_data = await key.read()
+    with open(cert_path, "wb") as f:
+        f.write(cert_data)
+    with open(key_path, "wb") as f:
+        f.write(key_data)
+    os.chmod(key_path, 0o600)
+    logger.info("Integration SSL cert and key uploaded.")
+    return {"status": "ok", "cert_path": cert_path, "key_path": key_path}
+
+
+@app.get("/api/cert-status", response_class=JSONResponse)
+async def cert_status(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    cert_path = os.path.join(INTEGRATION_CERT_DIR, "integration_cert.pem")
+    key_path = os.path.join(INTEGRATION_CERT_DIR, "integration_key.pem")
+    return {
+        "cert_exists": os.path.exists(cert_path),
+        "key_exists": os.path.exists(key_path),
+    }
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -382,6 +414,39 @@ HTML_PAGE = r"""<!DOCTYPE html>
   .toast.success { background: var(--success); }
   .toast.error { background: var(--danger); }
 
+  .file-upload-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  .file-upload-row label.file-btn {
+    padding: 0.45rem 1rem;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: 0;
+    transition: border-color 0.15s;
+  }
+  .file-upload-row label.file-btn:hover { border-color: var(--accent); }
+  .file-upload-row input[type="file"] { display: none; }
+  .file-name {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .cert-status {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+  }
+  .cert-status.found { background: #1a3a1a; color: var(--success); }
+  .cert-status.missing { background: #3a1a1a; color: var(--danger); }
+  .ssl-fields { margin-top: 1rem; }
+  .ssl-fields.hidden { display: none; }
   .color-swatch {
     display: flex;
     gap: 0.4rem;
@@ -442,6 +507,38 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <div class="form-group">
         <label>ADAM Findings Path</label>
         <input type="text" id="adam_path">
+      </div>
+    </div>
+  </div>
+
+  <!-- Listener SSL/TLS -->
+  <div class="card">
+    <div class="card-title">Webhook Listener Protocol</div>
+    <div class="vendor-select">
+      <button class="vendor-btn" data-proto="http" onclick="selectProto('http')">HTTP</button>
+      <button class="vendor-btn" data-proto="https" onclick="selectProto('https')">HTTPS</button>
+    </div>
+    <div class="ssl-fields hidden" id="sslFields">
+      <div style="margin-bottom: 0.75rem;">
+        <span class="cert-status" id="certStatus">Checking...</span>
+      </div>
+      <div class="form-group">
+        <label>Upload SSL Certificate &amp; Key</label>
+        <div class="file-upload-row">
+          <label class="file-btn">
+            Certificate (.pem)
+            <input type="file" id="certFile" accept=".pem,.crt,.cer">
+          </label>
+          <span class="file-name" id="certFileName">No file chosen</span>
+        </div>
+        <div class="file-upload-row" style="margin-top: 0.5rem;">
+          <label class="file-btn">
+            Private Key (.pem)
+            <input type="file" id="keyFile" accept=".pem,.key">
+          </label>
+          <span class="file-name" id="keyFileName">No file chosen</span>
+        </div>
+        <button class="btn btn-primary" style="margin-top: 0.75rem;" onclick="uploadCert()">Upload Certificate</button>
       </div>
     </div>
   </div>
@@ -660,6 +757,9 @@ async function loadConfig() {
     document.getElementById('source_path').value = cfg.source_path || '/zone-detections';
     document.getElementById('adam_path').value = cfg.adam_path || '/adam-findings';
 
+    // SSL
+    selectProto(cfg.source_ssl ? 'https' : 'http');
+
     // Protocols
     const protos = cfg.monitored_protocols || [];
     document.querySelectorAll('#protocols input').forEach(cb => {
@@ -712,6 +812,9 @@ async function saveConfig() {
     monitored_protocols: protocols,
     allowed_tags: currentTags,
     vendor: currentVendor,
+    source_ssl: currentProto === 'https',
+    source_ssl_cert: 'certs/integration_cert.pem',
+    source_ssl_key: 'certs/integration_key.pem',
   };
 
   if (currentVendor === 'Algo') {
@@ -745,6 +848,65 @@ async function saveConfig() {
   } catch (e) {
     toast('Failed to save configuration', 'error');
   }
+}
+
+// SSL protocol selection
+let currentProto = 'http';
+function selectProto(p) {
+  currentProto = p;
+  document.querySelectorAll('[data-proto]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.proto === p);
+  });
+  document.getElementById('sslFields').classList.toggle('hidden', p === 'http');
+  if (p === 'https') checkCertStatus();
+}
+
+// File name display
+document.getElementById('certFile').addEventListener('change', function() {
+  document.getElementById('certFileName').textContent = this.files[0]?.name || 'No file chosen';
+});
+document.getElementById('keyFile').addEventListener('change', function() {
+  document.getElementById('keyFileName').textContent = this.files[0]?.name || 'No file chosen';
+});
+
+// Upload cert and key
+async function uploadCert() {
+  const certFile = document.getElementById('certFile').files[0];
+  const keyFile = document.getElementById('keyFile').files[0];
+  if (!certFile || !keyFile) {
+    toast('Please select both a certificate and key file.', 'error');
+    return;
+  }
+  const formData = new FormData();
+  formData.append('cert', certFile);
+  formData.append('key', keyFile);
+  try {
+    const res = await fetch('/api/upload-cert', { method: 'POST', body: formData });
+    if (res.ok) {
+      toast('Certificate and key uploaded.', 'success');
+      checkCertStatus();
+    } else {
+      toast('Failed to upload certificate.', 'error');
+    }
+  } catch (e) {
+    toast('Failed to upload certificate.', 'error');
+  }
+}
+
+// Check cert status
+async function checkCertStatus() {
+  try {
+    const res = await fetch('/api/cert-status');
+    const data = await res.json();
+    const el = document.getElementById('certStatus');
+    if (data.cert_exists && data.key_exists) {
+      el.textContent = 'Certificate and key found';
+      el.className = 'cert-status found';
+    } else {
+      el.textContent = 'Certificate or key missing - upload required';
+      el.className = 'cert-status missing';
+    }
+  } catch (e) {}
 }
 
 // Save config and restart the integration service
