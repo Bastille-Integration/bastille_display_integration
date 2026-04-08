@@ -766,11 +766,13 @@ HTML_PAGE = r"""<!DOCTYPE html>
   </header>
 
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('config')">Configuration</button>
+    <button class="tab-btn active" onclick="switchTab('status')">Status</button>
+    <button class="tab-btn" onclick="switchTab('config')">Configuration</button>
+    <button class="tab-btn" onclick="switchTab('testing')">Testing</button>
     <button class="tab-btn" onclick="switchTab('alerts')">Alerts</button>
   </div>
 
-  <div class="tab-content active" id="tabConfig">
+  <div class="tab-content active" id="tabStatus">
 
   <!-- Status Dashboard -->
   <div class="card">
@@ -798,6 +800,10 @@ HTML_PAGE = r"""<!DOCTYPE html>
     </div>
     <div class="config-summary-wrap" id="configSummary"></div>
   </div>
+
+  </div><!-- end tabStatus -->
+
+  <div class="tab-content" id="tabConfig">
 
   <!-- Vendor Selection -->
   <div class="card">
@@ -989,6 +995,16 @@ HTML_PAGE = r"""<!DOCTYPE html>
     </div>
   </div>
 
+  <div class="actions">
+    <button class="btn btn-secondary" onclick="loadConfig()">Discard Changes</button>
+    <button class="btn btn-primary" onclick="saveConfig()">Save Configuration</button>
+    <button class="btn btn-warning" id="restartBtn" onclick="saveAndRestart()">Save &amp; Restart Service</button>
+  </div>
+
+  </div><!-- end tabConfig -->
+
+  <div class="tab-content" id="tabTesting">
+
   <!-- Test Alert -->
   <div class="card">
     <div class="card-title">Test Alert</div>
@@ -1083,12 +1099,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
     <div class="test-result" id="testResult"></div>
   </div>
 
-  <div class="actions">
-    <button class="btn btn-secondary" onclick="loadConfig()">Discard Changes</button>
-    <button class="btn btn-primary" onclick="saveConfig()">Save Configuration</button>
-    <button class="btn btn-warning" id="restartBtn" onclick="saveAndRestart()">Save &amp; Restart Service</button>
-  </div>
-  </div><!-- end tabConfig -->
+  </div><!-- end tabTesting -->
 
   <div class="tab-content" id="tabAlerts">
     <div class="card">
@@ -1622,10 +1633,12 @@ async function loadStatus() {
 
 // Tab switching
 function switchTab(tab) {
+  const tabMap = { status: 'tabStatus', config: 'tabConfig', testing: 'tabTesting', alerts: 'tabAlerts' };
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
   document.querySelector('[onclick="switchTab(\'' + tab + '\')"]').classList.add('active');
-  document.getElementById(tab === 'config' ? 'tabConfig' : 'tabAlerts').classList.add('active');
+  document.getElementById(tabMap[tab]).classList.add('active');
+  if (tab === 'status') loadStatus();
   if (tab === 'alerts') loadAlerts();
 }
 
