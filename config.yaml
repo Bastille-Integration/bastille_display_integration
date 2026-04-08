@@ -32,11 +32,15 @@ allowed_tags:
 #
 ## FREEPORT
 #
-#vendor: Freeport 
-#target_host: 10.35.44.51 
+#vendor: Freeport
+#target_host: 10.35.44.51
 #target_port: 80
 #auth_username: bn
 #auth_password: bn
+# Font size for alert detail text on Freeport display (default: 160)
+#freeport_detail_font_size: 160
+# Custom message prepended to alert details on Freeport display (optional)
+#freeport_custom_message: SECURITY ALERT
 #
 # ALGO
 #

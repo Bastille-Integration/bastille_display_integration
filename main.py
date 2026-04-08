@@ -41,6 +41,10 @@ strobe_color = config.get("strobe_color")
 tone = config.get("tone", False)
 tone_wav = config.get("tone_wav")
 
+# Freeport-specific configuration
+freeport_detail_font_size = config.get("freeport_detail_font_size", 160)
+freeport_custom_message = config.get("freeport_custom_message")
+
 # Configure logging
 logging.basicConfig(filename=log_file, level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("Main")
@@ -129,7 +133,7 @@ def create_alert(body):
                 a.tone(tone_payload=tone_payload)
         if vendor == "Freeport":
             logger.info(f'Sending alert to Freeport')
-            f.screen_change(option="alert", protocol=protocol, device=manufacturer, zone=zone)
+            f.screen_change(option="alert", protocol=protocol, device=manufacturer, zone=zone, detail_font_size=freeport_detail_font_size, custom_message=freeport_custom_message)
 
 def create_adam_alert(body):
     parsed = AdamWebhookParser(body)
@@ -179,7 +183,7 @@ def create_adam_alert(body):
             a.tone(tone_payload=tone_payload)
     if vendor == "Freeport":
         logger.info(f'Sending ADAM alert to Freeport')
-        f.screen_change(option="alert", protocol=protocol, device=manufacturer, zone=zone)
+        f.screen_change(option="alert", protocol=protocol, device=manufacturer, zone=zone, detail_font_size=freeport_detail_font_size, custom_message=freeport_custom_message)
 
 async def turn_off_alert():
     await asyncio.sleep(clear_time)  # Sleep for X seconds

@@ -1059,6 +1059,19 @@ HTML_PAGE = r"""<!DOCTYPE html>
         </div>
       </div>
     </div>
+    <div class="card">
+      <div class="card-title">Freeport Display</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Alert Detail Font Size</label>
+          <input type="number" id="freeport_detail_font_size" min="20" max="500" value="160">
+        </div>
+        <div class="form-group">
+          <label>Custom Message</label>
+          <input type="text" id="freeport_custom_message" placeholder="e.g. SECURITY ALERT">
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="actions">
@@ -1384,6 +1397,8 @@ async function loadConfig() {
     document.getElementById('freeport_target_port').value = cfg.target_port || 80;
     document.getElementById('freeport_username').value = cfg.auth_username || '';
     document.getElementById('freeport_password').value = cfg.auth_password || '';
+    document.getElementById('freeport_detail_font_size').value = cfg.freeport_detail_font_size || 160;
+    document.getElementById('freeport_custom_message').value = cfg.freeport_custom_message || '';
 
   } catch (e) {
     toast('Failed to load configuration', 'error');
@@ -1422,6 +1437,9 @@ async function saveConfig() {
     cfg.target_port = parseInt(document.getElementById('freeport_target_port').value);
     cfg.auth_username = document.getElementById('freeport_username').value;
     cfg.auth_password = document.getElementById('freeport_password').value;
+    cfg.freeport_detail_font_size = parseInt(document.getElementById('freeport_detail_font_size').value) || 160;
+    const customMsg = document.getElementById('freeport_custom_message').value.trim();
+    if (customMsg) cfg.freeport_custom_message = customMsg;
   }
 
   try {

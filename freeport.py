@@ -10,11 +10,13 @@ class Freeport:
         self.password = password
         logging.basicConfig(filename=log_file, level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         self.logger = logging.getLogger("Freeport Class")
-    def screen_change(self, option: str, protocol: str = None, device: str = None, zone: str = None):
+    def screen_change(self, option: str, protocol: str = None, device: str = None, zone: str = None, detail_font_size: int = 160, custom_message: str = None):
         self.option = option
         self.protocol = protocol
         self.device = device
         self.zone = zone
+        self.detail_font_size = detail_font_size
+        self.custom_message = custom_message
         def wait_for_response(sock, buffer_size=4096, expected_keyword="SUCCESS"):
             """Wait for a complete response from the server."""
             response = ""
@@ -57,6 +59,9 @@ class Freeport:
                     break
 
             if self.option == "alert":
+                detail_text = f"Protocol:{self.protocol}-Device:{self.device}-Zone:{self.zone}"
+                if self.custom_message:
+                    detail_text = f"{self.custom_message} | {detail_text}"
                 commands = [
                     'set feature background visible: false',
                     'set feature message 1 text: ALERT',
@@ -64,8 +69,8 @@ class Freeport:
                     'set feature message 1 font size: 220',
                     'set feature message 2 visible: true',
                     'set feature message 2 font color: #D30000',
-                    'set feature message 2 font size: 160',
-                    f'set feature message 2 text: "Protocol:{self.protocol}-Device:{self.device}-Zone:{self.zone}"',
+                    f'set feature message 2 font size: {self.detail_font_size}',
+                    f'set feature message 2 text: "{detail_text}"',
                     'set feature clock 0 visible: false',
                     'set feature clock 1 visible: false',
                     'set feature clock 2 visible: false',
