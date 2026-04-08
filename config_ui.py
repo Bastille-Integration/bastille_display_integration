@@ -99,20 +99,17 @@ async def put_config(request: Request, credentials: HTTPBasicCredentials = Depen
 
 @app.post("/api/restart", response_class=JSONResponse)
 async def restart_service(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
-    try:
-        result = subprocess.run(
+    import threading
+    def _delayed_restart():
+        import time
+        time.sleep(1)
+        subprocess.run(
             ["sudo", "systemctl", "restart", "bastille_display_integration.service"],
             capture_output=True, text=True, timeout=15
         )
-        if result.returncode == 0:
-            logger.info("Integration service restarted.")
-            return {"status": "ok"}
-        else:
-            logger.error("Failed to restart service: %s", result.stderr)
-            return JSONResponse(status_code=500, content={"status": "error", "detail": result.stderr.strip()})
-    except subprocess.TimeoutExpired:
-        logger.error("Restart command timed out.")
-        return JSONResponse(status_code=500, content={"status": "error", "detail": "Restart command timed out"})
+    threading.Thread(target=_delayed_restart, daemon=True).start()
+    logger.info("Integration service restart scheduled.")
+    return {"status": "ok"}
 
 
 @app.post("/api/upload-cert", response_class=JSONResponse)
