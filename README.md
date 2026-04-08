@@ -38,16 +38,48 @@ Open the config UI in a browser:
 https://<host-ip>:8443
 ```
 
-Default credentials: `bn` / `bn`
+Default credentials: `bn` / `bn` (configurable via `ui_username` / `ui_password` in `config.yaml`)
 
-From the config UI you can:
-- Select display vendor (Algo or Freeport)
-- Configure listener host, port, and webhook paths
-- Toggle HTTP/HTTPS for the webhook listener and upload SSL certificates
-- Set monitored protocols and allowed tags
-- Configure vendor-specific settings (connection, display, strobe, tone)
-- Send test alerts with customizable data
-- Save configuration and restart the service
+### Config UI Tabs
+
+The config UI is organized into four tabs:
+
+#### Status
+
+- **Integration Service** -- shows running/stopped state, PID, and uptime
+- **Config UI Service** -- shows running/stopped state, PID, and uptime
+- **Display Target** -- verifies connectivity to the Algo (HTTP) or Freeport (TLS) device and reports reachable/unreachable with connection details
+- **Running Configuration** -- summarized in three categories:
+  - Webhook Listener (host, port, SSL, endpoint paths)
+  - Display Target (vendor, host, port, clear time, strobe/tone for Algo)
+  - Filtering (monitored protocols, allowed tags)
+
+#### Configuration
+
+- Select display vendor (Algo or Freeport) -- only relevant settings are shown
+- Global settings: listener host, port, webhook paths, log file, clear time
+- Webhook listener protocol: toggle HTTP/HTTPS with SSL certificate and key upload
+- Monitored protocols: toggle cellular, Wi-Fi, BLE, or add custom protocols
+- Allowed tags: add/remove tags for devices that should not trigger alerts
+- Algo-specific: target host/port, credentials, text color, strobe pattern/color, tone selection
+- Freeport-specific: target host/port, credentials
+- Save, Discard Changes, or Save & Restart Service buttons
+
+#### Testing
+
+- Send test alerts directly to the running integration service
+- **Zone Detection** test: configure protocol, zone, vendor, manufacturer, transmitter ID, and tags
+- **ADAM Finding** test: configure protocol, severity, reason, zone, vendor, transmitter ID, network name, tags, severity score, and webhook name
+- Protocol dropdowns are populated from the configured monitored protocols list
+- Results displayed inline with success/failure status
+
+#### Alerts
+
+- View a history of all received alerts (up to 500, most recent first)
+- Each alert shows: timestamp, type (Zone Detection / ADAM Finding), protocol, zone, vendor, severity, and status (Sent / Filtered)
+- Color-coded severity badges (critical, high, medium, low)
+- Status indicates whether the alert was sent to the display or filtered (by protocol or tag)
+- Refresh to load latest alerts or Clear All to reset the log
 
 Configuration is stored in `config.yaml` and can also be edited directly.
 
