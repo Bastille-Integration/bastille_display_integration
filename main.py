@@ -23,15 +23,17 @@ adam_path = config["adam_path"]
 source_port = config["source_port"]
 target_host = config["target_host"]
 target_port = config["target_port"]
-strobe_pattern = config["strobe_pattern"]
-strobe_color = config["strobe_color"]
 auth_username = config["auth_username"]
 auth_password = config["auth_password"]
 clear_time = config["clear_time"]
 monitored_protocols = config["monitored_protocols"]
 allowed_tags = config["allowed_tags"]
-tone = config["tone"]
-tone_wav = config["tone_wav"]
+
+# Algo-specific configuration
+strobe_pattern = config.get("strobe_pattern")
+strobe_color = config.get("strobe_color")
+tone = config.get("tone", False)
+tone_wav = config.get("tone_wav")
 
 # Configure logging
 logging.basicConfig(filename=log_file, level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
