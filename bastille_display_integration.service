@@ -1,10 +1,13 @@
 [Unit]
 Description=Bastille Display Integration Service
+Wants=bastille_config_ui.service
+After=network.target
 
 [Service]
 User=bn
 WorkingDirectory=/home/bn/bastille_display_integration
 ExecStart=/usr/bin/python3.8 /home/bn/bastille_display_integration/main.py
+ExecStartPost=/usr/bin/systemctl start bastille_config_ui.service
 Restart=always
 
 [Install]
