@@ -1,6 +1,7 @@
 [Unit]
 Description=Bastille Display Integration - Configuration UI
 After=network.target
+PartOf=bastille_display_integration.service
 
 [Service]
 User=bn
@@ -9,4 +10,4 @@ ExecStart=/usr/bin/python3 /home/bn/bastille_display_integration/config_ui.py
 Restart=on-failure
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=bastille_display_integration.service
