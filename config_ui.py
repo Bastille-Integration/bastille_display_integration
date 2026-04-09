@@ -129,7 +129,8 @@ async def get_status(credentials: HTTPBasicCredentials = Depends(verify_credenti
             resp = requests.get(
                 target_host,
                 auth=(cfg.get("auth_username", ""), cfg.get("auth_password", "")),
-                timeout=5
+                timeout=5,
+                verify=False
             )
             target_health = {"reachable": True, "detail": f"HTTP {resp.status_code}"}
         except requests.exceptions.ConnectionError:
