@@ -16,35 +16,35 @@ class Algo:
         self.logger = logging.getLogger("Algo Class")
 
     def alert_screen(self, target_payload):
-        response = requests.post(url=f'{self.host}{target_path}', auth=self.auth, headers=headers, json=target_payload)
+        response = requests.post(url=f'{self.host}{target_path}', auth=self.auth, headers=headers, json=target_payload, verify=False)
         if response.status_code == 200:
             self.logger.info("Sending alerts with payload: %s", target_payload)
         else:
             self.logger.error("Failed to send alerts due to error. Recommend checking Algo. Received: %s", response.status_code)
 
     def strobe_on(self, strobe_payload):
-        response = requests.post(url=f'{self.host}{strobe_on_path}', auth=self.auth, headers=headers, json=strobe_payload)
+        response = requests.post(url=f'{self.host}{strobe_on_path}', auth=self.auth, headers=headers, json=strobe_payload, verify=False)
         if response.status_code == 200:
             self.logger.info("Turning on strobe.")
         else:
             self.logger.error("Failed to turn on strobe. Recommend checking Algo. Received: %s", response.status_code)
 
     def tone(self, tone_payload):
-        response = requests.post(url=f'{self.host}{tone_path}', auth=self.auth, headers=headers, json=tone_payload)
+        response = requests.post(url=f'{self.host}{tone_path}', auth=self.auth, headers=headers, json=tone_payload, verify=False)
         if response.status_code == 200:
             self.logger.info("Starting tone.")
         else:
             self.logger.error("Failed to turn on tone. Recommend checking Algo. Received: %s", response.status_code)
 
     def alert_clear(self, clear_payload):
-        response = requests.post(url=f'{self.host}{target_path}', auth=self.auth, headers=headers, json=clear_payload)
+        response = requests.post(url=f'{self.host}{target_path}', auth=self.auth, headers=headers, json=clear_payload, verify=False)
         if response.status_code == 200:
             self.logger.info("Clearing alerts due to not receiving new Zone Detections.")
         else:
             self.logger.error("Failed to clear alerts due to error. Recommend checking Algo. Received: %s", response.status_code)
 
     def strobe_off(self):
-        response = requests.post(url=f'{self.host}{strobe_off_path}', auth=self.auth, headers=headers)
+        response = requests.post(url=f'{self.host}{strobe_off_path}', auth=self.auth, headers=headers, verify=False)
         if response.status_code == 200:
             self.logger.info("Turning strobe off.")
         else:
