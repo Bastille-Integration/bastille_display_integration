@@ -41,9 +41,11 @@ strobe_color = config.get("strobe_color")
 tone = config.get("tone", False)
 tone_wav = config.get("tone_wav")
 
-# Display message templates
-zone_detection_template = config.get("zone_detection_template", "ALERT - {protocol} in {zone} - Vendor: {vendor} - ALERT")
-adam_finding_template = config.get("adam_finding_template", "ADAM ALERT - {severity} - {reasons} - {protocol} in {zone} - Vendor: {vendor}")
+# Display message templates - read live from config on each alert
+def get_template(key, default):
+    with open("config.yaml", "r") as f:
+        cfg = yaml.safe_load(f)
+    return cfg.get(key, default)
 
 # Freeport-specific configuration
 freeport_detail_font_size = config.get("freeport_detail_font_size", 160)
@@ -109,7 +111,7 @@ def create_alert(body):
             save_alert("zone_detection", protocol, zone, manufacturer, tags=tags, status="filtered_tag")
         else:
             save_alert("zone_detection", protocol, zone, manufacturer, tags=tags)
-            alert_text = zone_detection_template.format(
+            alert_text = get_template("zone_detection_template", "ALERT - {protocol} in {zone} - Vendor: {vendor} - ALERT").format(
                 protocol=protocol or "", zone=zone or "", vendor=manufacturer or "",
                 tags=", ".join(tags) if isinstance(tags, list) else (tags or "")
             )
@@ -163,7 +165,7 @@ def create_adam_alert(body):
 
     save_alert("adam_finding", protocol, zone, manufacturer, severity=severity, reasons=reasons, tags=tags)
     reason_text = ", ".join(reasons) if reasons else "unknown"
-    alert_text = adam_finding_template.format(
+    alert_text = get_template("adam_finding_template", "ADAM ALERT - {severity} - {reasons} - {protocol} in {zone} - Vendor: {vendor}").format(
         protocol=protocol or "", zone=zone or "", vendor=manufacturer or "",
         severity=severity.upper() if severity else "UNKNOWN",
         reasons=reason_text,
