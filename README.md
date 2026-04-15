@@ -83,6 +83,41 @@ The config UI is organized into four tabs:
 
 Configuration is stored in `config.yaml` and can also be edited directly.
 
+## Configuring Bastille Webhooks
+
+After installation, configure the Bastille platform to send webhooks to this integration.
+
+### Zone Detection Webhook
+
+1. Log in to the Bastille command console
+2. Navigate to **Settings > Webhooks**
+3. Click **Add Webhook**
+4. Configure the webhook:
+   - **Name**: Display Integration - Zone Detections
+   - **URL**: `http://<integration-host-ip>:8001/zone-detections` (or `https://` if SSL is enabled)
+   - **Event Type**: Zone Detections
+5. Configure any filters as needed (zones, protocols, etc.)
+6. Save the webhook
+
+### ADAM Finding Webhook
+
+1. Log in to the Bastille command console
+2. Navigate to **Settings > Webhooks**
+3. Click **Add Webhook**
+4. Configure the webhook:
+   - **Name**: Display Integration - ADAM Findings
+   - **URL**: `http://<integration-host-ip>:8001/adam-findings` (or `https://` if SSL is enabled)
+   - **Event Type**: Findings
+5. Configure any filters or policy rules as needed
+6. Save the webhook
+
+### Notes
+
+- Replace `<integration-host-ip>` with the IP address or hostname of the machine running this integration
+- The port and paths shown above are defaults -- if you changed them in the config UI, use the values shown on the **Status** tab under **Webhook Listener**
+- If the integration is configured with HTTPS, ensure the Bastille platform can reach it over TLS (self-signed certificates may need to be trusted or verification disabled on the Bastille side)
+- Use the **Testing** tab in the config UI to verify the integration is receiving and processing alerts correctly before relying on it in production
+
 ## Webhook Endpoints
 
 | Endpoint | Description |
