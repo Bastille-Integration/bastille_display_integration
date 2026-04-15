@@ -41,6 +41,10 @@ strobe_color = config.get("strobe_color")
 tone = config.get("tone", False)
 tone_wav = config.get("tone_wav")
 
+# Display message templates
+zone_detection_template = config.get("zone_detection_template", "ALERT - {protocol} in {zone} - Vendor: {vendor} - ALERT")
+adam_finding_template = config.get("adam_finding_template", "ADAM ALERT - {severity} - {reasons} - {protocol} in {zone} - Vendor: {vendor}")
+
 # Freeport-specific configuration
 freeport_detail_font_size = config.get("freeport_detail_font_size", 160)
 freeport_custom_message = config.get("freeport_custom_message")
@@ -105,9 +109,13 @@ def create_alert(body):
             save_alert("zone_detection", protocol, zone, manufacturer, tags=tags, status="filtered_tag")
         else:
             save_alert("zone_detection", protocol, zone, manufacturer, tags=tags)
+            alert_text = zone_detection_template.format(
+                protocol=protocol or "", zone=zone or "", vendor=manufacturer or "",
+                tags=", ".join(tags) if isinstance(tags, list) else (tags or "")
+            )
             target_payload = {
                 "type": "image",
-                "text1": f"ALERT - {protocol} in {zone} - Vendor: {manufacturer} - ALERT",
+                "text1": alert_text,
                 "textColor": "orange",
                 "textFont": "roboto",
                 "textPosition": "middle",
@@ -155,7 +163,12 @@ def create_adam_alert(body):
 
     save_alert("adam_finding", protocol, zone, manufacturer, severity=severity, reasons=reasons, tags=tags)
     reason_text = ", ".join(reasons) if reasons else "unknown"
-    alert_text = f"ADAM ALERT - {severity.upper() if severity else 'UNKNOWN'} - {reason_text} - {protocol} in {zone} - Vendor: {manufacturer}"
+    alert_text = adam_finding_template.format(
+        protocol=protocol or "", zone=zone or "", vendor=manufacturer or "",
+        severity=severity.upper() if severity else "UNKNOWN",
+        reasons=reason_text,
+        tags=", ".join(tags) if isinstance(tags, list) else (tags or "")
+    )
 
     target_payload = {
         "type": "image",

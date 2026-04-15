@@ -25,6 +25,11 @@ monitored_protocols:
   - cellular
   - wifi
   - ble
+# Display message templates. Available variables:
+#   Zone Detection: {protocol}, {zone}, {vendor}, {tags}
+#   ADAM Finding: {protocol}, {zone}, {vendor}, {severity}, {reasons}, {tags}
+zone_detection_template: "ALERT - {protocol} in {zone} - Vendor: {vendor} - ALERT"
+adam_finding_template: "ADAM ALERT - {severity} - {reasons} - {protocol} in {zone} - Vendor: {vendor}"
 # If device tagged with below tags, will NOT alert.
 allowed_tags:
   - authorized

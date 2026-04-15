@@ -954,6 +954,25 @@ HTML_PAGE = r"""<!DOCTYPE html>
     </div>
   </div>
 
+  <!-- Display Messages -->
+  <div class="card">
+    <div class="card-title">Display Message Templates</div>
+    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+      Variables: <code>{protocol}</code> <code>{zone}</code> <code>{vendor}</code> <code>{tags}</code> &mdash;
+      ADAM only: <code>{severity}</code> <code>{reasons}</code>
+    </p>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Zone Detection Template</label>
+        <input type="text" id="zone_detection_template" value="ALERT - {protocol} in {zone} - Vendor: {vendor} - ALERT">
+      </div>
+      <div class="form-group full">
+        <label>ADAM Finding Template</label>
+        <input type="text" id="adam_finding_template" value="ADAM ALERT - {severity} - {reasons} - {protocol} in {zone} - Vendor: {vendor}">
+      </div>
+    </div>
+  </div>
+
   <!-- Allowed Tags -->
   <div class="card">
     <div class="card-title">Allowed Tags (devices with these tags will NOT alert)</div>
@@ -1367,6 +1386,10 @@ async function loadConfig() {
     // SSL
     selectProto(cfg.source_ssl ? 'https' : 'http');
 
+    // Message templates
+    document.getElementById('zone_detection_template').value = cfg.zone_detection_template || 'ALERT - {protocol} in {zone} - Vendor: {vendor} - ALERT';
+    document.getElementById('adam_finding_template').value = cfg.adam_finding_template || 'ADAM ALERT - {severity} - {reasons} - {protocol} in {zone} - Vendor: {vendor}';
+
     // Protocols
     const protos = cfg.monitored_protocols || [];
     allProtocols = [...new Set([...defaultProtocols, ...protos])];
@@ -1418,6 +1441,8 @@ async function saveConfig() {
     monitored_protocols: enabledProtocols,
     allowed_tags: currentTags,
     vendor: currentVendor,
+    zone_detection_template: document.getElementById('zone_detection_template').value,
+    adam_finding_template: document.getElementById('adam_finding_template').value,
     source_ssl: currentProto === 'https',
     source_ssl_cert: 'certs/integration_cert.pem',
     source_ssl_key: 'certs/integration_key.pem',
