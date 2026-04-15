@@ -41,8 +41,8 @@ strobe_color = config.get("strobe_color")
 tone = config.get("tone", False)
 tone_wav = config.get("tone_wav")
 
-# Display message templates - read live from config on each alert
-def get_template(key, default):
+# Read config values live so changes take effect without restart
+def get_config_value(key, default=None):
     with open("config.yaml", "r") as f:
         cfg = yaml.safe_load(f)
     return cfg.get(key, default)
@@ -110,19 +110,19 @@ def create_alert(body):
             save_alert("zone_detection", protocol, zone, manufacturer, tags=tags, status="filtered_tag")
         else:
             save_alert("zone_detection", protocol, zone, manufacturer, tags=tags)
-            alert_text = get_template("zone_detection_template", "ALERT - {protocol} in {zone} - Vendor: {vendor} - ALERT").format(
+            alert_text = get_config_value("zone_detection_template", "ALERT - {protocol} in {zone} - Vendor: {vendor} - ALERT").format(
                 protocol=protocol or "", zone=zone or "", vendor=manufacturer or "",
                 tags=", ".join(tags) if isinstance(tags, list) else (tags or "")
             )
             target_payload = {
                 "type": "image",
                 "text1": alert_text,
-                "textColor": "orange",
-                "textFont": "roboto",
-                "textPosition": "middle",
-                "textScroll": "1",
-                "textScrollSpeed": "4",
-                "textSize": "medium"
+                "textColor": get_config_value("algo_text_color", "orange"),
+                "textFont": get_config_value("algo_text_font", "roboto"),
+                "textPosition": get_config_value("algo_text_position", "middle"),
+                "textScroll": get_config_value("algo_text_scroll", "1"),
+                "textScrollSpeed": get_config_value("algo_text_scroll_speed", "4"),
+                "textSize": get_config_value("algo_text_size", "medium")
             }
         if vendor == "Algo":
             logger.info(f'Sending alert to Algo')
@@ -164,7 +164,7 @@ def create_adam_alert(body):
 
     save_alert("adam_finding", protocol, zone, manufacturer, severity=severity, reasons=reasons, tags=tags)
     reason_text = ", ".join(reasons) if reasons else "unknown"
-    alert_text = get_template("adam_finding_template", "ADAM ALERT - {severity} - {reasons} - {protocol} in {zone} - Vendor: {vendor}").format(
+    alert_text = get_config_value("adam_finding_template", "ADAM ALERT - {severity} - {reasons} - {protocol} in {zone} - Vendor: {vendor}").format(
         protocol=protocol or "", zone=zone or "", vendor=manufacturer or "",
         severity=severity.upper() if severity else "UNKNOWN",
         reasons=reason_text,
@@ -174,12 +174,12 @@ def create_adam_alert(body):
     target_payload = {
         "type": "image",
         "text1": alert_text,
-        "textColor": "red" if severity in ("high", "critical") else "orange",
-        "textFont": "roboto",
-        "textPosition": "middle",
-        "textScroll": "1",
-        "textScrollSpeed": "4",
-        "textSize": "medium"
+        "textColor": "red" if severity in ("high", "critical") else get_config_value("algo_text_color", "orange"),
+        "textFont": get_config_value("algo_text_font", "roboto"),
+        "textPosition": get_config_value("algo_text_position", "middle"),
+        "textScroll": get_config_value("algo_text_scroll", "1"),
+        "textScrollSpeed": get_config_value("algo_text_scroll_speed", "4"),
+        "textSize": get_config_value("algo_text_size", "medium")
     }
     if vendor == "Algo":
         logger.info(f'Sending ADAM alert to Algo')

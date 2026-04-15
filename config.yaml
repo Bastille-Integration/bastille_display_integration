@@ -53,6 +53,13 @@ target_port: 80
 auth_username: admin
 auth_password: algo
 text_color: red
+# Algo text display settings
+algo_text_color: orange
+algo_text_font: roboto
+algo_text_size: medium
+algo_text_position: middle
+algo_text_scroll: "1"
+algo_text_scroll_speed: "4"
 strobe_pattern: 2
 strobe_color: red
 #    "tonelist":

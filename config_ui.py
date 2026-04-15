@@ -1051,6 +1051,49 @@ HTML_PAGE = r"""<!DOCTYPE html>
           </select>
         </div>
         <div class="form-group">
+          <label>Text Font</label>
+          <select id="algo_text_font">
+            <option value="roboto">Roboto</option>
+            <option value="arial">Arial</option>
+            <option value="courier">Courier</option>
+            <option value="times">Times</option>
+            <option value="verdana">Verdana</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Text Size</label>
+          <select id="algo_text_size">
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Text Position</label>
+          <select id="algo_text_position">
+            <option value="top">Top</option>
+            <option value="middle">Middle</option>
+            <option value="bottom">Bottom</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Text Scroll</label>
+          <select id="algo_text_scroll">
+            <option value="0">Off</option>
+            <option value="1">On</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Scroll Speed</label>
+          <select id="algo_text_scroll_speed">
+            <option value="1">1 - Slowest</option>
+            <option value="2">2 - Slow</option>
+            <option value="3">3 - Medium</option>
+            <option value="4">4 - Fast</option>
+            <option value="5">5 - Fastest</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label>Strobe Pattern</label>
           <select id="algo_strobe_pattern">
             <option value="1">1 - Slow</option>
@@ -1059,7 +1102,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
             <option value="4">4 - Pulse</option>
           </select>
         </div>
-        <div class="form-group full">
+        <div class="form-group">
           <label>Strobe Color</label>
           <select id="algo_strobe_color">
             <option value="red">Red</option>
@@ -1447,7 +1490,12 @@ async function loadConfig() {
     document.getElementById('algo_target_port').value = cfg.target_port || 80;
     document.getElementById('algo_username').value = cfg.auth_username || '';
     document.getElementById('algo_password').value = cfg.auth_password || '';
-    document.getElementById('algo_text_color').value = cfg.text_color || 'red';
+    document.getElementById('algo_text_color').value = cfg.algo_text_color || cfg.text_color || 'orange';
+    document.getElementById('algo_text_font').value = cfg.algo_text_font || 'roboto';
+    document.getElementById('algo_text_size').value = cfg.algo_text_size || 'medium';
+    document.getElementById('algo_text_position').value = cfg.algo_text_position || 'middle';
+    document.getElementById('algo_text_scroll').value = String(cfg.algo_text_scroll != null ? cfg.algo_text_scroll : '1');
+    document.getElementById('algo_text_scroll_speed').value = String(cfg.algo_text_scroll_speed || '4');
     document.getElementById('algo_strobe_pattern').value = String(cfg.strobe_pattern || 2);
     document.getElementById('algo_strobe_color').value = cfg.strobe_color || 'red';
     document.getElementById('algo_tone').checked = cfg.tone === true || cfg.tone === 'True';
@@ -1492,6 +1540,12 @@ async function saveConfig() {
     cfg.auth_username = document.getElementById('algo_username').value;
     cfg.auth_password = document.getElementById('algo_password').value;
     cfg.text_color = document.getElementById('algo_text_color').value;
+    cfg.algo_text_color = document.getElementById('algo_text_color').value;
+    cfg.algo_text_font = document.getElementById('algo_text_font').value;
+    cfg.algo_text_size = document.getElementById('algo_text_size').value;
+    cfg.algo_text_position = document.getElementById('algo_text_position').value;
+    cfg.algo_text_scroll = document.getElementById('algo_text_scroll').value;
+    cfg.algo_text_scroll_speed = document.getElementById('algo_text_scroll_speed').value;
     cfg.strobe_pattern = parseInt(document.getElementById('algo_strobe_pattern').value);
     cfg.strobe_color = document.getElementById('algo_strobe_color').value;
     cfg.tone = document.getElementById('algo_tone').checked;
