@@ -261,6 +261,111 @@ async def cert_status(credentials: HTTPBasicCredentials = Depends(verify_credent
     }
 
 
+@app.post("/api/preview-commands", response_class=JSONResponse)
+async def preview_commands(request: Request, credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    body = await request.json()
+    test_type = body.get("test_type")
+    payload = body.get("payload", {})
+    cfg = load_config()
+    vendor_name = cfg.get("vendor", "Algo")
+
+    # Extract fields based on test type
+    if test_type == "zone_detection":
+        p = payload.get("payload", {})
+        emitter = p.get("emitter", {})
+        protocol = emitter.get("protocol", "")
+        zone = p.get("zone_name", "")
+        vendor_val = emitter.get("vendor", "")
+        tags = p.get("tags", [])
+        template = cfg.get("zone_detection_template", "ALERT - {protocol} in {zone} - Vendor: {vendor} - ALERT")
+        alert_text = template.format(
+            protocol=protocol, zone=zone, vendor=vendor_val,
+            tags=", ".join(tags) if isinstance(tags, list) else tags
+        )
+        text_color = cfg.get("algo_text_color", "orange")
+    else:
+        p = payload.get("payload", {})
+        snap = p.get("reference_snapshot", {})
+        emitter = snap.get("emitter", {})
+        protocol = emitter.get("protocol", "")
+        vendor_val = emitter.get("vendor", "")
+        tags = snap.get("tags", [])
+        severity = p.get("severity", "unknown")
+        reasons = p.get("reasons", [])
+        reason_text = ", ".join(reasons) if reasons else "unknown"
+        zone = ""
+        for tag in tags:
+            if tag.lower().startswith("zone:"):
+                zone = tag[5:]
+                break
+        template = cfg.get("adam_finding_template", "ADAM ALERT - {severity} - {reasons} - {protocol} in {zone} - Vendor: {vendor}")
+        alert_text = template.format(
+            protocol=protocol, zone=zone, vendor=vendor_val,
+            severity=severity.upper() if severity else "UNKNOWN",
+            reasons=reason_text,
+            tags=", ".join(tags) if isinstance(tags, list) else tags
+        )
+        text_color = "red" if severity in ("high", "critical") else cfg.get("algo_text_color", "orange")
+
+    commands = []
+
+    if vendor_name == "Algo":
+        commands.append({
+            "action": "Alert Screen",
+            "endpoint": "POST /api/controls/screen/start",
+            "payload": {
+                "type": "image",
+                "text1": alert_text,
+                "textColor": text_color,
+                "textFont": cfg.get("algo_text_font", "roboto"),
+                "textPosition": cfg.get("algo_text_position", "middle"),
+                "textScroll": str(cfg.get("algo_text_scroll", "1")),
+                "textScrollSpeed": str(cfg.get("algo_text_scroll_speed", "4")),
+                "textSize": cfg.get("algo_text_size", "medium")
+            }
+        })
+        commands.append({
+            "action": "Strobe On",
+            "endpoint": "POST /api/controls/strobe/start",
+            "payload": {
+                "pattern": cfg.get("strobe_pattern", 2),
+                "color1": cfg.get("strobe_color", "red")
+            }
+        })
+        if cfg.get("tone", False):
+            commands.append({
+                "action": "Tone",
+                "endpoint": "POST /api/controls/tone/start",
+                "payload": {
+                    "path": cfg.get("tone_wav", "bell-na.wav"),
+                    "loop": "false"
+                }
+            })
+
+    elif vendor_name == "Freeport":
+        font_size = cfg.get("freeport_detail_font_size", 160)
+        commands.append({
+            "action": "Freeport Alert",
+            "endpoint": f"TLS {cfg.get('target_host', '')}:{cfg.get('target_port', 80)}",
+            "payload": [
+                "set feature background visible: false",
+                "set feature message 1 text: ALERT",
+                "set feature message 1 font color: #D30000",
+                "set feature message 1 font size: 220",
+                "set feature message 2 visible: true",
+                "set feature message 2 font color: #D30000",
+                f"set feature message 2 font size: {font_size}",
+                f'set feature message 2 text: "{alert_text}"',
+                "set feature clock 0 visible: false",
+                "set feature clock 1 visible: false",
+                "set feature clock 2 visible: false",
+                "set feature clock 3 visible: false",
+            ]
+        })
+
+    return {"vendor": vendor_name, "commands": commands}
+
+
 @app.post("/api/clear-display", response_class=JSONResponse)
 async def proxy_clear_display(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
     cfg = load_config()
@@ -797,6 +902,52 @@ HTML_PAGE = r"""<!DOCTYPE html>
     color: var(--text-muted);
     font-size: 0.9rem;
   }
+  .command-preview {
+    margin-top: 1rem;
+    display: none;
+  }
+  .command-preview.show { display: block; }
+  .command-card {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .command-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  .command-action {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+  .command-endpoint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: monospace;
+  }
+  .command-json {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.6rem 0.75rem;
+    font-family: monospace;
+    font-size: 0.78rem;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-x: auto;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  .command-json .json-key { color: #6da3ff; }
+  .command-json .json-string { color: #98c379; }
+  .command-json .json-number { color: #d19a66; }
+  .command-json .json-bool { color: #c678dd; }
 
   .test-type-select {
     display: flex;
@@ -1278,6 +1429,16 @@ HTML_PAGE = r"""<!DOCTYPE html>
     </div>
 
     <div class="test-result" id="testResult"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Preview Display Commands</div>
+    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">Shows the exact commands and payloads that will be sent to the display target based on your current test data and configuration.</p>
+    <div style="display: flex; gap: 0.5rem;">
+      <button class="btn btn-secondary" onclick="previewCommands('zone_detection')">Preview Zone Detection</button>
+      <button class="btn btn-secondary" onclick="previewCommands('adam_finding')">Preview ADAM Finding</button>
+    </div>
+    <div class="command-preview" id="commandPreview"></div>
   </div>
 
   <div class="card">
@@ -1877,6 +2038,68 @@ async function restoreConfig() {
     toast('Restore failed: ' + e.message, 'error');
   }
   document.getElementById('restoreFile').value = '';
+}
+
+// JSON syntax highlighting
+function syntaxHighlight(json) {
+  const str = JSON.stringify(json, null, 2);
+  return str.replace(/("(\\u[a-fA-F0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
+    let cls = 'json-number';
+    if (/^"/.test(match)) {
+      if (/:$/.test(match)) {
+        cls = 'json-key';
+      } else {
+        cls = 'json-string';
+      }
+    } else if (/true|false/.test(match)) {
+      cls = 'json-bool';
+    }
+    return '<span class="' + cls + '">' + match + '</span>';
+  });
+}
+
+// Preview display commands
+async function previewCommands(type) {
+  let payload;
+  if (type === 'zone_detection') {
+    payload = buildZoneDetectionPayload();
+  } else {
+    payload = buildAdamFindingPayload();
+  }
+
+  const preview = document.getElementById('commandPreview');
+  preview.classList.remove('show');
+
+  try {
+    const res = await fetch('/api/preview-commands', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ test_type: type, payload: payload })
+    });
+    const data = await res.json();
+
+    let html = '<div style="margin-top: 0.75rem; margin-bottom: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">Vendor: <strong style="color: var(--text);">' + data.vendor + '</strong></div>';
+
+    data.commands.forEach(cmd => {
+      html += '<div class="command-card">';
+      html += '<div class="command-card-header">';
+      html += '<span class="command-action">' + cmd.action + '</span>';
+      html += '<span class="command-endpoint">' + cmd.endpoint + '</span>';
+      html += '</div>';
+      if (Array.isArray(cmd.payload)) {
+        html += '<div class="command-json">' + cmd.payload.map(l => l).join('\n') + '</div>';
+      } else {
+        html += '<div class="command-json">' + syntaxHighlight(cmd.payload) + '</div>';
+      }
+      html += '</div>';
+    });
+
+    preview.innerHTML = html;
+    preview.classList.add('show');
+  } catch (e) {
+    preview.innerHTML = '<div class="test-result show fail">Failed to preview: ' + e.message + '</div>';
+    preview.classList.add('show');
+  }
 }
 
 // Clear display target
