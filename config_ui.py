@@ -90,6 +90,38 @@ async def get_config(credentials: HTTPBasicCredentials = Depends(verify_credenti
     return load_config()
 
 
+@app.get("/api/config/export")
+async def export_config(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    from fastapi.responses import Response
+    with open(CONFIG_PATH, "r") as f:
+        content = f.read()
+    return Response(
+        content=content,
+        media_type="application/x-yaml",
+        headers={"Content-Disposition": "attachment; filename=config.yaml"}
+    )
+
+
+@app.post("/api/config/restore", response_class=JSONResponse)
+async def restore_config(file: UploadFile = File(...), credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    content = await file.read()
+    try:
+        parsed = yaml.safe_load(content)
+        if not isinstance(parsed, dict):
+            return JSONResponse(status_code=400, content={"status": "error", "detail": "Invalid config file format"})
+    except yaml.YAMLError as e:
+        return JSONResponse(status_code=400, content={"status": "error", "detail": f"YAML parse error: {e}"})
+    # Backup current config
+    backup_path = CONFIG_PATH + ".bak"
+    with open(CONFIG_PATH, "r") as f:
+        with open(backup_path, "w") as bak:
+            bak.write(f.read())
+    with open(CONFIG_PATH, "wb") as f:
+        f.write(content)
+    logger.info("Configuration restored from uploaded file. Backup saved to config.yaml.bak")
+    return {"status": "ok"}
+
+
 @app.put("/api/config", response_class=JSONResponse)
 async def put_config(request: Request, credentials: HTTPBasicCredentials = Depends(verify_credentials)):
     body = await request.json()
@@ -1100,6 +1132,17 @@ HTML_PAGE = r"""<!DOCTYPE html>
     <button class="btn btn-warning" id="restartBtn" onclick="saveAndRestart()">Save &amp; Restart Service</button>
   </div>
 
+  <div class="card">
+    <div class="card-title">Backup &amp; Restore</div>
+    <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+      <button class="btn btn-secondary" onclick="exportConfig()">Export Config</button>
+      <label class="btn btn-secondary" style="cursor: pointer;">
+        Restore Config
+        <input type="file" id="restoreFile" accept=".yaml,.yml" style="display: none;" onchange="restoreConfig()">
+      </label>
+    </div>
+  </div>
+
   </div><!-- end tabConfig -->
 
   <div class="tab-content" id="tabTesting">
@@ -1760,6 +1803,33 @@ async function loadStatus() {
     document.getElementById('intStatusText').textContent = 'Error';
     document.getElementById('uiStatusText').textContent = 'Error';
   }
+}
+
+// Export config
+function exportConfig() {
+  window.location.href = '/api/config/export';
+}
+
+// Restore config from file
+async function restoreConfig() {
+  const file = document.getElementById('restoreFile').files[0];
+  if (!file) return;
+  const formData = new FormData();
+  formData.append('file', file);
+  try {
+    const res = await fetch('/api/config/restore', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (res.ok) {
+      toast('Configuration restored. Current config backed up to config.yaml.bak', 'success');
+      loadConfig();
+      loadStatus();
+    } else {
+      toast('Restore failed: ' + (data.detail || 'unknown error'), 'error');
+    }
+  } catch (e) {
+    toast('Restore failed: ' + e.message, 'error');
+  }
+  document.getElementById('restoreFile').value = '';
 }
 
 // Clear display target
