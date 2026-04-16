@@ -1249,27 +1249,27 @@ HTML_PAGE = r"""<!DOCTYPE html>
     <div class="form-grid">
       <div class="form-group">
         <label>Log File</label>
-        <input type="text" id="log_file">
+        <input type="text" id="log_file" placeholder="e.g. app.log">
       </div>
       <div class="form-group">
         <label>Clear Time (seconds)</label>
-        <input type="number" id="clear_time" min="1">
+        <input type="number" id="clear_time" min="1" placeholder="Seconds before display clears (e.g. 60)">
       </div>
       <div class="form-group">
         <label>Listener Host</label>
-        <input type="text" id="source_host">
+        <input type="text" id="source_host" placeholder="0.0.0.0 to listen on all interfaces">
       </div>
       <div class="form-group">
         <label>Listener Port</label>
-        <input type="number" id="source_port" min="1" max="65535">
+        <input type="number" id="source_port" min="1" max="65535" placeholder="e.g. 8001">
       </div>
       <div class="form-group">
         <label>Zone Detections Path</label>
-        <input type="text" id="source_path">
+        <input type="text" id="source_path" placeholder="e.g. /zone-detections">
       </div>
       <div class="form-group">
         <label>ADAM Findings Path</label>
-        <input type="text" id="adam_path">
+        <input type="text" id="adam_path" placeholder="e.g. /adam-findings">
       </div>
     </div>
   </div>
@@ -1326,11 +1326,11 @@ HTML_PAGE = r"""<!DOCTYPE html>
     <div class="form-grid">
       <div class="form-group full">
         <label>Zone Detection Template</label>
-        <input type="text" id="zone_detection_template" value="ALERT - {protocol} in {zone} - Vendor: {vendor} - ALERT">
+        <input type="text" id="zone_detection_template" placeholder="e.g. ALERT - {protocol} in {zone} - Vendor: {vendor}">
       </div>
       <div class="form-group full">
         <label>ADAM Finding Template</label>
-        <input type="text" id="adam_finding_template" value="ADAM ALERT - {severity} - {reasons} - {protocol} in {zone} - Vendor: {vendor}">
+        <input type="text" id="adam_finding_template" placeholder="e.g. ADAM ALERT - {severity} - {reasons} - {protocol} in {zone}">
       </div>
     </div>
   </div>
@@ -1350,19 +1350,19 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <div class="form-grid">
         <div class="form-group">
           <label>Target Host</label>
-          <input type="text" id="algo_target_host" placeholder="http://172.30.2.119">
+          <input type="text" id="algo_target_host" placeholder="e.g. http://192.168.1.100">
         </div>
         <div class="form-group">
           <label>Target Port</label>
-          <input type="number" id="algo_target_port" min="1" max="65535">
+          <input type="number" id="algo_target_port" min="1" max="65535" placeholder="e.g. 80">
         </div>
         <div class="form-group">
           <label>Username</label>
-          <input type="text" id="algo_username">
+          <input type="text" id="algo_username" placeholder="Algo API username (e.g. admin)">
         </div>
         <div class="form-group">
           <label>Password</label>
-          <input type="password" id="algo_password">
+          <input type="password" id="algo_password" placeholder="Algo API password">
         </div>
       </div>
     </div>
@@ -1468,19 +1468,19 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <div class="form-grid">
         <div class="form-group">
           <label>Target Host</label>
-          <input type="text" id="freeport_target_host" placeholder="10.35.44.51">
+          <input type="text" id="freeport_target_host" placeholder="IP address only - https:// not required, as TLS connection">
         </div>
         <div class="form-group">
           <label>Target Port</label>
-          <input type="number" id="freeport_target_port" min="1" max="65535">
+          <input type="number" id="freeport_target_port" min="1" max="65535" placeholder="e.g. 80">
         </div>
         <div class="form-group">
           <label>Username</label>
-          <input type="text" id="freeport_username">
+          <input type="text" id="freeport_username" placeholder="Freeport API username">
         </div>
         <div class="form-group">
           <label>Password</label>
-          <input type="password" id="freeport_password">
+          <input type="password" id="freeport_password" placeholder="Freeport API password">
         </div>
       </div>
     </div>
@@ -1489,7 +1489,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <div class="form-grid">
         <div class="form-group">
           <label>Alert Detail Font Size</label>
-          <input type="number" id="freeport_detail_font_size" min="20" max="500" value="160">
+          <input type="number" id="freeport_detail_font_size" min="20" max="500" value="160" placeholder="Default: 160">
         </div>
       </div>
     </div>
