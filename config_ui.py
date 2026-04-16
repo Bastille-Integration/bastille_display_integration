@@ -1864,7 +1864,7 @@ function selectVendor(v) {
 }
 
 // Protocol management
-const defaultProtocols = ['cellular', 'wifi', 'ble'];
+const defaultProtocols = ['cellular', 'wifi', 'ble', 'bt', 'ieee_802_15_4'];
 let allProtocols = [...defaultProtocols];
 let enabledProtocols = [];
 

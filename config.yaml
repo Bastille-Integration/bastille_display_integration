@@ -25,6 +25,8 @@ monitored_protocols:
   - cellular
   - wifi
   - ble
+  - bt
+  - ieee_802_15_4
 # Display message templates. Available variables:
 #   Zone Detection: {protocol}, {zone}, {vendor}, {tags}
 #   ADAM Finding: {protocol}, {zone}, {vendor}, {severity}, {reasons}, {tags}

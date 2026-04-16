@@ -121,6 +121,8 @@ monitored_protocols:
   - cellular
   - wifi
   - ble
+  - bt
+  - ieee_802_15_4
 # If device tagged with below tags, will NOT alert.
 allowed_tags:
   - authorized
