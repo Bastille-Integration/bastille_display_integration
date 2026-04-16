@@ -902,6 +902,61 @@ HTML_PAGE = r"""<!DOCTYPE html>
     color: var(--text-muted);
     font-size: 0.9rem;
   }
+  .docs h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .docs h2:first-child { margin-top: 0; }
+  .docs h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 1rem;
+    margin-bottom: 0.4rem;
+  }
+  .docs p, .docs li {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .docs ul { padding-left: 1.25rem; margin: 0.4rem 0; }
+  .docs li { margin-bottom: 0.25rem; }
+  .docs code {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+  .docs .note {
+    background: #1a2640;
+    border-left: 3px solid var(--accent);
+    padding: 0.6rem 0.75rem;
+    border-radius: 0 4px 4px 0;
+    margin: 0.75rem 0;
+    font-size: 0.8rem;
+    color: var(--text);
+  }
+  .docs ol { padding-left: 1.25rem; margin: 0.4rem 0; }
+  .docs ol li { margin-bottom: 0.35rem; }
+  .docs strong { color: var(--text); }
+  .docs pre {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-size: 0.78rem;
+    overflow-x: auto;
+    margin: 0.5rem 0;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
   .command-preview {
     margin-top: 1rem;
     display: none;
@@ -1012,6 +1067,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
     <button class="tab-btn" onclick="switchTab('config')">Configuration</button>
     <button class="tab-btn" onclick="switchTab('testing')">Testing</button>
     <button class="tab-btn" onclick="switchTab('alerts')">Alerts</button>
+    <button class="tab-btn" onclick="switchTab('docs')">Documentation</button>
   </div>
 
   <div class="tab-content active" id="tabStatus">
@@ -1463,6 +1519,150 @@ HTML_PAGE = r"""<!DOCTYPE html>
       </div>
     </div>
   </div><!-- end tabAlerts -->
+
+  <div class="tab-content" id="tabDocs">
+    <div class="card docs">
+
+      <h2>Overview</h2>
+      <p>The Bastille Display Integration receives webhook alerts from the Bastille platform and triggers visual and audio alerts on connected display hardware. It supports two webhook types and two display vendors:</p>
+      <ul>
+        <li><strong>Zone Detections</strong> &mdash; triggered when Bastille detects wireless devices in monitored zones (ndjson format)</li>
+        <li><strong>ADAM Findings</strong> &mdash; triggered when Bastille ADAM identifies security threats with severity ratings (json format)</li>
+        <li><strong>Algo</strong> &mdash; controlled via HTTP REST API (screen text, strobe lights, audio tones)</li>
+        <li><strong>Freeport</strong> &mdash; controlled via TLS socket commands (screen text, clock visibility)</li>
+      </ul>
+
+      <h2>How It Works</h2>
+      <p>When a webhook is received, the integration:</p>
+      <ol>
+        <li>Parses the incoming payload to extract protocol, zone, vendor, and device information</li>
+        <li>Checks if the protocol is in the monitored protocols list &mdash; if not, the alert is filtered</li>
+        <li>Checks if the device has any allowed tags &mdash; if so, the alert is filtered</li>
+        <li>Applies the configured display message template to build the alert text</li>
+        <li>Sends the alert to the configured display device (Algo or Freeport)</li>
+        <li>Schedules an automatic clear after the configured clear time, unless new alerts arrive</li>
+      </ol>
+      <p>All alerts (sent and filtered) are logged and visible in the <strong>Alerts</strong> tab.</p>
+
+      <h2>Configuring Display Devices</h2>
+
+      <h3>Algo Setup</h3>
+      <ol>
+        <li>Open the Algo web interface in a browser: <code>http://&lt;algo-ip&gt;</code></li>
+        <li>Log in with the Algo admin credentials</li>
+        <li>Navigate to <strong>API</strong> or <strong>Advanced Settings</strong></li>
+        <li><strong>Enable the API</strong> &mdash; ensure the REST API is turned on</li>
+        <li>Note the username and password for API access (default is typically <code>admin</code> / <code>algo</code>)</li>
+        <li>In the <strong>Configuration</strong> tab, enter the Algo target host (e.g., <code>http://&lt;algo-ip&gt;</code>), port, and credentials under <strong>Algo Connection</strong></li>
+      </ol>
+      <div class="note">The integration sends HTTP POST requests to the Algo REST API for screen text, strobe control, and audio tones. Self-signed certificates on the Algo are accepted automatically.</div>
+
+      <h3>Freeport Setup</h3>
+      <ol>
+        <li>Log in to the Freeport management interface</li>
+        <li>Navigate to <strong>User Management</strong> or <strong>Administration</strong></li>
+        <li><strong>Create a new user</strong> with API privileges:
+          <ul>
+            <li>Set a username and password (e.g., <code>bn</code> / <code>bn</code>)</li>
+            <li>Ensure the user has <strong>API access</strong> permissions enabled</li>
+          </ul>
+        </li>
+        <li>Navigate to <strong>API Settings</strong> or <strong>System Configuration</strong></li>
+        <li><strong>Enable the API</strong> &mdash; ensure the TLS API interface is turned on and note the port (default is typically <code>80</code>)</li>
+        <li>In the <strong>Configuration</strong> tab, enter the Freeport target host (IP address, not URL), port, and credentials under <strong>Freeport Connection</strong></li>
+      </ol>
+      <div class="note">The integration connects to the Freeport via TLS socket, authenticates with the API user credentials, and sends display commands. Certificate verification is disabled for self-signed certificates.</div>
+
+      <h3>Verifying Display Connectivity</h3>
+      <ol>
+        <li>Go to the <strong>Status</strong> tab &mdash; the <strong>Display Target</strong> box should show "Reachable"</li>
+        <li>Go to the <strong>Testing</strong> tab and use <strong>Preview Display Commands</strong> to verify the payloads look correct</li>
+        <li>Send a test alert to confirm the display responds</li>
+        <li>Use <strong>Clear Display</strong> to reset the display after testing</li>
+      </ol>
+
+      <h2>Configuring Bastille Webhooks</h2>
+
+      <h3>Zone Detection Webhook</h3>
+      <ol>
+        <li>Log in to the Bastille command console</li>
+        <li>Navigate to <strong>Settings &gt; Webhooks</strong></li>
+        <li>Click <strong>Add Webhook</strong></li>
+        <li>Configure the webhook:
+          <ul>
+            <li><strong>Name</strong>: Display Integration - Zone Detections</li>
+            <li><strong>URL</strong>: <code>http://&lt;integration-host-ip&gt;:8001/zone-detections</code> (or <code>https://</code> if SSL is enabled)</li>
+            <li><strong>Event Type</strong>: Zone Detections</li>
+          </ul>
+        </li>
+        <li>Configure any filters as needed (zones, protocols, etc.)</li>
+        <li>Save the webhook</li>
+      </ol>
+
+      <h3>ADAM Finding Webhook</h3>
+      <ol>
+        <li>Log in to the Bastille command console</li>
+        <li>Navigate to <strong>Settings &gt; Webhooks</strong></li>
+        <li>Click <strong>Add Webhook</strong></li>
+        <li>Configure the webhook:
+          <ul>
+            <li><strong>Name</strong>: Display Integration - ADAM Findings</li>
+            <li><strong>URL</strong>: <code>http://&lt;integration-host-ip&gt;:8001/adam-findings</code> (or <code>https://</code> if SSL is enabled)</li>
+            <li><strong>Event Type</strong>: Findings</li>
+          </ul>
+        </li>
+        <li>Configure any filters or policy rules as needed</li>
+        <li>Save the webhook</li>
+      </ol>
+      <div class="note">The port and paths shown above are defaults. If you changed them in the <strong>Configuration</strong> tab, use the values shown on the <strong>Status</strong> tab under <strong>Webhook Listener</strong>.</div>
+
+      <h2>Display Message Templates</h2>
+      <p>Templates control the text sent to the display. They use variables that are replaced with actual alert data:</p>
+
+      <h3>Zone Detection Variables</h3>
+      <ul>
+        <li><code>{protocol}</code> &mdash; the wireless protocol (e.g., wifi, cellular, ble)</li>
+        <li><code>{zone}</code> &mdash; the zone name where the device was detected</li>
+        <li><code>{vendor}</code> &mdash; the device vendor/manufacturer</li>
+        <li><code>{tags}</code> &mdash; comma-separated list of device tags</li>
+      </ul>
+
+      <h3>ADAM Finding Variables</h3>
+      <p>All zone detection variables plus:</p>
+      <ul>
+        <li><code>{severity}</code> &mdash; the finding severity (CRITICAL, HIGH, MEDIUM, LOW)</li>
+        <li><code>{reasons}</code> &mdash; comma-separated list of finding reasons (e.g., malicious_device_pineapple)</li>
+      </ul>
+
+      <h3>Examples</h3>
+      <pre>Zone Detection: ALERT - {protocol} in {zone} - Vendor: {vendor} - ALERT
+ADAM Finding:   ADAM ALERT - {severity} - {reasons} - {protocol} in {zone}</pre>
+
+      <h2>Filtering</h2>
+      <p>Alerts can be filtered in two ways:</p>
+      <ul>
+        <li><strong>Monitored Protocols</strong> &mdash; only alerts matching the selected protocols will trigger the display. Unmonitored protocols are logged as "filtered" in the Alerts tab.</li>
+        <li><strong>Allowed Tags</strong> &mdash; devices tagged with any of the allowed tags (e.g., "authorized", "exclude") will not trigger alerts. These are also logged as "filtered".</li>
+      </ul>
+
+      <h2>Webhook Endpoints</h2>
+      <ul>
+        <li><code>POST /zone-detections</code> &mdash; receives Bastille zone detection webhooks (ndjson format)</li>
+        <li><code>POST /adam-findings</code> &mdash; receives Bastille ADAM finding webhooks (json format)</li>
+      </ul>
+      <p>Both paths and the listener port are configurable in the <strong>Configuration</strong> tab.</p>
+
+      <h2>HTTPS / SSL</h2>
+      <p>The webhook listener can be configured to use HTTPS:</p>
+      <ol>
+        <li>In the <strong>Configuration</strong> tab, toggle the listener protocol to <strong>HTTPS</strong></li>
+        <li>Upload an SSL certificate and private key using the file upload controls</li>
+        <li>Save and restart the service</li>
+      </ol>
+      <p>When HTTPS is enabled, ensure the Bastille platform is configured to send webhooks to the <code>https://</code> URL and can trust the certificate (or has verification disabled).</p>
+
+    </div>
+  </div><!-- end tabDocs -->
 
 </div>
 
@@ -2119,7 +2319,7 @@ async function clearDisplay() {
 
 // Tab switching
 function switchTab(tab) {
-  const tabMap = { status: 'tabStatus', config: 'tabConfig', testing: 'tabTesting', alerts: 'tabAlerts' };
+  const tabMap = { status: 'tabStatus', config: 'tabConfig', testing: 'tabTesting', alerts: 'tabAlerts', docs: 'tabDocs' };
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
   document.querySelector('[onclick="switchTab(\'' + tab + '\')"]').classList.add('active');
