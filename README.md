@@ -83,6 +83,39 @@ The config UI is organized into four tabs:
 
 Configuration is stored in `config.yaml` and can also be edited directly.
 
+## Configuring Display Devices
+
+Before the integration can send alerts, the display device must be configured to accept API commands.
+
+### Algo Setup
+
+1. Open the Algo web interface in a browser: `http://<algo-ip>`
+2. Log in with the Algo admin credentials
+3. Navigate to **API** or **Advanced Settings**
+4. **Enable the API** -- ensure the REST API is turned on
+5. Note the username and password for API access (default is typically `admin` / `algo`)
+6. In the config UI, enter the Algo target host (e.g., `http://<algo-ip>`), port, and credentials under the **Algo Connection** section
+
+### Freeport Setup
+
+1. Log in to the Freeport management interface
+2. Navigate to **User Management** or **Administration**
+3. **Create a new user** with API privileges:
+   - Set a username and password (e.g., `bn` / `bn`)
+   - Ensure the user has **API access** permissions enabled
+4. Navigate to **API Settings** or **System Configuration**
+5. **Enable the API** -- ensure the TLS API interface is turned on and note the port (default is typically `80`)
+6. In the config UI, enter the Freeport target host (IP address, not URL), port, and the API user credentials under the **Freeport Connection** section
+
+### Verifying Display Connectivity
+
+After configuring the display device and entering its details in the config UI:
+
+1. Go to the **Status** tab -- the **Display Target** box should show "Reachable"
+2. Go to the **Testing** tab and use **Preview Display Commands** to verify the payloads look correct
+3. Send a test alert to confirm the display responds
+4. Use **Clear Display** to reset the display after testing
+
 ## Configuring Bastille Webhooks
 
 After installation, configure the Bastille platform to send webhooks to this integration.
