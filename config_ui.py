@@ -1350,11 +1350,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <div class="form-grid">
         <div class="form-group">
           <label>Target Host</label>
-          <input type="text" id="algo_target_host" placeholder="e.g. http://192.168.1.100">
-        </div>
-        <div class="form-group">
-          <label>Target Port</label>
-          <input type="number" id="algo_target_port" min="1" max="65535" placeholder="e.g. 80">
+          <input type="text" id="algo_target_host" placeholder="e.g. http://192.168.1.100 or https://192.168.1.100">
         </div>
         <div class="form-group">
           <label>Username</label>
@@ -2011,7 +2007,6 @@ async function loadConfig() {
 
     // Algo fields
     document.getElementById('algo_target_host').value = cfg.target_host || '';
-    document.getElementById('algo_target_port').value = cfg.target_port || 80;
     document.getElementById('algo_username').value = cfg.auth_username || '';
     document.getElementById('algo_password').value = cfg.auth_password || '';
     document.getElementById('algo_text_color').value = cfg.algo_text_color || cfg.text_color || 'orange';
@@ -2060,7 +2055,6 @@ async function saveConfig() {
 
   if (currentVendor === 'Algo') {
     cfg.target_host = document.getElementById('algo_target_host').value;
-    cfg.target_port = parseInt(document.getElementById('algo_target_port').value);
     cfg.auth_username = document.getElementById('algo_username').value;
     cfg.auth_password = document.getElementById('algo_password').value;
     cfg.text_color = document.getElementById('algo_text_color').value;
