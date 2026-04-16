@@ -41,22 +41,26 @@ TONE_OPTIONS = [
 app = FastAPI()
 security = HTTPBasic()
 
-# UI credentials from config, default to bn/bn
-_cfg = yaml.safe_load(open(CONFIG_PATH, "r"))
-UI_USERNAME = _cfg.get("ui_username", "bn")
-UI_PASSWORD = _cfg.get("ui_password", "bn")
+def get_ui_users():
+    """Read UI users from config. Supports both legacy single-user and multi-user format."""
+    cfg = load_config()
+    users = cfg.get("ui_users")
+    if isinstance(users, list) and users:
+        return {u["username"]: u["password"] for u in users if "username" in u and "password" in u}
+    # Fallback to legacy single-user config
+    return {cfg.get("ui_username", "bn"): cfg.get("ui_password", "bn")}
 
 
 def verify_credentials(credentials: HTTPBasicCredentials = Depends(security)):
-    username_correct = secrets.compare_digest(credentials.username, UI_USERNAME)
-    password_correct = secrets.compare_digest(credentials.password, UI_PASSWORD)
-    if not (username_correct and password_correct):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials",
-            headers={"WWW-Authenticate": "Basic"},
-        )
-    return credentials
+    users = get_ui_users()
+    for username, password in users.items():
+        if secrets.compare_digest(credentials.username, username) and secrets.compare_digest(credentials.password, str(password)):
+            return credentials
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid credentials",
+        headers={"WWW-Authenticate": "Basic"},
+    )
 
 
 def generate_self_signed_cert():
@@ -83,6 +87,92 @@ def load_config():
 def save_config(config):
     with open(CONFIG_PATH, "w") as f:
         yaml.dump(config, f, default_flow_style=False, sort_keys=False)
+
+
+@app.get("/api/users", response_class=JSONResponse)
+async def get_users(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    users = get_ui_users()
+    return [{"username": u} for u in users]
+
+
+@app.post("/api/users", response_class=JSONResponse)
+async def add_user(request: Request, credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    body = await request.json()
+    username = body.get("username", "").strip()
+    password = body.get("password", "").strip()
+    if not username or not password:
+        return JSONResponse(status_code=400, content={"status": "error", "detail": "Username and password required"})
+    cfg = load_config()
+    users = cfg.get("ui_users", [])
+    if not isinstance(users, list):
+        users = []
+    # Migrate legacy single-user to list
+    if not users:
+        legacy_user = cfg.get("ui_username", "bn")
+        legacy_pass = cfg.get("ui_password", "bn")
+        users = [{"username": legacy_user, "password": legacy_pass}]
+    if any(u["username"] == username for u in users):
+        return JSONResponse(status_code=400, content={"status": "error", "detail": "User already exists"})
+    users.append({"username": username, "password": password})
+    cfg["ui_users"] = users
+    save_config(cfg)
+    logger.info(f"User '{username}' added.")
+    return {"status": "ok"}
+
+
+@app.put("/api/users/password", response_class=JSONResponse)
+async def change_password(request: Request, credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    body = await request.json()
+    username = body.get("username", "").strip()
+    new_password = body.get("new_password", "").strip()
+    if not username or not new_password:
+        return JSONResponse(status_code=400, content={"status": "error", "detail": "Username and new password required"})
+    cfg = load_config()
+    users = cfg.get("ui_users", [])
+    if not isinstance(users, list):
+        users = []
+    # Migrate legacy single-user to list
+    if not users:
+        legacy_user = cfg.get("ui_username", "bn")
+        legacy_pass = cfg.get("ui_password", "bn")
+        users = [{"username": legacy_user, "password": legacy_pass}]
+    found = False
+    for u in users:
+        if u["username"] == username:
+            u["password"] = new_password
+            found = True
+            break
+    if not found:
+        return JSONResponse(status_code=404, content={"status": "error", "detail": "User not found"})
+    cfg["ui_users"] = users
+    save_config(cfg)
+    logger.info(f"Password changed for user '{username}'.")
+    return {"status": "ok"}
+
+
+@app.delete("/api/users", response_class=JSONResponse)
+async def delete_user(request: Request, credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    body = await request.json()
+    username = body.get("username", "").strip()
+    if not username:
+        return JSONResponse(status_code=400, content={"status": "error", "detail": "Username required"})
+    cfg = load_config()
+    users = cfg.get("ui_users", [])
+    if not isinstance(users, list):
+        users = []
+    if not users:
+        legacy_user = cfg.get("ui_username", "bn")
+        legacy_pass = cfg.get("ui_password", "bn")
+        users = [{"username": legacy_user, "password": legacy_pass}]
+    if len(users) <= 1:
+        return JSONResponse(status_code=400, content={"status": "error", "detail": "Cannot delete the last user"})
+    new_users = [u for u in users if u["username"] != username]
+    if len(new_users) == len(users):
+        return JSONResponse(status_code=404, content={"status": "error", "detail": "User not found"})
+    cfg["ui_users"] = new_users
+    save_config(cfg)
+    logger.info(f"User '{username}' deleted.")
+    return {"status": "ok"}
 
 
 @app.get("/api/config", response_class=JSONResponse)
@@ -957,6 +1047,39 @@ HTML_PAGE = r"""<!DOCTYPE html>
     color: var(--text-muted);
     line-height: 1.5;
   }
+  .user-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+  .user-table th {
+    text-align: left;
+    padding: 0.4rem 0.6rem;
+    border-bottom: 2px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .user-table td {
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .user-table tr:hover td { background: var(--input-bg); }
+  .user-actions { display: flex; gap: 0.4rem; }
+  .user-actions button {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .user-actions button:hover { border-color: var(--accent); color: var(--accent); }
+  .user-actions button.delete:hover { border-color: var(--danger); color: var(--danger); }
   .command-preview {
     margin-top: 1rem;
     display: none;
@@ -1376,6 +1499,22 @@ HTML_PAGE = r"""<!DOCTYPE html>
     <button class="btn btn-secondary" onclick="loadConfig()">Discard Changes</button>
     <button class="btn btn-primary" onclick="saveConfig()">Save Configuration</button>
     <button class="btn btn-warning" id="restartBtn" onclick="saveAndRestart()">Save &amp; Restart Service</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">User Management</div>
+    <div id="userTable"></div>
+    <div class="form-grid" style="margin-top: 0.5rem;">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="new_user_name" placeholder="Username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="new_user_pass" placeholder="Password">
+      </div>
+    </div>
+    <button class="btn btn-primary" style="margin-top: 0.5rem;" onclick="addUser()">Add User</button>
   </div>
 
   <div class="card">
@@ -2237,6 +2376,86 @@ async function loadStatus() {
   }
 }
 
+// User management
+async function loadUsers() {
+  try {
+    const res = await fetch('/api/users');
+    const users = await res.json();
+    const el = document.getElementById('userTable');
+    if (!users.length) {
+      el.innerHTML = '<p style="font-size: 0.85rem; color: var(--text-muted);">No users configured.</p>';
+      return;
+    }
+    let html = '<table class="user-table"><thead><tr><th>Username</th><th>Actions</th></tr></thead><tbody>';
+    users.forEach(u => {
+      html += '<tr><td>' + u.username + '</td><td><div class="user-actions">' +
+        '<button onclick="changePassword(\'' + u.username + '\')">Change Password</button>' +
+        '<button class="delete" onclick="deleteUser(\'' + u.username + '\')">Delete</button>' +
+        '</div></td></tr>';
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+  } catch (e) {}
+}
+
+async function addUser() {
+  const username = document.getElementById('new_user_name').value.trim();
+  const password = document.getElementById('new_user_pass').value.trim();
+  if (!username || !password) { toast('Username and password required.', 'error'); return; }
+  try {
+    const res = await fetch('/api/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      toast('User "' + username + '" added.', 'success');
+      document.getElementById('new_user_name').value = '';
+      document.getElementById('new_user_pass').value = '';
+      loadUsers();
+    } else {
+      toast(data.detail || 'Failed to add user.', 'error');
+    }
+  } catch (e) { toast('Failed to add user.', 'error'); }
+}
+
+async function changePassword(username) {
+  const newPass = prompt('Enter new password for "' + username + '":');
+  if (!newPass) return;
+  try {
+    const res = await fetch('/api/users/password', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, new_password: newPass })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      toast('Password changed for "' + username + '". You may need to re-authenticate.', 'success');
+    } else {
+      toast(data.detail || 'Failed to change password.', 'error');
+    }
+  } catch (e) { toast('Failed to change password.', 'error'); }
+}
+
+async function deleteUser(username) {
+  if (!confirm('Delete user "' + username + '"?')) return;
+  try {
+    const res = await fetch('/api/users', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      toast('User "' + username + '" deleted.', 'success');
+      loadUsers();
+    } else {
+      toast(data.detail || 'Failed to delete user.', 'error');
+    }
+  } catch (e) { toast('Failed to delete user.', 'error'); }
+}
+
 // Export config
 function exportConfig() {
   window.location.href = '/api/config/export';
@@ -2421,6 +2640,7 @@ async function clearAlerts() {
 // Initial load
 loadConfig();
 loadStatus();
+loadUsers();
 </script>
 </body>
 </html>
