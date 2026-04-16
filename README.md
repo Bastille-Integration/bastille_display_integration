@@ -94,9 +94,36 @@ https://<host-ip>:8443
 
 Default credentials: `bn` / `bn` (configurable via `ui_username` / `ui_password` in `config.yaml`)
 
+### Applying Changes
+
+Most configuration changes require the integration service to be restarted before they take effect. This includes changes to:
+
+- **Listener settings** -- host, port, webhook paths
+- **Vendor selection** -- switching between Algo and Freeport
+- **Connection settings** -- target host, port, credentials
+- **SSL settings** -- enabling/disabling HTTPS, certificate changes
+- **Monitored protocols and allowed tags**
+
+Use the **Save & Restart Service** button in the Configuration tab to save and restart in one step. The config UI will briefly disconnect during the restart.
+
+**Exception:** Display message templates and Algo text display settings (font, size, scroll, position) are read live from the config file on each alert and take effect immediately after saving -- no restart required.
+
+### Global Settings
+
+| Setting | Description | Default |
+|---|---|---|
+| Log File | Path to the application log file | `app.log` |
+| Listener Host | IP address to bind the webhook listener. Use `0.0.0.0` to listen on all interfaces | `0.0.0.0` |
+| Listener Port | Port for the webhook listener | `8001` |
+| Zone Detections Path | URL path for zone detection webhooks | `/zone-detections` |
+| ADAM Findings Path | URL path for ADAM finding webhooks | `/adam-findings` |
+| Clear Time | Seconds to wait before clearing the display after the last alert. If a new alert arrives during this window, the timer resets | `60` |
+| Monitored Protocols | Only alerts matching these protocols will trigger the display (e.g., cellular, wifi, ble). Custom protocols can be added | `cellular, wifi, ble` |
+| Allowed Tags | Devices tagged with any of these tags will not trigger alerts (e.g., authorized, exclude) | `authorized, exclude` |
+
 ### Config UI Tabs
 
-The config UI is organized into four tabs:
+The config UI is organized into five tabs:
 
 #### Status
 

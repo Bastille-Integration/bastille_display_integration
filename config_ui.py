@@ -1532,6 +1532,30 @@ HTML_PAGE = r"""<!DOCTYPE html>
         <li><strong>Freeport</strong> &mdash; controlled via TLS socket commands (screen text, clock visibility)</li>
       </ul>
 
+      <h2>Global Settings</h2>
+      <ul>
+        <li><strong>Log File</strong> &mdash; path to the application log file (default: <code>app.log</code>)</li>
+        <li><strong>Listener Host</strong> &mdash; IP address to bind the webhook listener. Use <code>0.0.0.0</code> to listen on all interfaces (default: <code>0.0.0.0</code>)</li>
+        <li><strong>Listener Port</strong> &mdash; port for the webhook listener (default: <code>8001</code>)</li>
+        <li><strong>Zone Detections Path</strong> &mdash; URL path for zone detection webhooks (default: <code>/zone-detections</code>)</li>
+        <li><strong>ADAM Findings Path</strong> &mdash; URL path for ADAM finding webhooks (default: <code>/adam-findings</code>)</li>
+        <li><strong>Clear Time</strong> &mdash; seconds to wait before clearing the display after the last alert. If a new alert arrives during this window, the timer resets (default: <code>60</code>)</li>
+        <li><strong>Monitored Protocols</strong> &mdash; only alerts matching these protocols will trigger the display. Custom protocols can be added (default: <code>cellular, wifi, ble</code>)</li>
+        <li><strong>Allowed Tags</strong> &mdash; devices tagged with any of these tags will not trigger alerts (default: <code>authorized, exclude</code>)</li>
+      </ul>
+
+      <h2>Applying Changes</h2>
+      <p>Most configuration changes require the integration service to be <strong>restarted</strong> before they take effect. This includes changes to:</p>
+      <ul>
+        <li>Listener settings (host, port, webhook paths)</li>
+        <li>Vendor selection (switching between Algo and Freeport)</li>
+        <li>Connection settings (target host, port, credentials)</li>
+        <li>SSL settings (enabling/disabling HTTPS, certificate changes)</li>
+        <li>Monitored protocols and allowed tags</li>
+      </ul>
+      <p>Use the <strong>Save &amp; Restart Service</strong> button in the Configuration tab to save and restart in one step. The config UI will briefly disconnect during the restart.</p>
+      <div class="note"><strong>Exception:</strong> Display message templates and Algo text display settings (font, size, scroll, position) are read live from the config file on each alert and take effect immediately after saving &mdash; no restart required.</div>
+
       <h2>How It Works</h2>
       <p>When a webhook is received, the integration:</p>
       <ol>
