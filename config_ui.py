@@ -1421,7 +1421,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <div class="form-grid">
         <div class="form-group">
           <label>Target Host</label>
-          <input type="text" id="algo_target_host" placeholder="e.g. http://192.168.1.100 or https://192.168.1.100">
+          <input type="text" id="algo_target_host" placeholder="http://&lt;IP of Algo&gt; or https://&lt;IP of Algo&gt;">
         </div>
         <div class="form-group">
           <label>Username</label>
@@ -1535,7 +1535,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <div class="form-grid">
         <div class="form-group">
           <label>Target Host</label>
-          <input type="text" id="freeport_target_host" placeholder="IP address only - https:// not required, as TLS connection">
+          <input type="text" id="freeport_target_host" placeholder="&lt;IP of Freeport&gt; - https:// not required, as TLS connection">
         </div>
         <div class="form-group">
           <label>Target Port</label>
