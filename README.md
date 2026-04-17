@@ -46,7 +46,7 @@ Receives webhook alerts from the Bastille platform (Zone Detections and ADAM Fin
 
 
 ┌──────────────────────┐
-│   Config UI          │   https://<host>:443
+│   Config UI          │   https://<host>
 │   (port 443)        │
 │                      │
 │  Status ─ service health, display connectivity, running config
@@ -89,7 +89,7 @@ This will:
 Open the config UI in a browser:
 
 ```
-https://<host-ip>:443
+https://<host-ip>
 ```
 
 Default credentials: `bn` / `bn` (configurable via `ui_username` / `ui_password` in `config.yaml`)
