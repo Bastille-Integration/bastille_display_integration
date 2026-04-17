@@ -183,33 +183,89 @@ async def get_config(credentials: HTTPBasicCredentials = Depends(verify_credenti
 @app.get("/api/config/export")
 async def export_config(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
     from fastapi.responses import Response
-    with open(CONFIG_PATH, "r") as f:
-        content = f.read()
-    return Response(
-        content=content,
-        media_type="application/x-yaml",
-        headers={"Content-Disposition": "attachment; filename=config.yaml"}
-    )
+    import io
+    import zipfile
+    cfg = load_config()
+    if cfg.get("source_ssl"):
+        # Export as zip with config + certs
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+            zf.write(CONFIG_PATH, "config.yaml")
+            cert_path = os.path.join(INTEGRATION_CERT_DIR, "integration_cert.pem")
+            key_path = os.path.join(INTEGRATION_CERT_DIR, "integration_key.pem")
+            if os.path.exists(cert_path):
+                zf.write(cert_path, "certs/integration_cert.pem")
+            if os.path.exists(key_path):
+                zf.write(key_path, "certs/integration_key.pem")
+        buf.seek(0)
+        return Response(
+            content=buf.read(),
+            media_type="application/zip",
+            headers={"Content-Disposition": "attachment; filename=bastille_config_export.zip"}
+        )
+    else:
+        with open(CONFIG_PATH, "r") as f:
+            content = f.read()
+        return Response(
+            content=content,
+            media_type="application/x-yaml",
+            headers={"Content-Disposition": "attachment; filename=config.yaml"}
+        )
 
 
 @app.post("/api/config/restore", response_class=JSONResponse)
 async def restore_config(file: UploadFile = File(...), credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    import io
+    import zipfile
     content = await file.read()
-    try:
-        parsed = yaml.safe_load(content)
-        if not isinstance(parsed, dict):
-            return JSONResponse(status_code=400, content={"status": "error", "detail": "Invalid config file format"})
-    except yaml.YAMLError as e:
-        return JSONResponse(status_code=400, content={"status": "error", "detail": f"YAML parse error: {e}"})
+    filename = file.filename or ""
+
     # Backup current config
     backup_path = CONFIG_PATH + ".bak"
     with open(CONFIG_PATH, "r") as f:
         with open(backup_path, "w") as bak:
             bak.write(f.read())
-    with open(CONFIG_PATH, "wb") as f:
-        f.write(content)
-    logger.info("Configuration restored from uploaded file. Backup saved to config.yaml.bak")
-    return {"status": "ok"}
+
+    if filename.endswith(".zip") or content[:4] == b"PK\x03\x04":
+        # Zip file - extract config and certs
+        try:
+            zf = zipfile.ZipFile(io.BytesIO(content))
+        except zipfile.BadZipFile:
+            return JSONResponse(status_code=400, content={"status": "error", "detail": "Invalid zip file"})
+        if "config.yaml" not in zf.namelist():
+            return JSONResponse(status_code=400, content={"status": "error", "detail": "Zip must contain config.yaml"})
+        cfg_data = zf.read("config.yaml")
+        try:
+            parsed = yaml.safe_load(cfg_data)
+            if not isinstance(parsed, dict):
+                return JSONResponse(status_code=400, content={"status": "error", "detail": "Invalid config file format"})
+        except yaml.YAMLError as e:
+            return JSONResponse(status_code=400, content={"status": "error", "detail": f"YAML parse error: {e}"})
+        with open(CONFIG_PATH, "wb") as f:
+            f.write(cfg_data)
+        # Extract certs if present
+        os.makedirs(INTEGRATION_CERT_DIR, exist_ok=True)
+        for cert_name in ["certs/integration_cert.pem", "certs/integration_key.pem"]:
+            if cert_name in zf.namelist():
+                dest = os.path.join(os.path.dirname(__file__), cert_name)
+                with open(dest, "wb") as f:
+                    f.write(zf.read(cert_name))
+                if "key" in cert_name:
+                    os.chmod(dest, 0o600)
+        logger.info("Configuration and certificates restored from zip. Backup saved to config.yaml.bak")
+        return {"status": "ok", "detail": "Config and SSL certificates restored"}
+    else:
+        # Plain yaml file
+        try:
+            parsed = yaml.safe_load(content)
+            if not isinstance(parsed, dict):
+                return JSONResponse(status_code=400, content={"status": "error", "detail": "Invalid config file format"})
+        except yaml.YAMLError as e:
+            return JSONResponse(status_code=400, content={"status": "error", "detail": f"YAML parse error: {e}"})
+        with open(CONFIG_PATH, "wb") as f:
+            f.write(content)
+        logger.info("Configuration restored from uploaded file. Backup saved to config.yaml.bak")
+        return {"status": "ok"}
 
 
 @app.put("/api/config", response_class=JSONResponse)
@@ -293,6 +349,7 @@ async def get_status(credentials: HTTPBasicCredentials = Depends(verify_credenti
             "source_path": cfg.get("source_path", "N/A"),
             "adam_path": cfg.get("adam_path", "N/A"),
             "source_ssl": cfg.get("source_ssl", False),
+            "listener_protocol": "HTTPS" if cfg.get("source_ssl") else "HTTP",
             "target_host": cfg.get("target_host", "N/A"),
             "target_port": cfg.get("target_port", "N/A"),
             "monitored_protocols": cfg.get("monitored_protocols", []),
@@ -1276,7 +1333,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
 
   <!-- Listener SSL/TLS -->
   <div class="card">
-    <div class="card-title">Webhook Listener Protocol</div>
+    <div class="card-title">Webhook Listener Protocol &mdash; <span id="protoLabel" style="color: var(--accent);">HTTP</span></div>
     <div class="vendor-select">
       <button class="vendor-btn" data-proto="http" onclick="selectProto('http')">HTTP</button>
       <button class="vendor-btn" data-proto="https" onclick="selectProto('https')">HTTPS</button>
@@ -1519,7 +1576,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
       <button class="btn btn-secondary" onclick="exportConfig()">Export Config</button>
       <label class="btn btn-secondary" style="cursor: pointer;">
         Restore Config
-        <input type="file" id="restoreFile" accept=".yaml,.yml" style="display: none;" onchange="restoreConfig()">
+        <input type="file" id="restoreFile" accept=".yaml,.yml,.zip" style="display: none;" onchange="restoreConfig()">
       </label>
     </div>
   </div>
@@ -2100,6 +2157,7 @@ function selectProto(p) {
     btn.classList.toggle('active', btn.dataset.proto === p);
   });
   document.getElementById('sslFields').classList.toggle('hidden', p === 'http');
+  document.getElementById('protoLabel').textContent = p.toUpperCase();
   if (p === 'https') checkCertStatus();
 }
 
@@ -2319,11 +2377,11 @@ function renderConfigSummary(s) {
 
   el.innerHTML =
     section('Webhook Listener',
+      row('Protocol', s.listener_protocol) +
       row('Host', s.source_host) +
       row('Port', s.source_port) +
-      row('SSL', s.source_ssl) +
-      row('Zone Detections', s.source_path) +
-      row('ADAM Findings', s.adam_path)
+      row('Zone Detections URL', (s.source_ssl ? 'https' : 'http') + '://' + s.source_host + ':' + s.source_port + s.source_path) +
+      row('ADAM Findings URL', (s.source_ssl ? 'https' : 'http') + '://' + s.source_host + ':' + s.source_port + s.adam_path)
     ) +
     section('Display Target',
       row('Vendor', s.vendor) +
