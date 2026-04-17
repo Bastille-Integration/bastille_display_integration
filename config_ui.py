@@ -1542,11 +1542,11 @@ HTML_PAGE = r"""<!DOCTYPE html>
           <input type="number" id="freeport_target_port" min="1" max="65535" placeholder="e.g. 80">
         </div>
         <div class="form-group">
-          <label>Username</label>
+          <label>API Username</label>
           <input type="text" id="freeport_username" placeholder="Freeport API username">
         </div>
         <div class="form-group">
-          <label>Password</label>
+          <label>API Password</label>
           <input type="password" id="freeport_password" placeholder="Freeport API password">
         </div>
       </div>
