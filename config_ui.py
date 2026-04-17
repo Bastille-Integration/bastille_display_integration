@@ -1428,7 +1428,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
           <input type="text" id="algo_username" placeholder="Algo API username (e.g. admin)">
         </div>
         <div class="form-group">
-          <label>Password</label>
+          <label>API Password</label>
           <input type="password" id="algo_password" placeholder="Algo API password">
         </div>
       </div>
