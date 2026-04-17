@@ -41,6 +41,19 @@ TONE_OPTIONS = [
 app = FastAPI()
 security = HTTPBasic()
 
+def _get_host_ip():
+    """Get the primary IP address of this machine."""
+    import socket as _socket
+    try:
+        s = _socket.socket(_socket.AF_INET, _socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "127.0.0.1"
+
+
 def get_ui_users():
     """Read UI users from config. Supports both legacy single-user and multi-user format."""
     cfg = load_config()
@@ -350,6 +363,7 @@ async def get_status(credentials: HTTPBasicCredentials = Depends(verify_credenti
             "adam_path": cfg.get("adam_path", "N/A"),
             "source_ssl": cfg.get("source_ssl", False),
             "listener_protocol": "HTTPS" if cfg.get("source_ssl") else "HTTP",
+            "host_ip": _get_host_ip(),
             "target_host": cfg.get("target_host", "N/A"),
             "target_port": cfg.get("target_port", "N/A"),
             "monitored_protocols": cfg.get("monitored_protocols", []),
@@ -2380,8 +2394,8 @@ function renderConfigSummary(s) {
       row('Protocol', s.listener_protocol) +
       row('Host', s.source_host) +
       row('Port', s.source_port) +
-      row('Zone Detections URL', (s.source_ssl ? 'https' : 'http') + '://' + s.source_host + ':' + s.source_port + s.source_path) +
-      row('ADAM Findings URL', (s.source_ssl ? 'https' : 'http') + '://' + s.source_host + ':' + s.source_port + s.adam_path)
+      row('Zone Detections URL', (s.source_ssl ? 'https' : 'http') + '://' + (s.source_host === '0.0.0.0' ? s.host_ip : s.source_host) + ':' + s.source_port + s.source_path) +
+      row('ADAM Findings URL', (s.source_ssl ? 'https' : 'http') + '://' + (s.source_host === '0.0.0.0' ? s.host_ip : s.source_host) + ':' + s.source_port + s.adam_path)
     ) +
     section('Display Target',
       row('Vendor', s.vendor) +
