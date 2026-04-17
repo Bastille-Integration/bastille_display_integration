@@ -46,8 +46,8 @@ Receives webhook alerts from the Bastille platform (Zone Detections and ADAM Fin
 
 
 ┌──────────────────────┐
-│   Config UI          │   https://<host>:8443
-│   (port 8443)        │
+│   Config UI          │   https://<host>:443
+│   (port 443)        │
 │                      │
 │  Status ─ service health, display connectivity, running config
 │  Configuration ─ vendor, listener, protocols, tags, templates
@@ -89,7 +89,7 @@ This will:
 Open the config UI in a browser:
 
 ```
-https://<host-ip>:8443
+https://<host-ip>:443
 ```
 
 Default credentials: `bn` / `bn` (configurable via `ui_username` / `ui_password` in `config.yaml`)
@@ -246,7 +246,7 @@ Paths and port are configurable via `config.yaml` or the config UI.
 | Service | Port | Description |
 |---|---|---|
 | `bastille_display_integration` | 8001 | Webhook listener and alert dispatcher |
-| `bastille_config_ui` | 8443 | HTTPS configuration UI |
+| `bastille_config_ui` | 443 | HTTPS configuration UI |
 
 Manage with systemd:
 
