@@ -31,7 +31,7 @@ if fuser /var/lib/apt/lists/lock /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend 
   fi
 fi
 apt-get update -qq
-apt-get install -y -qq python3 python3-pip python3-fastapi python3-httpx openssl
+apt-get install -y -qq python3 python3-pip python3-fastapi python3-httpx openssl net-tools
 
 echo "[1/6] Installing Python packages..."
 python3 -m pip install ndjson PyYAML --break-system-packages --quiet
