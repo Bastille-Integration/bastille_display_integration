@@ -1539,7 +1539,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
         </div>
         <div class="form-group">
           <label>Target Port</label>
-          <input type="number" id="freeport_target_port" min="1" max="65535" placeholder="e.g. 80">
+          <input type="number" id="freeport_target_port" min="1" max="65535" placeholder="e.g. 2311">
         </div>
         <div class="form-group">
           <label>API Username</label>
@@ -2095,7 +2095,7 @@ async function loadConfig() {
 
     // Freeport fields
     document.getElementById('freeport_target_host').value = cfg.target_host || '';
-    document.getElementById('freeport_target_port').value = cfg.target_port || 80;
+    document.getElementById('freeport_target_port').value = cfg.target_port || 2311;
     document.getElementById('freeport_username').value = cfg.auth_username || '';
     document.getElementById('freeport_password').value = cfg.auth_password || '';
     document.getElementById('freeport_detail_font_size').value = cfg.freeport_detail_font_size || 160;

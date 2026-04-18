@@ -185,7 +185,7 @@ Before the integration can send alerts, the display device must be configured to
    - Set a username and password (e.g., `bn` / `bn`)
    - Ensure the user has **API access** permissions enabled
 4. Navigate to **API Settings** or **System Configuration**
-5. **Enable the API** -- ensure the TLS API interface is turned on and note the port (default is typically `80`)
+5. **Enable the API** -- ensure the TLS API interface is turned on and note the port (default is typically `2311`)
 6. In the config UI, enter the Freeport target host (IP address, not URL), port, and the API user credentials under the **Freeport Connection** section
 
 ### Verifying Display Connectivity
