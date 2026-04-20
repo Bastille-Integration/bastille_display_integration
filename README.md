@@ -208,8 +208,9 @@ After installation, configure the Bastille platform to send webhooks to this int
 3. Click **Add Webhook**
 4. Configure the webhook:
    - **Name**: Display Integration - Zone Detections
-   - **URL**: `http://<integration-host-ip>:8001/zone-detections` (or `https://` if SSL is enabled)
+   - **URL**: Use `http://` or `https://` to match the integration's listener protocol (see the **Status** tab in the config UI for the exact URL)
    - **Event Type**: Zone Detections
+   - **Output Type**: NDJSON
 5. Configure any filters as needed (zones, protocols, etc.)
 6. Save the webhook
 
@@ -220,8 +221,9 @@ After installation, configure the Bastille platform to send webhooks to this int
 3. Click **Add Webhook**
 4. Configure the webhook:
    - **Name**: Display Integration - ADAM Findings
-   - **URL**: `http://<integration-host-ip>:8001/adam-findings` (or `https://` if SSL is enabled)
+   - **URL**: Use `http://` or `https://` to match the integration's listener protocol (see the **Status** tab in the config UI for the exact URL)
    - **Event Type**: Findings
+   - **Output Type**: NDJSON
 5. Configure any filters or policy rules as needed
 6. Save the webhook
 

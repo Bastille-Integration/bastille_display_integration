@@ -1832,8 +1832,9 @@ HTML_PAGE = r"""<!DOCTYPE html>
         <li>Configure the webhook:
           <ul>
             <li><strong>Name</strong>: Display Integration - Zone Detections</li>
-            <li><strong>URL</strong>: <code>http://&lt;integration-host-ip&gt;:8001/zone-detections</code> (or <code>https://</code> if SSL is enabled)</li>
+            <li><strong>URL</strong>: Use <code>http://</code> or <code>https://</code> to match the integration's listener protocol (see <strong>Status</strong> tab for the exact URL)</li>
             <li><strong>Event Type</strong>: Zone Detections</li>
+            <li><strong>Output Type</strong>: NDJSON</li>
           </ul>
         </li>
         <li>Configure any filters as needed (zones, protocols, etc.)</li>
@@ -1848,8 +1849,9 @@ HTML_PAGE = r"""<!DOCTYPE html>
         <li>Configure the webhook:
           <ul>
             <li><strong>Name</strong>: Display Integration - ADAM Findings</li>
-            <li><strong>URL</strong>: <code>http://&lt;integration-host-ip&gt;:8001/adam-findings</code> (or <code>https://</code> if SSL is enabled)</li>
+            <li><strong>URL</strong>: Use <code>http://</code> or <code>https://</code> to match the integration's listener protocol (see <strong>Status</strong> tab for the exact URL)</li>
             <li><strong>Event Type</strong>: Findings</li>
+            <li><strong>Output Type</strong>: NDJSON</li>
           </ul>
         </li>
         <li>Configure any filters or policy rules as needed</li>
