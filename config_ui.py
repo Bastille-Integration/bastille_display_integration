@@ -17,7 +17,7 @@ CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.yaml")
 CERT_DIR = os.path.join(os.path.dirname(__file__), "certs")
 CERT_FILE = os.path.join(CERT_DIR, "cert.pem")
 KEY_FILE = os.path.join(CERT_DIR, "key.pem")
-VERSION = "2.0.0"
+VERSION = "2.0.1"
 UI_PORT = 443
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")

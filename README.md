@@ -1,4 +1,4 @@
-# Bastille Display Integration v2.0.0
+# Bastille Display Integration v2.0.1
 
 Receives webhook alerts from the Bastille platform (Zone Detections and ADAM Findings) and triggers visual/audio alerts on Algo or Freeport display devices.
 
