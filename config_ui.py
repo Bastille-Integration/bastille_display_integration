@@ -17,6 +17,7 @@ CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.yaml")
 CERT_DIR = os.path.join(os.path.dirname(__file__), "certs")
 CERT_FILE = os.path.join(CERT_DIR, "cert.pem")
 KEY_FILE = os.path.join(CERT_DIR, "key.pem")
+VERSION = "2.0.0"
 UI_PORT = 443
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -350,6 +351,7 @@ async def get_status(credentials: HTTPBasicCredentials = Depends(verify_credenti
             target_health = {"reachable": False, "detail": str(e)}
 
     return {
+        "version": VERSION,
         "services": {
             "integration": integration,
             "config_ui": config_ui,
@@ -595,7 +597,7 @@ async def clear_alerts(credentials: HTTPBasicCredentials = Depends(verify_creden
 async def config_page(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
     config = load_config()
     tone_options_json = str(TONE_OPTIONS).replace("'", '"')
-    return HTML_PAGE.replace("__TONE_OPTIONS__", tone_options_json)
+    return HTML_PAGE.replace("__TONE_OPTIONS__", tone_options_json).replace("__VERSION__", VERSION)
 
 
 HTML_PAGE = r"""<!DOCTYPE html>
@@ -1252,7 +1254,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
 <body>
 <div class="container">
   <header>
-    <h1><span>Bastille</span> Display Integration</h1>
+    <h1><span>Bastille</span> Display Integration <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 400;">v__VERSION__</span></h1>
     <span class="badge" id="vendorBadge">-</span>
   </header>
 
@@ -1270,7 +1272,10 @@ HTML_PAGE = r"""<!DOCTYPE html>
   <div class="card">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
       <div class="card-title" style="margin-bottom: 0;">Status</div>
-      <button class="status-refresh" onclick="loadStatus()">Refresh</button>
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Version: <strong id="statusVersion" style="color: var(--accent);">-</strong></span>
+        <button class="status-refresh" onclick="loadStatus()">Refresh</button>
+      </div>
     </div>
     <div class="status-grid" style="grid-template-columns: 1fr 1fr 1fr;">
       <div class="status-box">
@@ -2418,6 +2423,7 @@ async function loadStatus() {
   try {
     const res = await fetch('/api/status');
     const data = await res.json();
+    document.getElementById('statusVersion').textContent = data.version || '-';
     setServiceStatus('intStatusDot', 'intStatusText', 'intStatusDetail', data.services.integration);
     setServiceStatus('uiStatusDot', 'uiStatusText', 'uiStatusDetail', data.services.config_ui);
     // Display target health
