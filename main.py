@@ -91,6 +91,7 @@ def save_alert(alert_type, protocol, zone, vendor_name, severity=None, reasons=N
         logger.error(f"Failed to save alert: {e}")
 
 def create_alert(body):
+    errors = []
     #Covert NDjson to json
     payload = NDJson(log_file=log_file)
     #Review each json line individually
@@ -124,27 +125,31 @@ def create_alert(body):
                 "textScrollSpeed": get_config_value("algo_text_scroll_speed", "4"),
                 "textSize": get_config_value("algo_text_size", "medium")
             }
-        if vendor == "Algo":
-            logger.info(f'Sending alert to Algo')
-            a.alert_screen(target_payload)
-            # Algo strobe
-            strobe_on_payload = {
-                "pattern": strobe_pattern,
-                "color1": strobe_color
-            }
-            a.strobe_on(strobe_on_payload)
-            # Tone
-            if tone:
-                tone_payload = {
-                    "path": tone_wav,
-                    "loop": "false"
+            if vendor == "Algo":
+                logger.info(f'Sending alert to Algo')
+                result = a.alert_screen(target_payload)
+                if not result.get("success"):
+                    errors.append(f"Screen: {result.get('error')}")
+                # Algo strobe
+                strobe_on_payload = {
+                    "pattern": strobe_pattern,
+                    "color1": strobe_color
                 }
-                a.tone(tone_payload=tone_payload)
-        if vendor == "Freeport":
-            logger.info(f'Sending alert to Freeport')
-            f.screen_change(option="alert", alert_text=alert_text, detail_font_size=freeport_detail_font_size)
+                a.strobe_on(strobe_on_payload)
+                # Tone
+                if tone:
+                    tone_payload = {
+                        "path": tone_wav,
+                        "loop": "false"
+                    }
+                    a.tone(tone_payload=tone_payload)
+            if vendor == "Freeport":
+                logger.info(f'Sending alert to Freeport')
+                f.screen_change(option="alert", alert_text=alert_text, detail_font_size=freeport_detail_font_size)
+    return {"errors": errors}
 
 def create_adam_alert(body):
+    errors = []
     parsed = AdamWebhookParser(body)
     protocol = parsed.parse("protocol")
     zone = parsed.parse("zone")
@@ -156,11 +161,11 @@ def create_adam_alert(body):
     if protocol and protocol not in monitored_protocols:
         logger.info(f'ADAM: Not sending alert due to unmonitored protocol {protocol}.')
         save_alert("adam_finding", protocol, zone, manufacturer, severity=severity, reasons=reasons, tags=tags, status="filtered_protocol")
-        return
+        return {"errors": errors}
     if any(i in tags for i in allowed_tags):
         logger.info(f'ADAM: Not sending alert due to known tags {tags}')
         save_alert("adam_finding", protocol, zone, manufacturer, severity=severity, reasons=reasons, tags=tags, status="filtered_tag")
-        return
+        return {"errors": errors}
 
     save_alert("adam_finding", protocol, zone, manufacturer, severity=severity, reasons=reasons, tags=tags)
     reason_text = ", ".join(reasons) if reasons else "unknown"
@@ -183,7 +188,9 @@ def create_adam_alert(body):
     }
     if vendor == "Algo":
         logger.info(f'Sending ADAM alert to Algo')
-        a.alert_screen(target_payload)
+        result = a.alert_screen(target_payload)
+        if not result.get("success"):
+            errors.append(f"Screen: {result.get('error')}")
         strobe_on_payload = {
             "pattern": strobe_pattern,
             "color1": strobe_color
@@ -198,6 +205,7 @@ def create_adam_alert(body):
     if vendor == "Freeport":
         logger.info(f'Sending ADAM alert to Freeport')
         f.screen_change(option="alert", alert_text=alert_text, detail_font_size=freeport_detail_font_size)
+    return {"errors": errors}
 
 async def turn_off_alert():
     await asyncio.sleep(clear_time)  # Sleep for X seconds
@@ -239,13 +247,7 @@ async def receive_ndjson(request: Request, background_tasks: BackgroundTasks):
 
     # Create alert based on Bastille webhook
     webhook = await request.body()
-    create_alert(webhook)
-
-    # try:
-    #     create_alert(webhook)
-    #     return "success"
-    # except Exception as e:
-    #     return "failure"
+    result = create_alert(webhook)
 
     # Cancel any previously scheduled reset_new_query_flag task
     if reset_task and not reset_task.done():
@@ -258,6 +260,10 @@ async def receive_ndjson(request: Request, background_tasks: BackgroundTasks):
     # Start a background job to CLEAR alerts
     background_tasks.add_task(turn_off_alert)
 
+    if result.get("errors"):
+        return {"status": "error", "errors": result["errors"]}
+    return {"status": "ok"}
+
 @app.post(adam_path)
 async def receive_adam_finding(request: Request, background_tasks: BackgroundTasks):
     global reset_task
@@ -266,7 +272,7 @@ async def receive_adam_finding(request: Request, background_tasks: BackgroundTas
 
     # Parse ADAM finding JSON
     body = await request.json()
-    create_adam_alert(body)
+    result = create_adam_alert(body)
 
     # Cancel any previously scheduled reset_new_query_flag task
     if reset_task and not reset_task.done():
@@ -278,6 +284,10 @@ async def receive_adam_finding(request: Request, background_tasks: BackgroundTas
 
     # Start a background job to CLEAR alerts
     background_tasks.add_task(turn_off_alert)
+
+    if result and result.get("errors"):
+        return {"status": "error", "errors": result["errors"]}
+    return {"status": "ok"}
 
 
 @app.post("/clear-display")

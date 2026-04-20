@@ -570,6 +570,12 @@ async def send_test(request: Request, credentials: HTTPBasicCredentials = Depend
         headers = {"Content-Type": "application/json"}
     try:
         resp = requests.post(url, data=data, headers=headers, timeout=10, verify=False)
+        try:
+            resp_json = resp.json()
+            if resp_json.get("errors"):
+                return {"status": "error", "code": resp.status_code, "detail": "; ".join(resp_json["errors"])}
+        except Exception:
+            pass
         return {"status": "ok", "code": resp.status_code, "response": resp.text}
     except requests.exceptions.ConnectionError:
         return JSONResponse(status_code=502, content={"status": "error", "detail": "Could not connect to integration service. Is it running?"})
