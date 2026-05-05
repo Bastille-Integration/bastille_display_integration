@@ -612,6 +612,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bastille Display Integration - Configuration</title>
+<link rel="icon" type="image/png" href="https://bastille.net/wp-content/themes/Bastille/favicon.png">
 <style>
   :root {
     --bg: #0f1117;
