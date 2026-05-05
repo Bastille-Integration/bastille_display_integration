@@ -1,0 +1,6 @@
+target_host: 10.35.44.51
+target_port: 2311
+username: bn
+password: bn
+detail_font_size: 160
+alert_text: "TEST ALERT - BLE detected in Zone A - Vendor: TestCo"
