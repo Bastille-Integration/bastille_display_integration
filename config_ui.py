@@ -615,17 +615,17 @@ HTML_PAGE = r"""<!DOCTYPE html>
 <link rel="icon" type="image/png" href="https://bastille.net/wp-content/themes/Bastille/favicon.png">
 <style>
   :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
-    --border: #2a2d3a;
-    --accent: #4f8ff7;
-    --accent-hover: #6da3ff;
-    --text: #e1e4ed;
-    --text-muted: #8b8fa3;
+    --bg: #0a1820;
+    --surface: #13232d;
+    --border: #354854;
+    --accent: #0debff;
+    --accent-hover: #3df0ff;
+    --text: #ffffff;
+    --text-muted: #7a9aaa;
     --success: #3cb043;
-    --danger: #d30000;
+    --danger: #fb4000;
     --warning: #f5a623;
-    --input-bg: #12141c;
+    --input-bg: #071018;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -641,8 +641,25 @@ HTML_PAGE = r"""<!DOCTYPE html>
     align-items: center;
     justify-content: space-between;
     margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+  }
+  .header-left { display: flex; align-items: center; gap: 1rem; }
+  .header-logo { height: 32px; width: auto; }
+  .header-divider {
+    width: 1px;
+    height: 28px;
+    background: var(--border);
+  }
+  .header-subtitle {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
   }
   h1 { font-size: 1.5rem; font-weight: 600; }
   h1 span { color: var(--accent); }
@@ -652,8 +669,8 @@ HTML_PAGE = r"""<!DOCTYPE html>
     border-radius: 4px;
     font-weight: 500;
   }
-  .badge-algo { background: #1e3a5f; color: #6da3ff; }
-  .badge-freeport { background: #3a1e5f; color: #b06dff; }
+  .badge-algo { background: #0d2e38; color: #0debff; }
+  .badge-freeport { background: #2a1000; color: #fb4000; }
 
   .card {
     background: var(--surface);
@@ -716,7 +733,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
     text-align: center;
   }
   .vendor-btn:hover { border-color: var(--accent); color: var(--text); }
-  .vendor-btn.active { border-color: var(--accent); color: var(--accent); background: #1a2640; }
+  .vendor-btn.active { border-color: var(--accent); color: var(--accent); background: #0d2e38; }
 
   .checkbox-group {
     display: flex;
@@ -738,7 +755,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
   }
   .checkbox-pill:has(input:checked) {
     border-color: var(--accent);
-    background: #1a2640;
+    background: #0d2e38;
     color: var(--accent);
   }
   .checkbox-pill input { display: none; }
@@ -760,7 +777,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
     display: flex;
     align-items: center;
     gap: 0.3rem;
-    background: #1a2640;
+    background: #0d2e38;
     color: var(--accent);
     padding: 0.2rem 0.55rem;
     border-radius: 4px;
@@ -840,7 +857,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
     cursor: pointer;
     transition: all 0.15s;
   }
-  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary { background: var(--accent); color: #0a1820; }
   .btn-primary:hover { background: var(--accent-hover); }
   .btn-warning { background: var(--warning); color: #000; }
   .btn-warning:hover { background: #ffc04d; }
@@ -900,8 +917,8 @@ HTML_PAGE = r"""<!DOCTYPE html>
     padding: 0.2rem 0.6rem;
     border-radius: 4px;
   }
-  .cert-status.found { background: #1a3a1a; color: var(--success); }
-  .cert-status.missing { background: #3a1a1a; color: var(--danger); }
+  .cert-status.found { background: #0d2a0d; color: var(--success); }
+  .cert-status.missing { background: #2a0a00; color: var(--danger); }
   .ssl-fields { margin-top: 1rem; }
   .ssl-fields.hidden { display: none; }
 
@@ -1046,26 +1063,26 @@ HTML_PAGE = r"""<!DOCTYPE html>
     font-weight: 600;
     text-transform: uppercase;
   }
-  .severity-critical { background: #5c0a0a; color: #ff6b6b; }
-  .severity-high { background: #4a1a0a; color: #ff8c42; }
-  .severity-medium { background: #4a3a0a; color: #ffc04d; }
-  .severity-low { background: #1a3a1a; color: #6dff6d; }
+  .severity-critical { background: #3a0500; color: #fb4000; }
+  .severity-high { background: #2a0e00; color: #ff7a3d; }
+  .severity-medium { background: #2a2000; color: #ffc04d; }
+  .severity-low { background: #0d2a0d; color: #3cb043; }
   .status-badge {
     font-size: 0.7rem;
     padding: 0.15rem 0.45rem;
     border-radius: 3px;
     font-weight: 600;
   }
-  .status-sent { background: #1a3a1a; color: var(--success); }
-  .status-filtered { background: #3a3a1a; color: var(--warning); }
+  .status-sent { background: #0d2a0d; color: var(--success); }
+  .status-filtered { background: #2a2000; color: var(--warning); }
   .type-badge {
     font-size: 0.7rem;
     padding: 0.15rem 0.45rem;
     border-radius: 3px;
     font-weight: 500;
   }
-  .type-zone { background: #1e3a5f; color: #6da3ff; }
-  .type-adam { background: #3a1e5f; color: #b06dff; }
+  .type-zone { background: #0d2e38; color: #0debff; }
+  .type-adam { background: #2a1000; color: #fb4000; }
   .alert-empty {
     text-align: center;
     padding: 3rem;
@@ -1105,7 +1122,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
     color: var(--accent);
   }
   .docs .note {
-    background: #1a2640;
+    background: #0d2e38;
     border-left: 3px solid var(--accent);
     padding: 0.6rem 0.75rem;
     border-radius: 0 4px 4px 0;
@@ -1202,7 +1219,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
     max-height: 300px;
     overflow-y: auto;
   }
-  .command-json .json-key { color: #6da3ff; }
+  .command-json .json-key { color: #0debff; }
   .command-json .json-string { color: #98c379; }
   .command-json .json-number { color: #d19a66; }
   .command-json .json-bool { color: #c678dd; }
@@ -1226,7 +1243,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
     text-align: center;
   }
   .test-type-btn:hover { border-color: var(--accent); color: var(--text); }
-  .test-type-btn.active { border-color: var(--accent); color: var(--accent); background: #1a2640; }
+  .test-type-btn.active { border-color: var(--accent); color: var(--accent); background: #0d2e38; }
   .test-fields { display: none; }
   .test-fields.active { display: block; }
   .test-result {
@@ -1239,8 +1256,8 @@ HTML_PAGE = r"""<!DOCTYPE html>
     word-break: break-all;
   }
   .test-result.show { display: block; }
-  .test-result.ok { background: #1a3a1a; color: var(--success); border: 1px solid #2a4a2a; }
-  .test-result.fail { background: #3a1a1a; color: var(--danger); border: 1px solid #4a2a2a; }
+  .test-result.ok { background: #0d2a0d; color: var(--success); border: 1px solid #1a4a1a; }
+  .test-result.fail { background: #2a0a00; color: var(--danger); border: 1px solid #4a1000; }
   .color-swatch {
     display: flex;
     gap: 0.4rem;
@@ -1261,7 +1278,11 @@ HTML_PAGE = r"""<!DOCTYPE html>
 <body>
 <div class="container">
   <header>
-    <h1><span>Bastille</span> Display Integration <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 400;">v__VERSION__</span></h1>
+    <div class="header-left">
+      <img class="header-logo" src="https://bastille.net/wp-content/themes/Bastille/favicon.png" alt="Bastille">
+      <div class="header-divider"></div>
+      <div class="header-subtitle">Display Integration <span style="color: var(--text-muted); font-weight: 400; font-size: 0.7rem;">v__VERSION__</span></div>
+    </div>
     <span class="badge" id="vendorBadge">-</span>
   </header>
 
