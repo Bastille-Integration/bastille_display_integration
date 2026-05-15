@@ -1,4 +1,4 @@
-# Bastille Display Integration v2.0.1
+# Bastille Display Integration v2.0.3
 
 Receives webhook alerts from the Bastille platform (Zone Detections and ADAM Findings) and triggers visual/audio alerts on Algo or Freeport display devices.
 
@@ -14,7 +14,7 @@ Receives webhook alerts from the Bastille platform (Zone Detections and ADAM Fin
 │  └─────────────────┘  │                                │
 │  ┌─────────────────┐  │                                ▼
 │  │  ADAM Findings   │  │                   ┌────────────────────────┐
-│  │     (json)       │──┼── POST /adam-findings ──▶│  Integration Service   │
+│  │    (ndjson)      │──┼── POST /adam-findings ──▶│  Integration Service   │
 │  └─────────────────┘  │                   │     (port 8001)        │
 └──────────────────────┘                   │                        │
                                            │  ┌──────────────────┐  │
@@ -241,7 +241,7 @@ After installation, configure the Bastille platform to send webhooks to this int
 | Endpoint | Description |
 |---|---|
 | `POST /zone-detections` | Receives Bastille zone detection webhooks (ndjson) |
-| `POST /adam-findings` | Receives Bastille ADAM finding webhooks (json) |
+| `POST /adam-findings` | Receives Bastille ADAM finding webhooks (ndjson) |
 
 Paths and port are configurable via `config.yaml` or the config UI.
 
