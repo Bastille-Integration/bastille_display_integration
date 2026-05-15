@@ -6,8 +6,9 @@ class BastilleWebhookParser:
 
     def parse(self, option):
         self.option = option
-        emitter = self.json_webhook.get("payload", {}).get("emitter", {})
-        device_info = self.json_webhook.get("payload", {}).get("device_info", {})
+        payload = self.json_webhook.get("payload") or {}
+        emitter = payload.get("emitter") or {}
+        device_info = payload.get("device_info") or {}
         if option == "manufacturer":
             value = device_info.get("manufacturer")
             return value

@@ -247,7 +247,11 @@ async def receive_ndjson(request: Request, background_tasks: BackgroundTasks):
 
     # Create alert based on Bastille webhook
     webhook = await request.body()
-    result = create_alert(webhook)
+    try:
+        result = create_alert(webhook)
+    except Exception as e:
+        logger.error(f"Unhandled error processing zone-detection webhook: {e}", exc_info=True)
+        raise HTTPException(status_code=400, detail=str(e))
 
     # Cancel any previously scheduled reset_new_query_flag task
     if reset_task and not reset_task.done():
@@ -270,9 +274,20 @@ async def receive_adam_finding(request: Request, background_tasks: BackgroundTas
     global new_query_made
     new_query_made = True
 
-    # Parse ADAM finding JSON
-    body = await request.json()
-    result = create_adam_alert(body)
+    # Parse ADAM finding — may be NDJSON (multiple findings per request)
+    webhook = await request.body()
+    errors = []
+    result = {"errors": []}
+    payload = NDJson(log_file=log_file)
+    for finding in payload.ndjson_to_json(webhook):
+        try:
+            r = create_adam_alert(finding)
+            if r and r.get("errors"):
+                errors.extend(r["errors"])
+        except Exception as e:
+            logger.error(f"Unhandled error processing ADAM finding: {e}", exc_info=True)
+            errors.append(str(e))
+    result = {"errors": errors}
 
     # Cancel any previously scheduled reset_new_query_flag task
     if reset_task and not reset_task.done():

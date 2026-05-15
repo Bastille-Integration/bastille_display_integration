@@ -6,9 +6,9 @@ class AdamWebhookParser:
         self.json_webhook = json_webhook
 
     def parse(self, option):
-        payload = self.json_webhook.get("payload", {})
-        snapshot = payload.get("reference_snapshot", {})
-        emitter = snapshot.get("emitter", {})
+        payload = self.json_webhook.get("payload") or {}
+        snapshot = payload.get("reference_snapshot") or {}
+        emitter = snapshot.get("emitter") or {}
 
         if option == "protocol":
             return emitter.get("protocol")
