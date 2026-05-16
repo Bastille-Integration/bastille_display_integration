@@ -19,7 +19,7 @@ class AdamWebhookParser:
         if option == "severity":
             return payload.get("severity")
         if option == "reasons":
-            return payload.get("reasons", [])
+            return payload.get("reasons") or []
         if option == "zone":
             # Extract zone from tags like "zone:Training 1A"
             tags = snapshot.get("tags", [])

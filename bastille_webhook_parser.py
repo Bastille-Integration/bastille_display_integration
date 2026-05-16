@@ -19,8 +19,8 @@ class BastilleWebhookParser:
             value = emitter.get("vendor")
             return value
         if option == "tags":
-            value = self.json_webhook.get("payload", {}).get("tags", {})
+            value = self.json_webhook.get("payload", {}).get("tags") or []
             return value
         if option == "zone":
-            value = self.json_webhook.get("payload", {}).get("zone_name", {})
+            value = self.json_webhook.get("payload", {}).get("zone_name")
             return value
