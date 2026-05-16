@@ -1,4 +1,6 @@
 certs/
 app.log
 alerts.json
+config.yaml
+config.yaml.bak
 __pycache__/
