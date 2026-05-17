@@ -13,8 +13,10 @@ from freeport import Freeport
 
 reset_task=None
 
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.yaml")
+
 # Read configuration values from the YAML file
-with open("config.yaml", "r") as config_file:
+with open(CONFIG_PATH, "r") as config_file:
     config = yaml.safe_load(config_file)
 
 # Extract configuration values
@@ -43,7 +45,7 @@ tone_wav = config.get("tone_wav")
 
 # Read config values live so changes take effect without restart
 def get_config_value(key, default=None):
-    with open("config.yaml", "r") as f:
+    with open(CONFIG_PATH, "r") as f:
         cfg = yaml.safe_load(f)
     return cfg.get(key, default)
 

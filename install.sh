@@ -14,7 +14,7 @@ echo "=== Bastille Display Integration - Installer ==="
 
 # --- Dependencies ---
 echo ""
-echo "[1/6] Installing system dependencies..."
+echo "[1/7] Installing system dependencies..."
 if fuser /var/lib/apt/lists/lock /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend >/dev/null 2>&1; then
   echo "Another apt process is running:"
   ps -eo pid,comm | grep -E "apt|dpkg" | grep -v grep
@@ -33,12 +33,12 @@ fi
 apt-get update -qq
 apt-get install -y -qq python3 python3-pip python3-fastapi python3-httpx openssl net-tools
 
-echo "[1/6] Installing Python packages..."
+echo "[1/7] Installing Python packages..."
 python3 -m pip install ndjson PyYAML --break-system-packages --quiet
 
 # --- Sudoers ---
 echo ""
-echo "[2/6] Configuring sudoers for service restart..."
+echo "[2/7] Configuring sudoers for service restart..."
 # Write sudoers rule directly to avoid file copy issues
 echo "$SERVICE_USER ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart bastille_display_integration.service" > /etc/sudoers.d/bastille
 chown root:root /etc/sudoers.d/bastille
@@ -54,7 +54,7 @@ echo "Verifying: $(cat /etc/sudoers.d/bastille)"
 
 # --- SSL Certificates ---
 echo ""
-echo "[3/6] Generating self-signed SSL certificate for config UI..."
+echo "[3/7] Generating self-signed SSL certificate for config UI..."
 CERT_DIR="$INSTALL_DIR/certs"
 mkdir -p "$CERT_DIR"
 if [ ! -f "$CERT_DIR/cert.pem" ] || [ ! -f "$CERT_DIR/key.pem" ]; then
@@ -70,7 +70,7 @@ fi
 
 # --- Service Files ---
 echo ""
-echo "[4/6] Installing systemd service files..."
+echo "[4/7] Installing systemd service files..."
 cp "$INSTALL_DIR/bastille_display_integration.service" /etc/systemd/system/
 cp "$INSTALL_DIR/bastille_config_ui.service" /etc/systemd/system/
 systemctl daemon-reload
@@ -78,14 +78,64 @@ echo "Service files installed."
 
 # --- Enable Services ---
 echo ""
-echo "[5/6] Enabling services..."
+echo "[5/7] Enabling services..."
 systemctl enable bastille_display_integration.service
 systemctl enable bastille_config_ui.service
 echo "Services enabled."
 
+# --- Initialize Config and Log ---
+echo ""
+echo "[6/7] Initializing config and log files..."
+if [ ! -f "$INSTALL_DIR/config.yaml" ]; then
+  if [ -f "$INSTALL_DIR/config.yaml.bak" ]; then
+    cp "$INSTALL_DIR/config.yaml.bak" "$INSTALL_DIR/config.yaml"
+    echo "config.yaml created from backup."
+  else
+    cat > "$INSTALL_DIR/config.yaml" << 'EOF'
+log_file: app.log
+source_host: 0.0.0.0
+source_path: /zone-detections
+adam_path: /adam-findings
+source_port: 8001
+source_ssl: false
+source_ssl_cert: certs/integration_cert.pem
+source_ssl_key: certs/integration_key.pem
+clear_time: 60
+monitored_protocols:
+  - cellular
+  - wifi
+  - ble
+  - bt
+  - ieee_802_15_4
+zone_detection_template: "ALERT - {protocol} in {zone} - Vendor: {vendor} - ALERT"
+adam_finding_template: "ADAM ALERT - {severity} - {reasons} - {protocol} in {zone} - Vendor: {vendor}"
+allowed_tags:
+  - authorized
+  - exclude
+vendor: Algo
+target_host: http://CHANGE_ME
+target_port: 80
+auth_username: CHANGE_ME
+auth_password: CHANGE_ME
+text_color: red
+EOF
+    echo "config.yaml created from template (edit before use)."
+  fi
+  chown "$SERVICE_USER":"$SERVICE_USER" "$INSTALL_DIR/config.yaml"
+else
+  echo "config.yaml already exists, skipping."
+fi
+if [ ! -f "$INSTALL_DIR/app.log" ]; then
+  touch "$INSTALL_DIR/app.log"
+  chown "$SERVICE_USER":"$SERVICE_USER" "$INSTALL_DIR/app.log"
+  echo "app.log created."
+else
+  echo "app.log already exists, skipping."
+fi
+
 # --- Start Services ---
 echo ""
-echo "[6/6] Starting services..."
+echo "[7/7] Starting services..."
 systemctl restart bastille_display_integration.service
 systemctl restart bastille_config_ui.service
 echo "Services started."
