@@ -395,6 +395,21 @@ async def restart_service(credentials: HTTPBasicCredentials = Depends(verify_cre
     return {"status": "ok"}
 
 
+@app.post("/api/restart-ui", response_class=JSONResponse)
+async def restart_ui_service(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    import threading
+    def _delayed_restart():
+        import time
+        time.sleep(1)
+        subprocess.run(
+            ["sudo", "systemctl", "restart", "bastille_config_ui.service"],
+            capture_output=True, text=True, timeout=15
+        )
+    threading.Thread(target=_delayed_restart, daemon=True).start()
+    logger.info("Config UI service restart scheduled.")
+    return {"status": "ok"}
+
+
 @app.post("/api/upload-cert", response_class=JSONResponse)
 async def upload_cert(
     cert: UploadFile = File(...),
@@ -1447,9 +1462,12 @@ HTML_PAGE = r"""<!DOCTYPE html>
         </label>
         <span class="file-name" id="uiIntermediateFileName">No file chosen</span>
       </div>
-      <button class="btn btn-primary" style="margin-top: 0.75rem;" onclick="uploadUiCert()">Upload Certificate</button>
+      <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap;">
+        <button class="btn btn-primary" onclick="uploadUiCert()">Upload Certificate</button>
+        <button class="btn btn-warning" id="restartUiBtn" onclick="restartUiService()">Restart Config UI</button>
+      </div>
     </div>
-    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">You may upload a full-chain bundle as the leaf cert, or provide the intermediate cert separately. The Config UI service must be restarted for a new certificate to take effect.</p>
+    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">You may upload a full-chain bundle as the leaf cert, or provide the intermediate cert separately. Restart the Config UI service after uploading for the new certificate to take effect.</p>
   </div>
 
   <!-- Listener SSL/TLS -->
@@ -2357,6 +2375,20 @@ async function checkUiCertStatus() {
       el.className = 'cert-status missing';
     }
   } catch (e) {}
+}
+
+// Restart Config UI service
+async function restartUiService() {
+  const btn = document.getElementById('restartUiBtn');
+  btn.disabled = true;
+  btn.textContent = 'Restarting...';
+  try {
+    await fetch('/api/restart-ui', { method: 'POST' });
+    toast('Config UI restarting — reconnect in a few seconds.', 'success');
+  } catch (e) {
+    toast('Config UI restarting — reconnect in a few seconds.', 'success');
+  }
+  setTimeout(() => { btn.disabled = false; btn.textContent = 'Restart Config UI'; }, 8000);
 }
 
 // Upload cert and key
