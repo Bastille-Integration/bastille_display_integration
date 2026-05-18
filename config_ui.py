@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request, Depends, HTTPException, status, File, UploadFile
+from typing import Optional
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 import secrets
@@ -398,12 +399,16 @@ async def restart_service(credentials: HTTPBasicCredentials = Depends(verify_cre
 async def upload_cert(
     cert: UploadFile = File(...),
     key: UploadFile = File(...),
+    intermediate: Optional[UploadFile] = File(None),
     credentials: HTTPBasicCredentials = Depends(verify_credentials),
 ):
     os.makedirs(INTEGRATION_CERT_DIR, exist_ok=True)
     cert_path = os.path.join(INTEGRATION_CERT_DIR, "integration_cert.pem")
     key_path = os.path.join(INTEGRATION_CERT_DIR, "integration_key.pem")
     cert_data = await cert.read()
+    if intermediate and intermediate.filename:
+        inter_data = await intermediate.read()
+        cert_data = cert_data.rstrip() + b"\n" + inter_data
     key_data = await key.read()
     with open(cert_path, "wb") as f:
         f.write(cert_data)
@@ -421,6 +426,41 @@ async def cert_status(credentials: HTTPBasicCredentials = Depends(verify_credent
     return {
         "cert_exists": os.path.exists(cert_path),
         "key_exists": os.path.exists(key_path),
+    }
+
+
+@app.post("/api/upload-ui-cert", response_class=JSONResponse)
+async def upload_ui_cert(
+    cert: UploadFile = File(...),
+    key: UploadFile = File(...),
+    intermediate: Optional[UploadFile] = File(None),
+    credentials: HTTPBasicCredentials = Depends(verify_credentials),
+):
+    os.makedirs(CERT_DIR, exist_ok=True)
+    cert_data = await cert.read()
+    if intermediate and intermediate.filename:
+        inter_data = await intermediate.read()
+        cert_data = cert_data.rstrip() + b"\n" + inter_data
+    key_data = await key.read()
+    with open(CERT_FILE, "wb") as f:
+        f.write(cert_data)
+    with open(KEY_FILE, "wb") as f:
+        f.write(key_data)
+    os.chmod(KEY_FILE, 0o600)
+    # Mark that a custom cert has been supplied
+    with open(os.path.join(CERT_DIR, ".ui_cert_custom"), "w") as f:
+        f.write("1")
+    logger.info("Config UI SSL cert and key uploaded.")
+    return {"status": "ok"}
+
+
+@app.get("/api/ui-cert-status", response_class=JSONResponse)
+async def ui_cert_status(credentials: HTTPBasicCredentials = Depends(verify_credentials)):
+    custom = os.path.exists(os.path.join(CERT_DIR, ".ui_cert_custom"))
+    return {
+        "cert_exists": os.path.exists(CERT_FILE),
+        "key_exists": os.path.exists(KEY_FILE),
+        "is_custom": custom,
     }
 
 
@@ -1378,6 +1418,40 @@ HTML_PAGE = r"""<!DOCTYPE html>
     </div>
   </div>
 
+  <!-- Config UI SSL Certificate -->
+  <div class="card">
+    <div class="card-title">Config UI SSL Certificate</div>
+    <div style="margin-bottom: 0.75rem;">
+      <span class="cert-status" id="uiCertStatus">Checking...</span>
+    </div>
+    <div class="form-group">
+      <label>Upload SSL Certificate &amp; Key</label>
+      <div class="file-upload-row">
+        <label class="file-btn">
+          Leaf Certificate (.pem)
+          <input type="file" id="uiCertFile" accept=".pem,.crt,.cer">
+        </label>
+        <span class="file-name" id="uiCertFileName">No file chosen</span>
+      </div>
+      <div class="file-upload-row" style="margin-top: 0.5rem;">
+        <label class="file-btn">
+          Private Key (.pem)
+          <input type="file" id="uiKeyFile" accept=".pem,.key">
+        </label>
+        <span class="file-name" id="uiKeyFileName">No file chosen</span>
+      </div>
+      <div class="file-upload-row" style="margin-top: 0.5rem;">
+        <label class="file-btn">
+          Intermediate Cert (optional)
+          <input type="file" id="uiIntermediateFile" accept=".pem,.crt,.cer">
+        </label>
+        <span class="file-name" id="uiIntermediateFileName">No file chosen</span>
+      </div>
+      <button class="btn btn-primary" style="margin-top: 0.75rem;" onclick="uploadUiCert()">Upload Certificate</button>
+    </div>
+    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">You may upload a full-chain bundle as the leaf cert, or provide the intermediate cert separately. The Config UI service must be restarted for a new certificate to take effect.</p>
+  </div>
+
   <!-- Listener SSL/TLS -->
   <div class="card">
     <div class="card-title">Webhook Listener Protocol &mdash; <span id="protoLabel" style="color: var(--accent);">HTTP</span></div>
@@ -1393,7 +1467,7 @@ HTML_PAGE = r"""<!DOCTYPE html>
         <label>Upload SSL Certificate &amp; Key</label>
         <div class="file-upload-row">
           <label class="file-btn">
-            Certificate (.pem)
+            Leaf Certificate (.pem)
             <input type="file" id="certFile" accept=".pem,.crt,.cer">
           </label>
           <span class="file-name" id="certFileName">No file chosen</span>
@@ -1405,7 +1479,15 @@ HTML_PAGE = r"""<!DOCTYPE html>
           </label>
           <span class="file-name" id="keyFileName">No file chosen</span>
         </div>
+        <div class="file-upload-row" style="margin-top: 0.5rem;">
+          <label class="file-btn">
+            Intermediate Cert (optional)
+            <input type="file" id="intermediateFile" accept=".pem,.crt,.cer">
+          </label>
+          <span class="file-name" id="intermediateFileName">No file chosen</span>
+        </div>
         <button class="btn btn-primary" style="margin-top: 0.75rem;" onclick="uploadCert()">Upload Certificate</button>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">You may upload a full-chain bundle as the leaf cert, or provide the intermediate cert separately.</p>
       </div>
     </div>
   </div>
@@ -2213,12 +2295,69 @@ function selectProto(p) {
 }
 
 // File name display
+document.getElementById('uiCertFile').addEventListener('change', function() {
+  document.getElementById('uiCertFileName').textContent = this.files[0]?.name || 'No file chosen';
+});
+document.getElementById('uiKeyFile').addEventListener('change', function() {
+  document.getElementById('uiKeyFileName').textContent = this.files[0]?.name || 'No file chosen';
+});
+document.getElementById('uiIntermediateFile').addEventListener('change', function() {
+  document.getElementById('uiIntermediateFileName').textContent = this.files[0]?.name || 'No file chosen';
+});
 document.getElementById('certFile').addEventListener('change', function() {
   document.getElementById('certFileName').textContent = this.files[0]?.name || 'No file chosen';
 });
 document.getElementById('keyFile').addEventListener('change', function() {
   document.getElementById('keyFileName').textContent = this.files[0]?.name || 'No file chosen';
 });
+document.getElementById('intermediateFile').addEventListener('change', function() {
+  document.getElementById('intermediateFileName').textContent = this.files[0]?.name || 'No file chosen';
+});
+
+// Upload Config UI cert and key
+async function uploadUiCert() {
+  const certFile = document.getElementById('uiCertFile').files[0];
+  const keyFile = document.getElementById('uiKeyFile').files[0];
+  if (!certFile || !keyFile) {
+    toast('Please select both a certificate and key file.', 'error');
+    return;
+  }
+  const formData = new FormData();
+  formData.append('cert', certFile);
+  formData.append('key', keyFile);
+  const interFile = document.getElementById('uiIntermediateFile').files[0];
+  if (interFile) formData.append('intermediate', interFile);
+  try {
+    const res = await fetch('/api/upload-ui-cert', { method: 'POST', body: formData });
+    if (res.ok) {
+      toast('Config UI certificate uploaded. Restart the Config UI service to apply.', 'success');
+      checkUiCertStatus();
+    } else {
+      toast('Failed to upload Config UI certificate.', 'error');
+    }
+  } catch (e) {
+    toast('Failed to upload Config UI certificate.', 'error');
+  }
+}
+
+// Check Config UI cert status
+async function checkUiCertStatus() {
+  try {
+    const res = await fetch('/api/ui-cert-status');
+    const data = await res.json();
+    const el = document.getElementById('uiCertStatus');
+    if (data.is_custom) {
+      el.textContent = 'Custom certificate installed';
+      el.className = 'cert-status found';
+    } else if (data.cert_exists && data.key_exists) {
+      el.textContent = 'Self-signed certificate (auto-generated)';
+      el.className = 'cert-status missing';
+    } else {
+      el.textContent = 'No certificate found';
+      el.className = 'cert-status missing';
+    }
+  } catch (e) {}
+}
 
 // Upload cert and key
 async function uploadCert() {
@@ -2231,6 +2370,8 @@ async function uploadCert() {
   const formData = new FormData();
   formData.append('cert', certFile);
   formData.append('key', keyFile);
+  const interFile = document.getElementById('intermediateFile').files[0];
+  if (interFile) formData.append('intermediate', interFile);
   try {
     const res = await fetch('/api/upload-cert', { method: 'POST', body: formData });
     if (res.ok) {
@@ -2745,6 +2886,7 @@ async function clearAlerts() {
 loadConfig();
 loadStatus();
 loadUsers();
+checkUiCertStatus();
 </script>
 </body>
 </html>
